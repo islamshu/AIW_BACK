@@ -12,7 +12,8 @@ use Illuminate\Http\Request;
 use Laravel\Fortify\Features;
 
 Route::get('/', function () {
-    return Inertia::render('Home');
+    // return Inertia::render('Home');
+    return view('welcom');
 })->name('home');
 Route::get('/__test-locale', function () {
     return [
@@ -26,7 +27,7 @@ Route::get('/lang/{lang}', function ($lang) {
     app()->setLocale($lang);
     
     return back();
-})->name('lang.switch');
+})->name('language.switch');
 
 
 Route::get('/about', fn() => Inertia::render('About'));
