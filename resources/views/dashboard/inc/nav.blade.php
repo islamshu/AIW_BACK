@@ -47,26 +47,32 @@
                             </div>
                         </li>
                         
-                         <li class="dropdown dropdown-language nav-item">
-                        <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-toggle="dropdown">
-                            @if(app()->getLocale() == 'ar')
-                                <i class="flag-icon flag-icon-ps"></i>
-                                <span class="selected-language">العربية</span>
-                            @else
-                                <i class="flag-icon flag-icon-il"></i>
-                                <span class="selected-language">English</span>
-                            @endif
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="{{ route('language.switch', 'ar') }}">
-                                <i class="flag-icon flag-icon-ps"></i> العربية
-                            </a>
-                            <a class="dropdown-item" href="{{ route('language.switch', 'en') }}">
-                                <i class="flag-icon flag-icon-us"></i> English
-                            </a>
-                           
-                        </div>
-                    </li>
+                        <li class="dropdown dropdown-language nav-item">
+    <a class="dropdown-toggle nav-link" id="dropdown-flag" href="#" data-bs-toggle="dropdown">
+        @if(app()->getLocale() == 'ar')
+            <span class="fi fi-sa me-1"></span>
+            <span class="selected-language">العربية</span>
+        @else
+            <span class="fi fi-us me-1"></span>
+            <span class="selected-language">English</span>
+        @endif
+    </a>
+
+    <div class="dropdown-menu dropdown-menu-end">
+        <a class="dropdown-item d-flex align-items-center gap-2"
+           href="{{ route('language.switch', 'ar') }}">
+            <span class="fi fi-sa"></span>
+            العربية
+        </a>
+
+        <a class="dropdown-item d-flex align-items-center gap-2"
+           href="{{ route('language.switch', 'en') }}">
+            <span class="fi fi-us"></span>
+            English
+        </a>
+    </div>
+</li>
+
                         <li class="dropdown dropdown-notification nav-item">
                             <a class="nav-link nav-link-label" href="#" data-toggle="dropdown">
                                 <i class="ficon ft-bell"></i>

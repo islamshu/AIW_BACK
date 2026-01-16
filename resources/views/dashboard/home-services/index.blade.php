@@ -141,71 +141,73 @@
 <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
 
 <script>
-Sortable.create(document.getElementById('sortable'), {
-    animation: 150,
-    onEnd() {
-        let order = [];
+    Sortable.create(document.getElementById('sortable'), {
+        animation: 150,
+        onEnd() {
+            let order = [];
 
-        document.querySelectorAll('#sortable tr').forEach(row => {
-            order.push(row.dataset.id);
-        });
+            document.querySelectorAll('#sortable tr').forEach(row => {
+                order.push(row.dataset.id);
+            });
 
-        fetch('{{ route('home-services.sort') }}', {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ order })
-        })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status) {
-                toast(data.message, 'success');
-            } else {
-                toast('فشل تحديث الترتيب', 'error');
-            }
-        })
-        .catch(() => {
-            toast('حدث خطأ أثناء حفظ الترتيب', 'error');
-        });
-    }
-});
+            fetch('{{ route('home-services.sort') }}', {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            order
+                        })
+                    })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status) {
+                        toast(data.message, 'success');
+                    } else {
+                        toast('فشل تحديث الترتيب', 'error');
+                    }
+                })
+                .catch(() => {
+                    toast('حدث خطأ أثناء حفظ الترتيب', 'error');
+                });
+        }
+    });
 
-document.querySelectorAll('.service-status').forEach(input => {
-    input.addEventListener('change', function () {
+    document.querySelectorAll('.service-status').forEach(input => {
+        input.addEventListener('change', function() {
 
-        this.disabled = true; // منع التكرار
+            this.disabled = true; // منع التكرار
 
-        fetch(`/dashboard/home-services/${this.dataset.id}/toggle`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            }
-        })
-        .then(res => res.json())
-        .then(data => {
-            toast(data.message, 'success');
-            this.disabled = false;
-        })
-        .catch(() => {
-            toast('فشل تحديث الحالة', 'error');
-            this.checked = !this.checked; // rollback
-            this.disabled = false;
+            fetch(`/dashboard/home-services/${this.dataset.id}/toggle`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    toast(data.message, 'success');
+                    this.disabled = false;
+                })
+                .catch(() => {
+                    toast('فشل تحديث الحالة', 'error');
+                    this.checked = !this.checked; // rollback
+                    this.disabled = false;
+                });
         });
     });
-});
 
-function toast(message, type = 'success') {
-    Toastify({
-        text: message,
-        duration: 2500,
-        gravity: "top",
-        position: "right",
-        backgroundColor: type === 'success'
-            ? "#28a745"
-            : "#dc3545"
-    }).showToast();
-}
+    function toast(message, type = 'success') {
+        Toastify({
+            text: message,
+            duration: 2500,
+            gravity: "top",
+            position: "right",
+            backgroundColor: type === 'success' ?
+                "#28a745" :
+                "#dc3545"
+        }).showToast();
+    }
 </script>
 @endsection

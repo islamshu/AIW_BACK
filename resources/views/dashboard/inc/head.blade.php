@@ -18,8 +18,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('storage/' . get_general_value('website_icon')) }}">
     <link rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-/>
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     <link
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Quicksand:300,400,500,700"
@@ -30,92 +29,93 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/classic/ckeditor.js"></script>
 
     <!-- BEGIN VENDOR CSS-->
 
     <!-- END MODERN CSS-->
     <!-- BEGIN Page Level CSS-->
     @if (app()->getLocale() == 'ar' || app()->getLocale() == 'he')
-        <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css-rtl/vendors.css') }}">
-        <!-- END VENDOR CSS-->
-        <!-- BEGIN MODERN CSS-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css-rtl/app.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css-rtl/custom-rtl.css') }}">
-        <link rel="stylesheet" type="text/css"
-            href="{{ asset('backend/app-assets/css-rtl/core/menu/menu-types/horizontal-menu.css') }}">
-        <link rel="stylesheet" type="text/css"
-            href="{{ asset('backend/app-assets/css-rtl/core/colors/palette-gradient.css') }}">
-        <link rel="stylesheet" type="text/css"
-            href="{{ asset('backend/app-assets/css-rtl/core/colors/palette-gradient.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style-rtl.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css-rtl/vendors.css') }}">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css-rtl/app.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css-rtl/custom-rtl.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('backend/app-assets/css-rtl/core/menu/menu-types/horizontal-menu.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('backend/app-assets/css-rtl/core/colors/palette-gradient.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('backend/app-assets/css-rtl/core/colors/palette-gradient.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style-rtl.css') }}">
 
-        <style>
-            body {
-                font-family: 'Tajawal', sans-serif;
-            }
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
 
-            span,
-            p,
-            h1,
-            h2,
-            h3,
-            ul,
-            li {
-                font-family: 'Tajawal', sans-serif !important;
-            }
+        span,
+        p,
+        h1,
+        h2,
+        h3,
+        ul,
+        li {
+            font-family: 'Tajawal', sans-serif !important;
+        }
 
-            .margin-right {
-                margin-right: 60%
-            }
+        .margin-right {
+            margin-right: 60%
+        }
 
-            .required {
-                color: red;
-            }
+        .required {
+            color: red;
+        }
 
-            #clientResults a {
-                padding: 10px;
-                border-bottom: 1px solid #eee;
-                cursor: pointer;
-            }
+        #clientResults a {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+        }
 
-            #clientResults a:hover {
-                background-color: #f0f0f0;
-            }
+        #clientResults a:hover {
+            background-color: #f0f0f0;
+        }
 
-            /* تغيير مربع البحث */
-            .dataTables_filter input {
-                font-size: 14px !important;
-                font-family: 'Tahoma', Arial, sans-serif !important;
-            }
+        /* تغيير مربع البحث */
+        .dataTables_filter input {
+            font-size: 14px !important;
+            font-family: 'Tahoma', Arial, sans-serif !important;
+        }
 
-            /* تغيير عناصر التصفية */
-            .dataTables_length select {
-                font-size: 14px !important;
-            }
+        /* تغيير عناصر التصفية */
+        .dataTables_length select {
+            font-size: 14px !important;
+        }
 
-            /* تغيير أرقام الصفحات */
-            .dataTables_paginate .paginate_button {
-                font-size: 14px !important;
-            }
-        </style>
+        /* تغيير أرقام الصفحات */
+        .dataTables_paginate .paginate_button {
+            font-size: 14px !important;
+        }
+    </style>
     @else
-        <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/vendors.css') }}">
-        <!-- END VENDOR CSS-->
-        <!-- BEGIN MODERN CSS-->
-        <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/app.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/custom.css') }}">
-        <link rel="stylesheet" type="text/css"
-            href="{{ asset('backend/app-assets/css/core/menu/menu-types/horizontal-menu.css') }}">
-        <link rel="stylesheet" type="text/css"
-            href="{{ asset('backend/app-assets/css/core/colors/palette-gradient.css') }}">
-        <link rel="stylesheet" type="text/css"
-            href="{{ asset('backend/app-assets/css/core/colors/palette-gradient.css') }}">
-        <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
-        <style>
-            .margin-right {
-                margin-left: 60%
-            }
-        </style>
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/vendors.css') }}">
+    <!-- END VENDOR CSS-->
+    <!-- BEGIN MODERN CSS-->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/app.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/custom.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('backend/app-assets/css/core/menu/menu-types/horizontal-menu.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('backend/app-assets/css/core/colors/palette-gradient.css') }}">
+    <link rel="stylesheet" type="text/css"
+        href="{{ asset('backend/app-assets/css/core/colors/palette-gradient.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
+    <style>
+        .margin-right {
+            margin-left: 60%
+        }
+    </style>
     @endif
     {{-- <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/vendors/css/forms/selects/selectivity-full.min.css') }}"> --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
@@ -164,10 +164,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/switchery/0.8.2/switchery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-steps/1.1.0/jquery.steps.min.js"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css">
 
     <style>
         .select2-container {
             width: 100% !important;
+        }
+
+        .container-fluid {
+            margin-top: 3%;
         }
 
         .cke_notifications_area {

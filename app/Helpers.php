@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Support\Facades\File;
 use App\Models\GeneralValue;
+use App\Models\Media;
 
 if (!function_exists('get_general_value')) {
 
@@ -35,3 +36,17 @@ if (!function_exists('saveJSONFile')) {
         file_put_contents(base_path('lang/' . $code . '.json'), stripslashes($jsonData));
     }
 }
+
+if (!function_exists('get_image_path')) {
+
+    function get_image_path($id)
+    {
+        if($id == null){
+            return null;
+        }
+        $media = Media::find($id);
+
+        return $media->url;
+    }
+}
+
