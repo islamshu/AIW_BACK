@@ -1,10 +1,17 @@
-<!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}" dir="{{ app()->getLocale() === 'ar' ? 'rtl' : 'ltr' }}">
+
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>@yield('title','AIW')</title>
+    
+    <!-- Favicons متعددة التنسيقات -->
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('storage/' . get_general_value('website_logo')) }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('storage/' . get_general_value('website_logo')) }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('storage/' . get_general_value('website_logo')) }}">
+    <link rel="manifest" href="{{ asset('storage/' . get_general_value('website_logo')) }}">
+    <link rel="shortcut icon" href="{{ asset('storage/' . get_general_value('website_logo')) }}" type="image/x-icon">
 
     {{-- Tailwind --}}
     <script src="https://cdn.tailwindcss.com"></script>
@@ -28,7 +35,17 @@
         body {
             font-family: 'Cairo', sans-serif;
         }
-
+        .sector-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, var(--sky-blue), var(--pink));
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
         body[dir="ltr"] {
             font-family: 'Poppins', sans-serif;
         }
@@ -90,65 +107,9 @@
 
 {{-- ================================================= --}}
 {{-- NAVBAR --}}
+
 {{-- ================================================= --}}
-<nav class="fixed top-0 w-full bg-[#0a192f]/95 backdrop-blur-sm z-50 py-4 border-b border-[#00b4d8]/10">
-    <div class="container mx-auto px-4">
-        <div class="flex justify-between items-center">
-
-            {{-- Logo --}}
-            <a href="/" class="flex items-center gap-4">
-                <div class="w-12 h-12 bg-gradient-to-br from-[#00b4d8] to-[#ff5d8f]
-                            rounded-lg flex items-center justify-center">
-                    <span class="font-bold text-xl">AIW</span>
-                </div>
-                <div class="flex flex-col">
-                    <span class="font-bold text-lg">Advanced Innovation Works</span>
-                    <span class="text-[#00b4d8] text-sm">
-                        Multi-Sector Investment & Operations Group
-                    </span>
-                </div>
-            </a>
-
-            {{-- Desktop Menu --}}
-            <div class="hidden md:flex items-center gap-8">
-                <a href="/" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2">
-                    <i class="fas fa-home"></i> الرئيسية
-                </a>
-                <a href="/about" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2">
-                    <i class="fas fa-users"></i> من نحن
-                </a>
-                <a href="/sectors" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2">
-                    <i class="fas fa-industry"></i> القطاعات
-                </a>
-                <a href="/contact" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2">
-                    <i class="fas fa-envelope"></i> اتصل بنا
-                </a>
-                <a href="{{ route('language.switch', app()->getLocale() === 'ar' ? 'en' : 'ar') }}"
-                class="bg-gradient-to-r from-[#00b4d8] to-[#ff5d8f] text-white px-4 py-2 rounded-full font-semibold">
-                    {{ app()->getLocale() === 'ar' ? 'English' : 'العربية' }}
-                </a>
-
-            </div>
-
-            {{-- Mobile Toggle --}}
-            <button id="menuToggle" class="md:hidden text-2xl">
-                <i class="fas fa-bars"></i>
-            </button>
-
-        </div>
-
-        {{-- Mobile Menu --}}
-        <div id="mobileMenu" class="hidden md:hidden mt-4">
-            <div class="flex flex-col gap-4 py-4">
-                <a href="/" class="text-[#a8b2d1] hover:text-[#00b4d8]">الرئيسية</a>
-                <a href="/about" class="text-[#a8b2d1] hover:text-[#00b4d8]">من نحن</a>
-                <a href="/sectors" class="text-[#a8b2d1] hover:text-[#00b4d8]">القطاعات</a>
-                <a href="/contact" class="text-[#a8b2d1] hover:text-[#00b4d8]">اتصل بنا</a>
-            </div>
-        </div>
-    </div>
-</nav>
-
+@include('frontend.inc.navbar')
 {{-- ================================================= --}}
 {{-- PAGE CONTENT --}}
 {{-- ================================================= --}}
@@ -159,14 +120,7 @@
 {{-- ================================================= --}}
 {{-- FOOTER --}}
 {{-- ================================================= --}}
-<footer class="pt-16 pb-8 border-t border-[#00b4d8]/10">
-    <div class="container mx-auto px-4 text-center text-[#8892b0]">
-        <p class="mb-2">© 2024 AIW Group. جميع الحقوق محفوظة.</p>
-        <p class="text-[#00b4d8] text-sm">
-            Multi-Activity Company Profile – Strategic Version
-        </p>
-    </div>
-</footer>
+@include('frontend.inc.footer')
 
 {{-- Floating Buttons --}}
 <div class="fixed bottom-8 left-8 flex flex-col gap-4 z-40">
@@ -208,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 });
 </script>
+@yield('scripts')
 
 </body>
 </html>

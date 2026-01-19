@@ -14,40 +14,9 @@ class PageController extends Controller
     // All Pages + filters + search + counts
     public function index(Request $request)
     {
-        $status = $request->get('status', 'all'); // all|published|draft|trash
-        $search = trim((string) $request->get('s', ''));
+        $pages = Page::orderBy('order')->get();
 
-        $query = Page::query();
-
-        if ($status === 'trash') {
-            $query->onlyTrashed();
-        } else {
-            $query->whereNull('deleted_at');
-            if (in_array($status, ['published', 'draft'], true)) {
-                $query->where('status', $status);
-            }
-        }
-
-        if ($search !== '') {
-            // بحث بالعربي/الانجليزي داخل JSON title
-            $query->where(function ($q) use ($search) {
-                $q->whereRaw("JSON_UNQUOTE(JSON_EXTRACT(title,'$.ar')) LIKE ?", ["%{$search}%"])
-                    ->orWhereRaw("JSON_UNQUOTE(JSON_EXTRACT(title,'$.en')) LIKE ?", ["%{$search}%"])
-                    ->orWhere('slug', 'LIKE', "%{$search}%");
-            });
-        }
-
-        $pages = $query->orderByDesc('updated_at')->paginate(15)->withQueryString();
-
-        // counts like WP tabs
-        $counts = [
-            'all' => Page::query()->whereNull('deleted_at')->count(),
-            'published' => Page::query()->whereNull('deleted_at')->where('status', 'published')->count(),
-            'draft' => Page::query()->whereNull('deleted_at')->where('status', 'draft')->count(),
-            'trash' => Page::onlyTrashed()->count(),
-        ];
-
-        return view('dashboard.pages.index', compact('pages', 'counts', 'status', 'search'));
+        return view('dashboard.pages.index', compact('pages'));
     }
 
     // Add New
@@ -133,7 +102,7 @@ class PageController extends Controller
             'slug' => 'nullable|string|max:255|unique:pages,slug,' . $page->id,
             'status' => 'required|in:draft,published',
         ]);
-        
+
         // تحديث بيانات الصفحة فقط
         $page->update([
             'title' => [
@@ -143,7 +112,7 @@ class PageController extends Controller
             'slug' => $data['slug'],
             'status' => $data['status'],
         ]);
-        
+
         return redirect()->route('dashboard.pages.edit', $page)
             ->with('success', 'تم تحديث بيانات الصفحة بنجاح');
     }
@@ -437,4 +406,30 @@ class PageController extends Controller
         // يمكنك إضافة منطق المعاينة هنا
         return view('pages.preview', compact('page'));
     }
+    public function toggleStatus(Request $request, Page $page)
+    {
+        $page->status = $request->status == 1 ? 'published' : 'draft';
+        $page->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $page->status === 'published'
+                ? 'تم نشر الصفحة'
+                : 'تم تحويل الصفحة إلى مسودة'
+        ]);
+    }
+    public function reorder(Request $request)
+    {
+        foreach ($request->order as $index => $id) {
+            Page::where('id', $id)->update([
+                'order' => $index + 1
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => 'تم حفظ ترتيب الصفحات'
+        ]);
+    }
+
 }

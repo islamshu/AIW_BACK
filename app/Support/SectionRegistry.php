@@ -7,11 +7,7 @@ class SectionRegistry
     public static function all(): array
     {
         return [
-            'layout' => [
-                'label' => 'Grid / Layout',
-                'icon' => '🧩',
-                'description' => 'تقسيم الصفحة إلى أعمدة (Grid)',
-            ],
+
             'hero' => [
                 'label' => 'Hero Section',
                 'description' => 'عنوان رئيسي + وصف + زر',
@@ -27,6 +23,12 @@ class SectionRegistry
                 'icon' => '🔁',
                 'description' => 'مجموعة عناصر متكررة (عنوان/وصف/أيقونة...)',
             ],
+            'hero_extra' => [
+                'label' => 'Hero إضافي',
+                'description' => 'سكشن هيرو ديناميكي (مستقل عن الهيرو الأساسي)',
+                'icon' => '🚀',
+            ],
+
         ];
     }
 

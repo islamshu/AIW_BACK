@@ -41,36 +41,33 @@
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label>{{ __('شعار الموقع') }}</label>
-                                                            <div class="custom-file">
-                                                                <input type="file" class="custom-file-input imagee"
-                                                                    id="website_logo" name="general_file[website_logo]">
-                                                                <label class="custom-file-label"
-                                                                    for="website_logo">{{ __('اختر ملف') }}</label>
-                                                            </div>
+                                                            <div class="col-md-6 mb-3 type-field" id="imageField"></div>
+
+
+                                                            {{-- hidden input --}}
+                                                            <input type="hidden" name="general[website_logo]"
+                                                                id="imageInput"
+                                                                value="{{ get_general_value('website_logo') }}">
+
+                                                            <button type="button" class="btn btn-outline-primary w-100"
+                                                                onclick="openMediaLibrary()">
+                                                                📁 اختيار صورة من المكتبة
+                                                            </button>
+
+                                                            {{-- IMAGE PREVIEW --}}
                                                             <div class="mt-2">
-                                                                <img src="{{ asset('storage/' . get_general_value('website_logo')) }}"
-                                                                    style="width: 120px; height: auto;"
-                                                                    class="img-thumbnail image-previeww" alt="">
+                                                                <img id="imagePreview"
+                                                                    src="{{ asset('storage/' . get_general_value('website_logo')) }}"
+                                                                    class="img-thumbnail"
+                                                                    style="max-height:120px">
                                                             </div>
+
+
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>{{ __('أيقونة الموقع') }}</label>
-                                                            <div class="custom-file">
-                                                                <input type="file" class="custom-file-input image"
-                                                                    id="website_icon" name="general_file[website_icon]">
-                                                                <label class="custom-file-label"
-                                                                    for="website_icon">{{ __('اختر ملف') }}</label>
-                                                            </div>
-                                                            <div class="mt-2">
-                                                                <img src="{{ asset('storage/' . get_general_value('website_icon')) }}"
-                                                                    style="width: 60px; height: auto;"
-                                                                    class="img-thumbnail image-preview" alt="">
-                                                            </div>
-                                                        </div>
-                                                    </div>
+
+
                                                 </div>
 
                                                 <div class="row mt-2">
@@ -107,92 +104,98 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <!-- قسم اللغة العربية -->
-                                            <div class="form-section mb-4">
-                                                <h5 class="section-title"><i class="ft-flag"></i>
-                                                    {{ __('إعدادات اللغة العربية') }}</h5>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>{{ __('اسم الموقع') }}</label>
-                                                            <input type="text"
-                                                                value="{{ get_general_value('website_name_ar') }}" required
-                                                                class="form-control" name="general[website_name_ar]"
-                                                                placeholder="اسم الموقع بالعربية">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>{{ __('وصف الموقع') }}</label>
-                                                            <textarea name="general[description_ar]" class="form-control" rows="2" placeholder="وصف الموقع بالعربية">{{ get_general_value('description_ar') }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>{{ __('عنوان الموقع') }}</label>
-                                                            <textarea name="general[address_ar]" class="form-control" rows="2" placeholder="عنوان الموقع بالعربية">{{ get_general_value('address_ar') }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <!-- قسم اللغة الانجليزية -->
-                                            <div class="form-section mb-4">
-                                                <h5 class="section-title"><i class="ft-flag"></i>
-                                                    {{ __('إعدادات اللغة الانجليزية') }}</h5>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>{{ __('اسم الموقع') }}</label>
-                                                            <input type="text"
-                                                                value="{{ get_general_value('website_name_en') }}"
-                                                                required class="form-control text-right" 
-                                                                name="general[website_name_en]"
-                                                                placeholder="اسم الموقع">
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>{{ __('وصف الموقع') }}</label>
-                                                            <textarea name="general[description_en]" class="form-control text-right"  rows="2"
-                                                                placeholder="وصف الموقع">{{ get_general_value('description_en') }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-md-12">
-                                                        <div class="form-group">
-                                                            <label>{{ __('عنوان الموقع') }}</label>
-                                                            <textarea name="general[address_en]" class="form-control text-right"  rows="2"
-                                                                placeholder="عنوان الموقع">{{ get_general_value('address_en') }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-
-                                            <!-- زر الحفظ -->
-                                            <div class="form-actions text-center mt-3">
-                                                <button type="submit" class="btn btn-primary btn-lg">
-                                                    <i class="la la-check-square-o"></i> {{ __('حفظ التغييرات') }}
-                                                </button>
-                                            </div>
-                                        </form>
                                     </div>
+
+
+
+                                    <!-- قسم اللغة العربية -->
+                                    <div class="form-section mb-4">
+                                        <h5 class="section-title"><i class="ft-flag"></i>
+                                            {{ __('إعدادات اللغة العربية') }}</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ __('اسم الموقع') }}</label>
+                                                    <input type="text"
+                                                        value="{{ get_general_value('website_name_ar') }}" required
+                                                        class="form-control" name="general[website_name_ar]"
+                                                        placeholder="اسم الموقع بالعربية">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ __('عنوان الموقع') }}</label>
+                                                    <input type="text"
+                                                        value="{{ get_general_value('address_ar') }}" required
+                                                        class="form-control" name="general[address_ar]"
+                                                        placeholder="عنوان الموقع بالعربية">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ __('وصف الموقع') }}</label>
+                                                    <textarea name="general[description_ar]" class="form-control  js-editor" rows="2"
+                                                        placeholder="وصف الموقع بالعربية">{{ get_general_value('description_ar') }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <!-- قسم اللغة الانجليزية -->
+                                    <div class="form-section mb-4">
+                                        <h5 class="section-title"><i class="ft-flag"></i>
+                                            {{ __('إعدادات اللغة الانجليزية') }}</h5>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ __('اسم الموقع') }}</label>
+                                                    <input type="text"
+                                                        value="{{ get_general_value('website_name_en') }}" required
+                                                        class="form-control text-right" name="general[website_name_en]"
+                                                        placeholder="اسم الموقع">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ __('عنوان الموقع') }}</label>
+                                                    <input type="text"
+                                                        value="{{ get_general_value('address_en') }}" required
+                                                        class="form-control" name="general[address_en]"
+                                                        placeholder="عنوان الموقع بالانجليزية">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>{{ __('وصف الموقع') }}</label>
+                                                    <textarea name="general[description_en]" class="form-control js-editor text-right" rows="2"
+                                                        placeholder="وصف الموقع">{{ get_general_value('description_en') }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+
+                                    <!-- زر الحفظ -->
+                                    <div class="form-actions text-center mt-3">
+                                        <button type="submit" class="btn btn-primary btn-lg">
+                                            <i class="la la-check-square-o"></i> {{ __('حفظ التغييرات') }}
+                                        </button>
+                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </section>
             </div>
+            </section>
         </div>
+    </div>
     </div>
 @endsection
 

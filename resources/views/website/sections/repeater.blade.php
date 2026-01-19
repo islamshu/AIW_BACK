@@ -64,16 +64,19 @@
                             hover:-translate-y-2
                             hover:border-[#00b4d8]/40
                             hover:shadow-[0_20px_40px_-20px_rgba(0,180,216,0.35)]">
-
+        <div style="display: ruby-text; ">
                     <div class="mb-6 h-14 w-14 flex items-center justify-center rounded-2xl"
                          style="background: {{ $color }}22;">
                         <i class="{{ $icon }}" style="color: {{ $color }}"></i>
+                       
                     </div>
-
-                    @if($title)
-                        <h3 class="mb-3 text-lg font-bold text-white">
+                    <h3 class="mb-3 m-5 text-lg font-bold text-white">
                             {{ $title }}
                         </h3>
+        </div>
+
+                    @if($title)
+                       
                     @endif
 
                     @if($desc)

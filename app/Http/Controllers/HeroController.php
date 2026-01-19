@@ -27,8 +27,8 @@ class HeroController extends Controller
             'subtitle.en'     => 'nullable|string',
             'button_text.ar'  => 'nullable|string|max:100',
             'button_text.en'  => 'nullable|string|max:100',
-            'button_link'     => 'nullable|url',
-            'image'           => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'button_link'     => 'nullable',
+            'image'           => 'nullable',
         ]);
 
         // رفع الصورة

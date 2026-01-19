@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GeneralValue;
 use App\Models\Sector;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +26,16 @@ class SectorController extends Controller
         $sector = null;
         return view('dashboard.sectors.form', compact('sector'));
     }
+    public function toggle(Request $request)
+{
+    GeneralValue::setValue('sectors_enabled', $request->status);
+
+
+    return response()->json([
+        'success' => true
+    ]);
+}
+
 
     /* ======================
         STORE
@@ -34,15 +45,14 @@ class SectorController extends Controller
         $data = $this->validateData($request);
 
         // icon OR image
-        if ($request->type === 'image' && $request->hasFile('image')) {
-            $data['image'] = $request->file('image')->store('sectors', 'public');
+        if ($request->type === 'image' ) {
+            $data['image'] = $request->image;
             $data['icon'] = null;
         } else {
             $data['image'] = null;
         }
 
         $data['order'] = Sector::max('order') + 1;
-        $data['is_active'] = $request->boolean('is_active');
 
         Sector::create($data);
 
@@ -78,11 +88,9 @@ class SectorController extends Controller
     {
         $data = $this->validateData($request);
 
-        if ($request->type === 'image' && $request->hasFile('image')) {
-            if ($sector->image) {
-                Storage::disk('public')->delete($sector->image);
-            }
-            $data['image'] = $request->file('image')->store('sectors', 'public');
+        if ($request->type === 'image' ) {
+            
+            $data['image'] = $request->image;
             $data['icon'] = null;
         }
 
@@ -93,7 +101,6 @@ class SectorController extends Controller
             $data['image'] = null;
         }
 
-        $data['is_active'] = $request->boolean('is_active');
 
         $sector->update($data);
 
@@ -144,14 +151,13 @@ class SectorController extends Controller
 
             'description.ar' => 'required|string',
             'description.en' => 'required|string',
-
             'badge_text.ar' => 'required|string|max:100',
             'badge_text.en' => 'required|string|max:100',
 
             'type' => 'required|in:icon,image',
 
             'icon' => 'nullable|required_if:type,icon|string|max:100',
-            'image' => 'nullable|required_if:type,image|image|max:2048',
+            'image' => 'nullable',
 
             'gradient_from' => 'required|string',
             'gradient_to' => 'required|string',

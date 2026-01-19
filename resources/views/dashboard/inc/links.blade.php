@@ -59,7 +59,38 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script src="https://cdn.tiny.cloud/1/2zem850nmvd5df5o8joazwyvha498198poptrpebqfmixw7h/tinymce/8/tinymce.min.js">
+</script>
 
+<script>
+    tinymce.init({
+        selector: '.js-editor',
+        language: 'ar',
+        height: 300,
+        plugins: 'image link lists code autoresize',
+        toolbar: `
+        undo redo |
+        bold italic underline |
+        bullist numlist |
+        image media-library |
+        alignleft aligncenter alignright |
+        code
+    `,
+        setup(editor) {
+            editor.ui.registry.addButton('media-library', {
+                text: '📁 مكتبة الوسائط',
+                onAction() {
+                    window.activeTinyEditor = editor;
+                    window.open(
+                        '{{ route('dashboard.media.index') }}?select_mode=editor',
+                        'MediaLibrary',
+                        'width=1200,height=800'
+                    );
+                }
+            });
+        }
+    });
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
@@ -166,63 +197,153 @@
 
 
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
         @php
-            $excludedRoutes = ['products.index', 'categories.index', 'coupons.index', 'orders.index', 'products.show', 'clients.show','orders.show'];
+            $excludedRoutes = ['products.index', 'categories.index', 'coupons.index', 'orders.index', 'products.show', 'clients.show', 'orders.show'];
         @endphp
 
-        @if (!in_array(Route::currentRouteName(), $excludedRoutes))
-            @if (app()->getLocale() == 'ar')
-                $('table').DataTable({
-                    language: {
-                        "sProcessing": "جاري التحميل...",
-                        "sLengthMenu": "أظهر _MENU_ مدخلات",
-                        "sZeroRecords": "لم يعثر على أية سجلات",
-                        "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
-                        "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
-                        "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
-                        "sInfoPostFix": "",
-                        "search": "<span class='search-label'><i class='la la-search'></i> ابحث</span>:",
-                        "sUrl": "",
-                        "oPaginate": {
-                            "sFirst": "الأول",
-                            "sPrevious": "السابق",
-                            "sNext": "التالي",
-                            "sLast": "الأخير"
-                        }
-                    },
-                    direction: 'rtl'
-                });
-            @else
-                $('table').DataTable({
-                    language: {
-                        "sProcessing": "טוען...",
-                        "sLengthMenu": "הצג _MENU_ רשומות",
-                        "sZeroRecords": "לא נמצאו רשומות תואמות",
-                        "sInfo": "מציג _START_ עד _END_ מתוך _TOTAL_ רשומות",
-                        "sInfoEmpty": "מציג 0 עד 0 מתוך 0 רשומות",
-                        "sInfoFiltered": "(מסונן מתוך _MAX_ רשומות סה\"כ)",
-                        "sInfoPostFix": "",
-                        "search": "<span class='search-label'><i class='la la-search'></i> חיפוש</span>:",
-                        "sUrl": "",
-                        "oPaginate": {
-                            "sFirst": "ראשון",
-                            "sPrevious": "קודם",
-                            "sNext": "הבא",
-                            "sLast": "אחרון"
-                        },
-                        "oAria": {
-                            "sSortAscending": ": הפעל למיון עולה",
-                            "sSortDescending": ": הפעל למיון יורד"
-                        }
-                    },
-                    direction: 'rtl'
-                });
-            @endif
-        @endif
+        $('table').DataTable({
+            language: {
+                "sProcessing": "جاري التحميل...",
+                "sLengthMenu": "أظهر _MENU_ مدخلات",
+                "sZeroRecords": "لم يعثر على أية سجلات",
+                "sInfo": "إظهار _START_ إلى _END_ من أصل _TOTAL_ مدخل",
+                "sInfoEmpty": "يعرض 0 إلى 0 من أصل 0 سجل",
+                "sInfoFiltered": "(منتقاة من مجموع _MAX_ مُدخل)",
+                "sInfoPostFix": "",
+                "search": "<span class='search-label'><i class='la la-search'></i> ابحث</span>:",
+                "sUrl": "",
+                "oPaginate": {
+                    "sFirst": "الأول",
+                    "sPrevious": "السابق",
+                    "sNext": "التالي",
+                    "sLast": "الأخير"
+                }
+            },
+            direction: 'rtl'
+        });
     });
+
+    function showToast(message, type = 'info') {
+        if (typeof Swal !== 'undefined') {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-start',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                }
+            });
+
+            Toast.fire({
+                icon: type,
+                title: message
+            });
+        } else {
+            alert(message);
+        }
+    }
+
+    @if (session('success'))
+        showToast('{{ session('
+                    success ') }}', 'success');
+    @endif
+
+    @if (session('error'))
+        showToast('{{ session('
+                    error ') }}', 'error');
+    @endif
+
+    @if (session('info'))
+        showToast('{{ session('
+                    info ') }}', 'info');
+    @endif
 </script>
 
+<script>
+    window.addEventListener('message', function(event) {
+        if (!event.data || !event.data.path) return;
+
+        const imagePath = event.data.path;
+
+        document.getElementById('imageInput').value = imagePath;
+
+        const preview = document.getElementById('imagePreview');
+        preview.src = '{{ asset('storage') }}/' + imagePath;
+        preview.style.display = 'block';
+    });
+</script>
+<script>
+    function openMediaLibrary() {
+        window.open(
+            '{{ route('dashboard.media.index') }}?select_mode=section',
+            'MediaLibrary',
+            'width=1200,height=800,scrollbars=yes,resizable=yes'
+        );
+    }
+
+
+
+    /* ============================================================
+       RECEIVE IMAGE FROM MEDIA LIBRARY
+    ============================================================ */
+    window.addEventListener('message', function(event) {
+
+        if (!event.data || event.data.type !== 'media-selected') return;
+
+        const media = event.data.media;
+        if (!media || !media.url) return;
+
+        // hidden input
+        const imageInput = document.getElementById('imageInput');
+        const imagePreview = document.getElementById('imagePreview');
+
+        // خزّن المسار بدون storage/
+        const cleanPath = media.url.replace('{{ asset('storage') }}/', '');
+
+        imageInput.value = cleanPath;
+
+        imagePreview.src = media.url;
+        imagePreview.style.display = 'block';
+
+        // فعّل وضع الصورة تلقائيًا
+        const imageRadio = document.getElementById('type_image');
+        if (imageRadio) {
+            imageRadio.checked = true;
+            imageRadio.dispatchEvent(new Event('change'));
+        }
+    });
+</script>
+<script>
+    window.addEventListener('message', function(event) {
+        if (!event.data || !event.data.type) return;
+
+        /* SECTION IMAGE */
+        if (event.data.type === 'media-selected' && window.activeSectionId) {
+            const media = event.data.media;
+            const id = window.activeSectionId;
+
+            document.getElementById(`section_image_${id}`).value = media.id;
+            document.getElementById(`section_preview_${id}`).src = media.url;
+            document.getElementById(`section_preview_${id}`).style.display = 'block';
+            document.getElementById(`section_remove_${id}`).style.display = 'inline-block';
+
+            window.activeSectionId = null;
+            return;
+        }
+
+        /* EDITOR IMAGE */
+        if (event.data.type === 'insert-image-editor' && window.activeTinyEditor) {
+            window.activeTinyEditor.insertContent(
+                `<img src="${event.data.media.url}" style="max-width:100%;height:auto;" />`
+            );
+            window.activeTinyEditor = null;
+        }
+    });
+</script>
 
 <!-- END PAGE LEVEL JS-->
 </body>

@@ -8,6 +8,53 @@ use App\Models\Media;
 
 class PagePreviewController extends Controller
 {
+    public function show($slug)
+    {
+        $page = Page::where('slug', $slug)
+        ->where('status', 'published')
+        ->firstOrFail();
+
+        $all = $page->sections()
+            ->orderBy('order')
+            ->get()
+            ->map(fn($section) => $this->hydrateSectionMedia($section)); // ⭐ هنا
+
+        $layouts = $all->groupBy('layout_id')->map(function ($layoutSections, $layoutId) {
+
+            $containers = $layoutSections->where('type', 'empty')
+                ->sortBy('column_index')
+                ->values();
+
+            $realSections = $layoutSections->where('type', '!=', 'empty')
+                ->where('is_active', true)
+                ->sortBy('order')
+                ->values();
+
+            $columns = $containers->map(function ($container) use ($realSections) {
+
+                $colIndex = (int) $container->column_index;
+                $colWidth = (int) (data_get($container->data, 'col') ?? 12);
+
+                $sectionsForThisColumn = $realSections
+                    ->where('column_index', $colIndex)
+                    ->values();
+
+                return [
+                    'col' => $colWidth,
+                    'column_index' => $colIndex,
+                    'container' => $container,
+                    'sections' => $sectionsForThisColumn
+                ];
+            })->values();
+
+            return [
+                'id' => $layoutId,
+                'columns' => $columns,
+            ];
+        })->values();
+
+        return view('website.pages.preview', compact('page', 'layouts'));
+    }
     public function showdash($id)
     {
         $page = Page::findOrFail($id);

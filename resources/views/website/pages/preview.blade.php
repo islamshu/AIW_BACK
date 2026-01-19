@@ -1,11 +1,10 @@
 @extends('layouts.frontend')
-@section('title', $page->title_ar)
+@section('title', $page->title[app()->getLocale()])
 
 @section('content')
 
 {{-- ================= PAGE PREVIEW ================= --}}
 {{-- Page: {{ $page->id }} / {{ $page->slug ?? '' }} --}}
-
 @forelse($layouts as $layout)
 
     {{-- ================= LAYOUT ROW ================= --}}

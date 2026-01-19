@@ -39,17 +39,7 @@
                     }}
                 ">
 
-                    {{-- Badge --}}
-                    <div class="
-                        inline-flex items-center gap-2
-                        rounded-full border border-white/10
-                        bg-white/5 px-4 py-2 text-sm text-[#a8b2d1]
-                        mb-6
-                        {{ !$hasImage ? 'mx-auto' : '' }}
-                    ">
-                        <span class="h-2 w-2 rounded-full bg-[#00b4d8]"></span>
-                        <span>AIW — Invest & Operate</span>
-                    </div>
+                    
 
                     {{-- Title --}}
                     <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">

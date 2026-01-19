@@ -35,7 +35,6 @@
 
     <!-- END MODERN CSS-->
     <!-- BEGIN Page Level CSS-->
-    @if (app()->getLocale() == 'ar' || app()->getLocale() == 'he')
     <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css-rtl/vendors.css') }}">
     <!-- END VENDOR CSS-->
     <!-- BEGIN MODERN CSS-->
@@ -98,25 +97,7 @@
             font-size: 14px !important;
         }
     </style>
-    @else
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/vendors.css') }}">
-    <!-- END VENDOR CSS-->
-    <!-- BEGIN MODERN CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/app.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/css/custom.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('backend/app-assets/css/core/menu/menu-types/horizontal-menu.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('backend/app-assets/css/core/colors/palette-gradient.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('backend/app-assets/css/core/colors/palette-gradient.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
-    <style>
-        .margin-right {
-            margin-left: 60%
-        }
-    </style>
-    @endif
+   
     {{-- <link rel="stylesheet" type="text/css" href="{{ asset('backend/app-assets/vendors/css/forms/selects/selectivity-full.min.css') }}"> --}}
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
 

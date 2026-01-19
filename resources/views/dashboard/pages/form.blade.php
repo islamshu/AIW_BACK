@@ -19,6 +19,46 @@
     }
 
     /* =====================================================
+   RIGHT SIDEBAR (FULL HEIGHT FLOATING)
+===================================================== */
+
+    .right-sidebar {
+        position: sticky;
+        top: 20px;
+        height: calc(100vh - 40px);
+        /* المسافة العلوية والسفلية */
+        display: flex;
+    }
+
+    .right-sidebar-card {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100%;
+    }
+
+    .right-sidebar-body {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 20px;
+    }
+
+    /* تحسين الـ scrollbar */
+    .right-sidebar-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .right-sidebar-body::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
+
+    .right-sidebar-body::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+
+    /* =====================================================
    CARDS
 ===================================================== */
     .card {
@@ -452,6 +492,115 @@
     }
 
     /* =====================================================
+   FLOATING RIGHT PANEL (NO GRID)
+===================================================== */
+
+    .page-main-content {
+        width: 100%;
+        padding-right: 260px;
+        /* مساحة للـ panel */
+    }
+
+    /* اللوحة العائمة */
+    .floating-right-panel {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 240px;
+        height: calc(100vh - 40px);
+        z-index: 1050;
+    }
+
+    /* الكارد */
+    .floating-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* المحتوى */
+    .floating-body {
+        flex: 1;
+        overflow-y: auto;
+        padding-bottom: 20px;
+    }
+
+    /* Scroll جميل */
+    .floating-body::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .floating-body::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
+/* ============================
+   MAIN CONTENT
+============================ */
+.page-content-full {
+    width: 100%;
+    max-width: 100%;
+    padding: 24px;
+}
+
+/* ============================
+   RIGHT SMALL FLOATING PANEL
+============================ */
+
+/* الكارد */
+.settings-card {
+    background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 120px);
+}
+
+/* الهيدر */
+.settings-header {
+    padding: 12px 14px;
+    font-weight: 700;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* المحتوى */
+.settings-body {
+    padding: 14px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Scroll ناعم */
+.settings-body::-webkit-scrollbar {
+    width: 5px;
+}
+
+.settings-body::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+.page-settings-panel {
+    position: fixed;
+    top: 90px;
+    right: 16px;
+    width: 220px;
+    z-index: 1050;
+    cursor: grab;
+}
+
+.page-settings-panel.dragging {
+    cursor: grabbing;
+    opacity: 0.9;
+}
+
+    /* =====================================================
    RESPONSIVE
 ===================================================== */
     @media (max-width: 768px) {
@@ -500,548 +649,517 @@
 @endif
 
 <div class="container-fluid">
-    <div class="row">
 
-        {{-- ================= LEFT COLUMN ================= --}}
-        <div class="col-lg-10">
+    {{-- MAIN CONTENT (FULL WIDTH) --}}
+    <div class="page-main-full">
 
-            {{-- ================= PAGE FORM ================= --}}
-            <form id="pageForm"
-                method="POST"
-                action="{{ $page->exists ? route('dashboard.pages.update',$page) : route('dashboard.pages.store') }}"
-                class="mb-4">
-                @csrf
-                @if($page->exists) @method('PUT') @endif
+        {{-- ================= PAGE FORM ================= --}}
+        <form id="pageForm"
+            method="POST"
+            action="{{ $page->exists ? route('dashboard.pages.update',$page) : route('dashboard.pages.store') }}"
+            class="mb-4">
+            @csrf
+            @if($page->exists) @method('PUT') @endif
 
-                <div class="card shadow-sm page-builder">
-                    <div class="card-header fw-bold bg-white d-flex justify-content-between">
-                        <span>بيانات الصفحة</span>
-                        @if($page->exists)
-                        <span class="badge bg-secondary">{{ $page->status }}</span>
-                        @endif
-                    </div>
-
-                    <div class="card-body">
-                        <div class="row g-3 mb-4">
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">العنوان (عربي)</label>
-                                <input type="text" name="title_ar" class="form-control"
-                                    value="{{ old('title_ar',$page->title['ar'] ?? '') }}">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-bold">Title (English)</label>
-                                <input type="text" name="title_en" class="form-control"
-                                    value="{{ old('title_en',$page->title['en'] ?? '') }}">
-                            </div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Slug</label>
-                            <input type="text" name="slug" class="form-control"
-                                value="{{ old('slug',$page->slug ?? '') }}">
-                        </div>
-
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-primary btn-lg">
-                                <i class="fas fa-save me-2"></i>حفظ بيانات الصفحة
-                            </button>
-                        </div>
-                    </div>
+            <div class="card shadow-sm page-builder">
+                <div class="card-header fw-bold bg-white d-flex justify-content-between">
+                    <span>بيانات الصفحة</span>
+                    @if($page->exists)
+                    <span class="badge bg-secondary">{{ $page->status }}</span>
+                    @endif
                 </div>
-            </form>
 
-            {{-- ================= LAYOUT BUILDER ================= --}}
-            @if($page->exists)
+                <div class="card-body">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">العنوان (عربي)</label>
+                            <input type="text" name="title_ar" class="form-control"
+                                value="{{ old('title_ar',$page->title['ar'] ?? '') }}">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Title (English)</label>
+                            <input type="text" name="title_en" class="form-control"
+                                value="{{ old('title_en',$page->title['en'] ?? '') }}">
+                        </div>
+                    </div>
 
-            <form id="sectionsForm"
-                method="POST"
-                action="{{ route('dashboard.pages.sections.batchUpdate',$page) }}">
-                @csrf
-                @method('PUT')
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Slug</label>
+                        <input type="text" name="slug" class="form-control"
+                            value="{{ old('slug',$page->slug ?? '') }}">
+                    </div>
 
-                <div class="card shadow-sm page-builder">
-                    <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
-                        <span>
-                            <i class="fas fa-layer-group me-2"></i>
-                            Layout Builder
-                            <small class="text-muted ms-2">({{ count($layouts) }} layout)</small>
-                        </span>
-
-                        <button type="button"
-                            class="btn btn-sm btn-outline-primary"
-                            data-toggle="modal"
-                            data-target="#addLayoutModal">
-                            <i class="fas fa-plus me-1"></i>
-                            إضافة Layout
+                    <div class="text-end">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-save me-2"></i>حفظ بيانات الصفحة
                         </button>
                     </div>
-
-                    <div class="card-body">
-
-                        @if(count($layouts))
-
-                        @foreach($layouts as $layoutIndex=>$layout)
-                        <div class="layout-row" id="layout-{{ $layout['id'] }}">
-
-                            <div class="layout-row-header">
-                                <div class="layout-row-title">
-                                    🧩 Layout Row #{{ $layoutIndex+1 }}
-                                    <small class="text-muted">(ID: {{ substr($layout['id'],0,8) }}...)</small>
-                                </div>
-
-                                {{-- زر حذف Layout (بدون form داخلي) --}}
-                                <button type="submit"
-                                    class="btn btn-sm btn-outline-danger"
-                                    form="delete-layout-{{ $layout['id'] }}"
-                                    onclick="return confirm('هل أنت متأكد من حذف هذا الـ Layout بالكامل؟')">
-                                    <i class="fas fa-trash me-1"></i>
-                                    حذف Layout
-                                </button>
-                            </div>
-
-                            <div class="row g-3 mt-3">
-
-                                @foreach($layout['columns'] as $colIndex=>$column)
-                                @php
-                                $colWidth = (int)($column['col'] ?? 12);
-                                $sections = $column['sections'];
-                                @endphp
-
-                                <div class="col-12 col-lg-{{ $colWidth }}">
-                                    <div class="column-box">
-
-                                        <div class="column-header">
-                                            <div class="column-title">
-                                                <i class="fas fa-columns me-2"></i>
-                                                Column {{ $colIndex+1 }}
-                                                <span class="badge bg-primary ms-2">{{ $colWidth }}/12</span>
-                                            </div>
-
-                                            <button type="button"
-                                                class="btn btn-sm btn-primary js-open-add-section"
-                                                data-layout="{{ $layout['id'] }}"
-                                                data-col="{{ $colIndex }}">
-                                                <i class="fas fa-plus me-1"></i>
-                                                إضافة قسم
-                                            </button>
-                                        </div>
-
-                                        <div class="sections-container">
-
-                                            @forelse($sections as $section)
-                                            @php
-                                            $meta = $sectionsRegistry[$section->type] ?? [];
-                                            $data = is_array($section->data) ? $section->data : [];
-                                            @endphp
-
-                                            @if($section->type !== 'empty')
-                                            <div class="section-chip js-section-chip">
-
-                                                <input type="hidden" name="sections[{{ $section->id }}][id]" value="{{ $section->id }}">
-                                                <input type="hidden" name="sections[{{ $section->id }}][layout_id]" value="{{ $layout['id'] }}">
-                                                <input type="hidden" name="sections[{{ $section->id }}][column_index]" value="{{ $colIndex }}">
-                                                <input type="hidden" name="sections[{{ $section->id }}][order]" value="{{ $section->order }}">
-                                                <input type="hidden" name="sections[{{ $section->id }}][_delete]" class="js-delete-flag" value="0">
-                                                <input type="hidden" name="sections[{{ $section->id }}][type]" value="{{ $section->type }}">
-                                                <input type="hidden" name="sections[{{ $section->id }}][is_active]" value="0">
-
-                                                <div class="section-header">
-                                                    <div class="section-title">
-                                                        <strong>{{ $meta['icon'] ?? '🧱' }} {{ $meta['label'] ?? $section->type }}</strong>
-                                                        @if(!$section->is_active)
-                                                        <span class="badge bg-warning ms-2">مخفي</span>
-                                                        @endif
-                                                    </div>
-
-                                                    <div class="d-flex gap-2">
-                                                        <input type="checkbox"
-                                                            name="sections[{{ $section->id }}][is_active]"
-                                                            value="1"
-                                                            {{ $section->is_active ? 'checked' : '' }}>
-                                                        <button type="button"
-                                                            class="btn btn-sm btn-outline-danger js-mark-delete">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </div>
-                                                </div>
-
-                                                <hr>
-
-                                                {{-- HERO --}}
-                                                @if($section->type==='hero')
-                                                <div class="row g-3">
-                                                    <div class="col-md-6">
-                                                        <label class="fw-bold">العنوان عربي</label>
-                                                        <input type="text" class="form-control"
-                                                            name="sections[{{ $section->id }}][data][title_ar]"
-                                                            value="{{ $data['title_ar'] ?? '' }}">
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class="fw-bold">Title English</label>
-                                                        <input type="text" class="form-control"
-                                                            name="sections[{{ $section->id }}][data][title_en]"
-                                                            value="{{ $data['title_en'] ?? '' }}">
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <label class="fw-bold">الوصف عربي</label>
-                                                        <textarea class="form-control js-editor"
-                                                            name="sections[{{ $section->id }}][data][desc_ar]">{{ $data['desc_ar'] ?? '' }}</textarea>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <label class="fw-bold">Description English</label>
-                                                        <textarea class="form-control js-editor"
-                                                            name="sections[{{ $section->id }}][data][desc_en]">{{ $data['desc_en'] ?? '' }}</textarea>
-                                                    </div>
-                                                    @include('dashboard.pages.sections.images')
-
-
-
-
-
-                                                </div>
-                                                @endif
-
-                                                {{-- TEXT --}}
-                                                @if($section->type==='text')
-                                                <div class="row g-3">
-                                                    <div class="col-12">
-                                                        <label class="fw-bold">النص عربي</label>
-                                                        <textarea class="form-control js-editor"
-                                                            name="sections[{{ $section->id }}][data][text_ar]">{{ $data['text_ar'] ?? '' }}</textarea>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <label class="fw-bold">Text English</label>
-                                                        <textarea class="form-control js-editor"
-                                                            name="sections[{{ $section->id }}][data][text_en]">{{ $data['text_en'] ?? '' }}</textarea>
-                                                    </div>
-                                                    @include('dashboard.pages.sections.images')
-
-                                                </div>
-                                                @endif
-                                                {{-- REPEATER (WITH ICON PICKER STYLE) --}}
-                                                @if($section->type === 'repeater')
-    @php
-        $items = $data['items'] ?? [];
-    @endphp
-
-    {{-- ================= SECTION TITLE ================= --}}
-    <div class="row g-3 mb-4">
-        <div class="col-md-6">
-            <label class="fw-bold">عنوان القسم (AR)</label>
-            <input type="text"
-                class="form-control"
-                name="sections[{{ $section->id }}][data][title_ar]"
-                value="{{ $data['title_ar'] ?? '' }}">
-        </div>
-
-        <div class="col-md-6">
-            <label class="fw-bold">Section Title (EN)</label>
-            <input type="text"
-                class="form-control"
-                name="sections[{{ $section->id }}][data][title_en]"
-                value="{{ $data['title_en'] ?? '' }}">
-        </div>
-    </div>
-    <div class="mb-4">
-    <label class="fw-bold d-block mb-2">طريقة العرض</label>
-
-    <select
-        class="form-select"
-        name="sections[{{ $section->id }}][data][display_mode]"
-    >
-        <option value="multi"
-            {{ ($data['display_mode'] ?? 'multi') === 'multi' ? 'selected' : '' }}>
-            كل عنصر داخل كارد مستقل
-        </option>
-
-        <option value="single"
-            {{ ($data['display_mode'] ?? '') === 'single' ? 'selected' : '' }}>
-            جميع العناصر داخل كارد واحد
-        </option>
-    </select>
-</div>
-    {{-- =================================================== --}}
-
-    <div class="mb-3">
-        <button type="button"
-            class="btn btn-sm btn-outline-primary js-add-repeater-item"
-            data-section="{{ $section->id }}">
-            <i class="fas fa-plus me-1"></i>
-            إضافة عنصر
-        </button>
-    </div>
-
-    <div class="repeater-items" data-section="{{ $section->id }}">
-
-        @foreach($items as $index => $item)
-        <div class="border rounded p-3 mb-3 repeater-item">
-
-            <input type="hidden"
-                name="sections[{{ $section->id }}][data][items][{{ $index }}][order]"
-                value="{{ $item['order'] ?? $index }}">
-
-            <div class="row g-3">
-
-                {{-- TITLE --}}
-                <div class="col-md-6">
-                    <label class="fw-bold">العنوان (AR)</label>
-                    <input type="text"
-                        class="form-control"
-                        name="sections[{{ $section->id }}][data][items][{{ $index }}][title_ar]"
-                        value="{{ $item['title_ar'] ?? '' }}">
                 </div>
+            </div>
+        </form>
 
-                <div class="col-md-6">
-                    <label class="fw-bold">Title (EN)</label>
-                    <input type="text"
-                        class="form-control"
-                        name="sections[{{ $section->id }}][data][items][{{ $index }}][title_en]"
-                        value="{{ $item['title_en'] ?? '' }}">
-                </div>
+        {{-- ================= LAYOUT BUILDER ================= --}}
+        @if($page->exists)
 
-                {{-- DESCRIPTION --}}
-                <div class="col-md-6">
-                    <label class="fw-bold">الوصف (AR)</label>
-                    <textarea class="form-control"
-                        rows="4"
-                        name="sections[{{ $section->id }}][data][items][{{ $index }}][desc_ar]">{{ $item['desc_ar'] ?? '' }}</textarea>
-                </div>
+        <form id="sectionsForm"
+            method="POST"
+            action="{{ route('dashboard.pages.sections.batchUpdate',$page) }}">
+            @csrf
+            @method('PUT')
 
-                <div class="col-md-6">
-                    <label class="fw-bold">Description (EN)</label>
-                    <textarea class="form-control"
-                        rows="4"
-                        name="sections[{{ $section->id }}][data][items][{{ $index }}][desc_en]">{{ $item['desc_en'] ?? '' }}</textarea>
-                </div>
+            <div class="card shadow-sm page-builder">
+                <div class="card-header bg-white fw-bold d-flex justify-content-between align-items-center">
+                    <span>
+                        <i class="fas fa-layer-group me-2"></i>
+                        Layout Builder
+                        <small class="text-muted ms-2">({{ count($layouts) }} layout)</small>
+                    </span>
 
-                {{-- ICON --}}
-                <div class="col-md-6">
-    <label class="fw-bold">الأيقونة</label>
-
-    <div class="input-group mb-2">
-        <input type="text"
-            class="form-control icon-input"
-            placeholder="fa-solid fa-star"
-            name="sections[{{ $section->id }}][data][items][{{ $index }}][icon]"
-            value="{{ $item['icon'] ?? '' }}">
-
-        <button type="button"
-            class="btn btn-outline-secondary js-open-icon-picker">
-            اختيار
-        </button>
-    </div>
-
-    {{-- COLOR PICKER --}}
-    <div class="d-flex align-items-center gap-2 mb-2">
-        <label class="small text-muted mb-0">لون الأيقونة</label>
-
-        <input type="color"
-            class="form-control form-control-color"
-            style="width: 48px; height: 38px;"
-            name="sections[{{ $section->id }}][data][items][{{ $index }}][icon_color]"
-            value="{{ $item['icon_color'] ?? '#00b4d8' }}">
-    </div>
-
-    {{-- PREVIEW --}}
-    <div class="icon-preview mt-2">
-        @if(!empty($item['icon']))
-            <i
-                class="{{ $item['icon'] }} fa-2x"
-                style="color: {{ $item['icon_color'] ?? '#00b4d8' }}"
-            ></i>
-        @endif
-    </div>
-</div>
-
-
-                {{-- DELETE --}}
-                <div class="col-md-3 d-flex align-items-end">
                     <button type="button"
-                        class="btn btn-outline-danger w-100 js-remove-repeater-item">
-                        <i class="fas fa-trash"></i>
-                        حذف العنصر
+                        class="btn btn-sm btn-outline-primary"
+                        data-toggle="modal"
+                        data-target="#addLayoutModal">
+                        <i class="fas fa-plus me-1"></i>
+                        إضافة Layout
                     </button>
                 </div>
 
-            </div>
-        </div>
-        @endforeach
+                <div class="card-body">
 
-    </div>
-@endif
+                    @if(count($layouts))
+
+                    @foreach($layouts as $layoutIndex=>$layout)
+                    <div class="layout-row" id="layout-{{ $layout['id'] }}">
+
+                        <div class="layout-row-header">
+                            <div class="layout-row-title">
+                                🧩 Layout Row #{{ $layoutIndex+1 }}
+                                <small class="text-muted">(ID: {{ substr($layout['id'],0,8) }}...)</small>
+                            </div>
+
+                            {{-- زر حذف Layout (بدون form داخلي) --}}
+                            <button type="submit"
+                                class="btn btn-sm btn-outline-danger"
+                                form="delete-layout-{{ $layout['id'] }}"
+                                onclick="return confirm('هل أنت متأكد من حذف هذا الـ Layout بالكامل؟')">
+                                <i class="fas fa-trash me-1"></i>
+                                حذف Layout
+                            </button>
+                        </div>
+
+                        <div class="row g-3 mt-3">
+
+                            @foreach($layout['columns'] as $colIndex=>$column)
+                            @php
+                            $colWidth = (int)($column['col'] ?? 12);
+                            $sections = $column['sections'];
+                            @endphp
+
+                            <div class="col-12 col-lg-{{ $colWidth }}">
+                                <div class="column-box">
+
+                                    <div class="column-header">
+                                        <div class="column-title">
+                                            <i class="fas fa-columns me-2"></i>
+                                            Column {{ $colIndex+1 }}
+                                            <span class="badge bg-primary ms-2">{{ $colWidth }}/12</span>
+                                        </div>
+
+                                        <button type="button"
+                                            class="btn btn-sm btn-primary js-open-add-section"
+                                            data-layout="{{ $layout['id'] }}"
+                                            data-col="{{ $colIndex }}">
+                                            <i class="fas fa-plus me-1"></i>
+                                            إضافة قسم
+                                        </button>
+                                    </div>
+
+                                    <div class="sections-container">
+
+                                        @forelse($sections as $section)
+                                        @php
+                                        $meta = $sectionsRegistry[$section->type] ?? [];
+                                        $data = is_array($section->data) ? $section->data : [];
+                                        @endphp
+
+                                        @if($section->type !== 'empty')
+                                        <div class="section-chip js-section-chip">
+
+                                            <input type="hidden" name="sections[{{ $section->id }}][id]" value="{{ $section->id }}">
+                                            <input type="hidden" name="sections[{{ $section->id }}][layout_id]" value="{{ $layout['id'] }}">
+                                            <input type="hidden" name="sections[{{ $section->id }}][column_index]" value="{{ $colIndex }}">
+                                            <input type="hidden" name="sections[{{ $section->id }}][order]" value="{{ $section->order }}">
+                                            <input type="hidden" name="sections[{{ $section->id }}][_delete]" class="js-delete-flag" value="0">
+                                            <input type="hidden" name="sections[{{ $section->id }}][type]" value="{{ $section->type }}">
+                                            <input type="hidden" name="sections[{{ $section->id }}][is_active]" value="0">
+
+                                            <div class="section-header">
+                                                <div class="section-title">
+                                                    <strong>{{ $meta['icon'] ?? '🧱' }} {{ $meta['label'] ?? $section->type }}</strong>
+                                                    @if(!$section->is_active)
+                                                    <span class="badge bg-warning ms-2">مخفي</span>
+                                                    @endif
+                                                </div>
+
+                                                <div class="d-flex gap-2">
+                                                    <input type="checkbox"
+                                                        name="sections[{{ $section->id }}][is_active]"
+                                                        value="1"
+                                                        {{ $section->is_active ? 'checked' : '' }}>
+                                                    <button type="button"
+                                                        class="btn btn-sm btn-outline-danger js-mark-delete">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <hr>
+
+                                            {{-- HERO --}}
+                                            @if($section->type==='hero')
+                                            <div class="row g-3">
+                                                <div class="col-md-6">
+                                                    <label class="fw-bold">العنوان عربي</label>
+                                                    <input type="text" class="form-control"
+                                                        name="sections[{{ $section->id }}][data][title_ar]"
+                                                        value="{{ $data['title_ar'] ?? '' }}">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label class="fw-bold">Title English</label>
+                                                    <input type="text" class="form-control"
+                                                        name="sections[{{ $section->id }}][data][title_en]"
+                                                        value="{{ $data['title_en'] ?? '' }}">
+                                                </div>
+                                                <div class="col-12">
+                                                    <label class="fw-bold">الوصف عربي</label>
+                                                    <textarea class="form-control js-editor"
+                                                        name="sections[{{ $section->id }}][data][desc_ar]">{{ $data['desc_ar'] ?? '' }}</textarea>
+                                                </div>
+                                                <div class="col-12">
+                                                    <label class="fw-bold">Description English</label>
+                                                    <textarea class="form-control js-editor"
+                                                        name="sections[{{ $section->id }}][data][desc_en]">{{ $data['desc_en'] ?? '' }}</textarea>
+                                                </div>
+                                                @include('dashboard.pages.sections.images')
+
 
 
 
 
                                             </div>
                                             @endif
-                                            @empty
-                                            <div class="empty-column">
-                                                <p class="text-muted">لا يوجد أقسام بعد</p>
+
+                                            {{-- TEXT --}}
+                                            @if($section->type==='text')
+                                            <div class="row g-3">
+                                                <div class="col-12">
+                                                    <label class="fw-bold">النص عربي</label>
+                                                    <textarea class="form-control js-editor"
+                                                        name="sections[{{ $section->id }}][data][text_ar]">{{ $data['text_ar'] ?? '' }}</textarea>
+                                                </div>
+                                                <div class="col-12">
+                                                    <label class="fw-bold">Text English</label>
+                                                    <textarea class="form-control js-editor"
+                                                        name="sections[{{ $section->id }}][data][text_en]">{{ $data['text_en'] ?? '' }}</textarea>
+                                                </div>
+                                                @include('dashboard.pages.sections.images')
+
                                             </div>
-                                            @endforelse
+                                            @endif
+                                            {{-- REPEATER (WITH ICON PICKER STYLE) --}}
+                                            @if($section->type === 'repeater')
+                                            @php
+                                            $items = $data['items'] ?? [];
+                                            @endphp
+
+                                            {{-- ================= SECTION TITLE ================= --}}
+                                            <div class="row g-3 mb-4">
+                                                <div class="col-md-6">
+                                                    <label class="fw-bold">عنوان القسم (AR)</label>
+                                                    <input type="text"
+                                                        class="form-control"
+                                                        name="sections[{{ $section->id }}][data][title_ar]"
+                                                        value="{{ $data['title_ar'] ?? '' }}">
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label class="fw-bold">Section Title (EN)</label>
+                                                    <input type="text"
+                                                        class="form-control"
+                                                        name="sections[{{ $section->id }}][data][title_en]"
+                                                        value="{{ $data['title_en'] ?? '' }}">
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label class="fw-bold d-block mb-2">طريقة العرض</label>
+
+                                                <select
+                                                    class="form-select"
+                                                    name="sections[{{ $section->id }}][data][display_mode]">
+                                                    <option value="multi"
+                                                        {{ ($data['display_mode'] ?? 'multi') === 'multi' ? 'selected' : '' }}>
+                                                        كل عنصر داخل كارد مستقل
+                                                    </option>
+
+                                                    <option value="single"
+                                                        {{ ($data['display_mode'] ?? '') === 'single' ? 'selected' : '' }}>
+                                                        جميع العناصر داخل كارد واحد
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            {{-- =================================================== --}}
+
+                                            <div class="mb-3">
+                                                <button type="button"
+                                                    class="btn btn-sm btn-outline-primary js-add-repeater-item"
+                                                    data-section="{{ $section->id }}">
+                                                    <i class="fas fa-plus me-1"></i>
+                                                    إضافة عنصر
+                                                </button>
+                                            </div>
+
+                                            <div class="repeater-items" data-section="{{ $section->id }}">
+
+                                                @foreach($items as $index => $item)
+                                                <div class="border rounded p-3 mb-3 repeater-item">
+
+                                                    <input type="hidden"
+                                                        name="sections[{{ $section->id }}][data][items][{{ $index }}][order]"
+                                                        value="{{ $item['order'] ?? $index }}">
+
+                                                    <div class="row g-3">
+
+                                                        {{-- TITLE --}}
+                                                        <div class="col-md-6">
+                                                            <label class="fw-bold">العنوان (AR)</label>
+                                                            <input type="text"
+                                                                class="form-control"
+                                                                name="sections[{{ $section->id }}][data][items][{{ $index }}][title_ar]"
+                                                                value="{{ $item['title_ar'] ?? '' }}">
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label class="fw-bold">Title (EN)</label>
+                                                            <input type="text"
+                                                                class="form-control"
+                                                                name="sections[{{ $section->id }}][data][items][{{ $index }}][title_en]"
+                                                                value="{{ $item['title_en'] ?? '' }}">
+                                                        </div>
+
+                                                        {{-- DESCRIPTION --}}
+                                                        <div class="col-md-6">
+                                                            <label class="fw-bold">الوصف (AR)</label>
+                                                            <textarea class="form-control"
+                                                                rows="4"
+                                                                name="sections[{{ $section->id }}][data][items][{{ $index }}][desc_ar]">{{ $item['desc_ar'] ?? '' }}</textarea>
+                                                        </div>
+
+                                                        <div class="col-md-6">
+                                                            <label class="fw-bold">Description (EN)</label>
+                                                            <textarea class="form-control"
+                                                                rows="4"
+                                                                name="sections[{{ $section->id }}][data][items][{{ $index }}][desc_en]">{{ $item['desc_en'] ?? '' }}</textarea>
+                                                        </div>
+
+                                                        {{-- ICON --}}
+                                                        <div class="col-md-6">
+                                                            <label class="fw-bold">الأيقونة</label>
+
+                                                            <div class="input-group mb-2">
+                                                                <input type="text"
+                                                                    class="form-control icon-input"
+                                                                    placeholder="fa-solid fa-star"
+                                                                    name="sections[{{ $section->id }}][data][items][{{ $index }}][icon]"
+                                                                    value="{{ $item['icon'] ?? '' }}">
+
+                                                                <button type="button"
+                                                                    class="btn btn-outline-secondary js-open-icon-picker">
+                                                                    اختيار
+                                                                </button>
+                                                            </div>
+
+                                                            {{-- COLOR PICKER --}}
+                                                            <div class="d-flex align-items-center gap-2 mb-2">
+                                                                <label class="small text-muted mb-0">لون الأيقونة</label>
+
+                                                                <input type="color"
+                                                                    class="form-control form-control-color"
+                                                                    style="width: 48px; height: 38px;"
+                                                                    name="sections[{{ $section->id }}][data][items][{{ $index }}][icon_color]"
+                                                                    value="{{ $item['icon_color'] ?? '#00b4d8' }}">
+                                                            </div>
+
+                                                            {{-- PREVIEW --}}
+                                                            <div class="icon-preview mt-2">
+                                                                @if(!empty($item['icon']))
+                                                                <i
+                                                                    class="{{ $item['icon'] }} fa-2x"
+                                                                    style="color: {{ $item['icon_color'] ?? '#00b4d8' }}"></i>
+                                                                @endif
+                                                            </div>
+                                                        </div>
+
+
+                                                        {{-- DELETE --}}
+                                                        <div class="col-md-3 d-flex align-items-end">
+                                                            <button type="button"
+                                                                class="btn btn-outline-danger w-100 js-remove-repeater-item">
+                                                                <i class="fas fa-trash"></i>
+                                                                حذف العنصر
+                                                            </button>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                @endforeach
+
+                                            </div>
+                                            @endif
+
+
+
 
                                         </div>
+                                        @endif
+                                        @empty
+                                        <div class="empty-column">
+                                            <p class="text-muted">لا يوجد أقسام بعد</p>
+                                        </div>
+                                        @endforelse
+
                                     </div>
                                 </div>
-                                @endforeach
-
                             </div>
-                        </div>
-                        @endforeach
+                            @endforeach
 
-                        <div class="text-end mt-4">
-                            <button type="submit" class="btn btn-success btn-lg">
-                                <i class="fas fa-save me-2"></i>
-                                حفظ جميع الأقسام
-                            </button>
                         </div>
-
-                        @else
-                        <div class="text-center py-5">
-                            <h4>لا يوجد Layouts</h4>
-                        </div>
-                        @endif
-
                     </div>
+                    @endforeach
+
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="fas fa-save me-2"></i>
+                            حفظ جميع الأقسام
+                        </button>
+                    </div>
+
+                    @else
+                    <div class="text-center py-5">
+                        <h4>لا يوجد Layouts</h4>
+                    </div>
+                    @endif
+
                 </div>
-            </form>
-
-            {{-- DELETE LAYOUT FORMS --}}
-            @foreach($layouts as $layout)
-            <form id="delete-layout-{{ $layout['id'] }}"
-                method="POST"
-                action="{{ route('dashboard.layouts.destroy',[$page,$layout['id']]) }}"
-                class="d-none">
-                @csrf
-                @method('DELETE')
-            </form>
-            @endforeach
-
-            @else
-            <div class="alert alert-info">
-                بعد حفظ بيانات الصفحة يمكنك البدء ببناء الـ Layout.
             </div>
+        </form>
+
+        {{-- DELETE LAYOUT FORMS --}}
+        @foreach($layouts as $layout)
+        <form id="delete-layout-{{ $layout['id'] }}"
+            method="POST"
+            action="{{ route('dashboard.layouts.destroy',[$page,$layout['id']]) }}"
+            class="d-none">
+            @csrf
+            @method('DELETE')
+        </form>
+        @endforeach
+
+        @else
+        <div class="alert alert-info">
+            بعد حفظ بيانات الصفحة يمكنك البدء ببناء الـ Layout.
+        </div>
+        @endif
+    </div>
+
+</div>
+
+{{-- FLOATING RIGHT PANEL --}}
+<div class="page-settings-panel">
+
+<div class="settings-card">
+        <div class="settings-header drag-handle">
+            <i class="fas fa-cog"></i>
+            الإعدادات
+        </div>
+        <div class="settings-body">
+
+            {{-- PAGE STATUS SELECT --}}
+            <div class="mb-3">
+                <label class="form-label fw-bold">حالة النشر</label>
+                <select name="status"
+                    form="pageForm"
+                    class="form-select {{ $page->status === 'published' ? 'border-success' : ($page->status === 'draft' ? 'border-warning' : '') }}"
+                    style="font-weight: 500;">
+                    <option value="draft"
+                        @selected(old('status', $page->status ?? 'draft')=='draft')
+                        class="text-warning">
+                        📝 مسودة
+                    </option>
+                    <option value="published"
+                        @selected(old('status', $page->status ?? 'draft')=='published')
+                        class="text-success">
+                        ✅ منشورة
+                    </option>
+                </select>
+
+                {{-- Current Status Badge (for display only) --}}
+                @if($page->exists)
+                <div class="mt-2 text-center">
+                    @if($page->status === 'published')
+                    <span class="badge bg-success bg-opacity-10  border border-success border-opacity-25 px-3 py-2">
+                        <i class="fas fa-check-circle me-1"></i>
+                        الصفحة منشورة حالياً
+                    </span>
+                    @else
+                    <span class="badge bg-warning bg-opacity-10  border border-warning border-opacity-25 px-3 py-2">
+                        <i class="fas fa-edit me-1"></i>
+                        الصفحة مسودة حالياً
+                    </span>
+                    @endif
+                </div>
+                @endif
+            </div>
+
+            {{-- SAVE PAGE --}}
+            <button type="submit"
+                form="pageForm"
+                class="btn btn-primary w-100 mb-2">
+                <i class="fas fa-save me-2"></i>
+                حفظ الصفحة
+            </button>
+
+
+            {{-- PREVIEW --}}
+            @if($page->exists)
+            <a href="{{ route('dashboard.pages.preview', $page) }}"
+                target="_blank"
+                class="btn btn-outline-dark w-100 mb-2">
+                <i class="fas fa-eye me-2"></i>
+                معاينة الصفحة
+            </a>
             @endif
 
+            {{-- ADD LAYOUT QUICK BUTTON --}}
+            @if($page->exists)
+            <button type="button"
+                        class="btn btn-sm btn-outline-primary"
+                        data-toggle="modal"
+                        data-target="#addLayoutModal">
+                        <i class="fas fa-plus me-1"></i>
+                        إضافة Layout
+                    </button>
+            @endif
+
+
+
         </div>
-
-        {{-- ================= RIGHT COLUMN ================= --}}
-        <div class="col-lg-2">
-            <div class="sticky-top" style="top:20px">
-
-                {{-- SETTINGS CARD --}}
-                <div class="card shadow-sm mb-3">
-                    <div class="card-header fw-bold bg-white">
-                        <i class="fas fa-cog me-2"></i>
-                        الإعدادات
-                    </div>
-
-                    <div class="card-body">
-
-                        {{-- PAGE STATUS SELECT --}}
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">حالة النشر</label>
-                            <select name="status"
-                                form="pageForm"
-                                class="form-select {{ $page->status === 'published' ? 'border-success' : ($page->status === 'draft' ? 'border-warning' : '') }}"
-                                style="font-weight: 500;">
-                                <option value="draft"
-                                    @selected(old('status', $page->status ?? 'draft')=='draft')
-                                    class="text-warning">
-                                    📝 مسودة
-                                </option>
-                                <option value="published"
-                                    @selected(old('status', $page->status ?? 'draft')=='published')
-                                    class="text-success">
-                                    ✅ منشورة
-                                </option>
-                            </select>
-
-                            {{-- Current Status Badge (for display only) --}}
-                            @if($page->exists)
-                            <div class="mt-2 text-center">
-                                @if($page->status === 'published')
-                                <span class="badge bg-success bg-opacity-10  border border-success border-opacity-25 px-3 py-2">
-                                    <i class="fas fa-check-circle me-1"></i>
-                                    الصفحة منشورة حالياً
-                                </span>
-                                @else
-                                <span class="badge bg-warning bg-opacity-10  border border-warning border-opacity-25 px-3 py-2">
-                                    <i class="fas fa-edit me-1"></i>
-                                    الصفحة مسودة حالياً
-                                </span>
-                                @endif
-                            </div>
-                            @endif
-                        </div>
-
-                        {{-- SAVE PAGE --}}
-                        <button type="submit"
-                            form="pageForm"
-                            class="btn btn-primary w-100 mb-2">
-                            <i class="fas fa-save me-2"></i>
-                            حفظ الصفحة
-                        </button>
-
-                        {{-- SAVE ALL (Page + Sections) --}}
-                        @if($page->exists)
-                        <button type="button"
-                            onclick="saveAllChanges()"
-                            class="btn btn-success w-100 mb-2">
-                            <i class="fas fa-save me-2"></i>
-                            حفظ الكل
-                        </button>
-                        @endif
-
-                        {{-- SAVE SECTIONS ONLY --}}
-                        @if($page->exists)
-                        <button type="submit"
-                            form="sectionsForm"
-                            class="btn btn-outline-success w-100 mb-2">
-                            <i class="fas fa-layer-group me-2"></i>
-                            حفظ الأقسام فقط
-                        </button>
-                        @endif
-
-                        {{-- PREVIEW --}}
-                        @if($page->exists)
-                        <a href="{{ route('dashboard.pages.preview', $page) }}"
-                            target="_blank"
-                            class="btn btn-outline-dark w-100 mb-2">
-                            <i class="fas fa-eye me-2"></i>
-                            معاينة الصفحة
-                        </a>
-                        @endif
-
-                        {{-- ADD LAYOUT QUICK BUTTON --}}
-                        @if($page->exists)
-                        <button type="button"
-                            class="btn btn-outline-primary w-100 mb-2"
-                            data-bs-toggle="modal"
-                            data-bs-target="#addLayoutModal">
-                            <i class="fas fa-plus me-2"></i>
-                            إضافة Layout
-                        </button>
-                        @endif
-
-                        {{-- BACK --}}
-                        <a href="{{ route('dashboard.pages.index') }}"
-                            class="btn btn-outline-secondary w-100">
-                            <i class="fas fa-arrow-right me-2"></i>
-                            رجوع
-                        </a>
-
-                    </div>
-                </div>
-
-
-
-            </div>
-        </div>
-
-
     </div>
+
+
+
+</div>
+</div>
+
 </div>
 {{-- ================= ADD LAYOUT MODAL ================= --}}
 @if($page->exists)
@@ -1057,25 +1175,39 @@
 
             <div class="modal-body">
                 <p class="text-muted mb-4">اختر تخطيطاً</p>
-
+            
                 <div class="row g-3 mb-4">
                     @php
                     $presets = ['12', '6,6', '8,4', '4,8', '4,4,4', '3,3,3,3'];
                     @endphp
-
+            
                     @foreach($presets as $preset)
                     @php
                     $cols = explode(',', $preset);
                     $name = count($cols) > 1 ? implode(' / ', $cols) : 'Full';
                     @endphp
-
+            
                     <div class="col-md-4 col-6">
                         <div class="layout-preset js-layout-preset {{ $loop->first ? 'active' : '' }}"
                             data-cols="{{ $preset }}">
                             <div class="preset-preview mb-2">
+                                @php
+                                $col_index = 0;
+                                $current_col = 0;
+                                @endphp
+                                
                                 @for($i = 0; $i < 12; $i++)
-                                    <span class="{{ $i < array_sum($cols) ? 'fill' : '' }}"></span>
-                                    @endfor
+                                    @if($current_col >= $cols[$col_index])
+                                        @php
+                                        $col_index++;
+                                        $current_col = 0;
+                                        @endphp
+                                    @endif
+                                    
+                                    <span class="col-group-{{ $col_index }} {{ $i < array_sum($cols) ? 'fill' : 'empty' }}"></span>
+                                    
+                                    @php $current_col++; @endphp
+                                @endfor
                             </div>
                             <div class="fw-bold">{{ $name }}</div>
                             <small class="text-muted">{{ $preset }}</small>
@@ -1083,13 +1215,13 @@
                     </div>
                     @endforeach
                 </div>
-
+            
                 <form method="POST"
                     action="{{ route('dashboard.layouts.store', $page) }}"
                     id="addLayoutForm">
                     @csrf
                     <div id="layoutColsHolder"></div>
-
+            
                     <div class="d-grid">
                         <button type="submit" class="btn btn-primary btn-lg">
                             <i class="fas fa-check-circle me-2"></i>
@@ -1097,8 +1229,50 @@
                         </button>
                     </div>
                 </form>
-
             </div>
+            
+            <style>
+            .preset-preview {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 2px;
+                height: 40px;
+            }
+            
+            .preset-preview span {
+                flex: 1;
+                height: 100%;
+                border-radius: 3px;
+                transition: all 0.2s;
+            }
+            
+            .preset-preview span.fill {
+                opacity: 1;
+            }
+            
+            .preset-preview span.empty {
+                opacity: 0.2;
+                background-color: #dee2e6 !important;
+            }
+            
+            /* ألوان لمجموعات الأعمدة المختلفة */
+            .preset-preview .col-group-0.fill { background-color: #0d6efd; } /* أزرق */
+            .preset-preview .col-group-1.fill { background-color: #198754; } /* أخضر */
+            .preset-preview .col-group-2.fill { background-color: #fd7e14; } /* برتقالي */
+            .preset-preview .col-group-3.fill { background-color: #dc3545; } /* أحمر */
+            .preset-preview .col-group-4.fill { background-color: #6f42c1; } /* بنفسجي */
+            .preset-preview .col-group-5.fill { background-color: #20c997; } /* تركواز */
+            
+            /* تأثير عند المرور */
+            .layout-preset:hover .preset-preview span.fill {
+                opacity: 0.9;
+                transform: translateY(-1px);
+            }
+            
+            .layout-preset.active .preset-preview span.fill {
+                box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+            }
+            </style>
         </div>
     </div>
 </div>
@@ -1170,115 +1344,115 @@
    GLOBAL STATE (ONE SOURCE OF TRUTH)
 ===================================================== --}}
 <script>
-    window.activeTinyEditor = null;   // للـ Editor فقط
-    window.activeSectionId  = null;   // للـ Section Image فقط
+    window.activeTinyEditor = null; // للـ Editor فقط
+    window.activeSectionId = null; // للـ Section Image فقط
 </script>
 
 {{-- =====================================================
    SAVE ALL (PAGE + SECTIONS)
 ===================================================== --}}
 <script>
-function saveAllChanges() {
-    const loader = document.createElement('div');
-    loader.className = 'position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center';
-    loader.style.zIndex = 9999;
-    loader.innerHTML = `
+    function saveAllChanges() {
+        const loader = document.createElement('div');
+        loader.className = 'position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50 d-flex justify-content-center align-items-center';
+        loader.style.zIndex = 9999;
+        loader.innerHTML = `
         <div class="spinner-border text-primary"></div>
         <div class="ms-3 text-white fw-bold">جارٍ حفظ جميع التغييرات...</div>
     `;
-    document.body.appendChild(loader);
+        document.body.appendChild(loader);
 
-    const pageForm = document.getElementById('pageForm');
-    const pageFormData = new FormData(pageForm);
+        const pageForm = document.getElementById('pageForm');
+        const pageFormData = new FormData(pageForm);
 
-    fetch(pageForm.action, {
-        method: pageForm.method,
-        body: pageFormData,
-        headers: {
-            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    }).then(() => {
-        const sectionsForm = document.getElementById('sectionsForm');
-        if (sectionsForm) {
-            tinymce.editors.forEach(ed => {
-                const textarea = ed.targetElm;
-                if (textarea) textarea.value = ed.getContent();
-            });
-            sectionsForm.submit();
-        }
-    }).finally(() => {
-        setTimeout(() => loader.remove(), 1000);
-    });
-}
+        fetch(pageForm.action, {
+            method: pageForm.method,
+            body: pageFormData,
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        }).then(() => {
+            const sectionsForm = document.getElementById('sectionsForm');
+            if (sectionsForm) {
+                tinymce.editors.forEach(ed => {
+                    const textarea = ed.targetElm;
+                    if (textarea) textarea.value = ed.getContent();
+                });
+                sectionsForm.submit();
+            }
+        }).finally(() => {
+            setTimeout(() => loader.remove(), 1000);
+        });
+    }
 </script>
 
 {{-- =====================================================
    LAYOUT PRESETS
 ===================================================== --}}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    const presets = document.querySelectorAll('.js-layout-preset');
-    const holder  = document.getElementById('layoutColsHolder');
+    document.addEventListener('DOMContentLoaded', function() {
+        const presets = document.querySelectorAll('.js-layout-preset');
+        const holder = document.getElementById('layoutColsHolder');
 
-    presets.forEach(preset => {
-        preset.addEventListener('click', function () {
-            presets.forEach(p => p.classList.remove('active'));
-            this.classList.add('active');
+        presets.forEach(preset => {
+            preset.addEventListener('click', function() {
+                presets.forEach(p => p.classList.remove('active'));
+                this.classList.add('active');
 
-            holder.innerHTML = '';
-            this.dataset.cols.split(',').forEach((col, i) => {
-                holder.insertAdjacentHTML('beforeend', `
+                holder.innerHTML = '';
+                this.dataset.cols.split(',').forEach((col, i) => {
+                    holder.insertAdjacentHTML('beforeend', `
                     <input type="hidden" name="columns[${i}][col]" value="${col}">
                     <input type="hidden" name="columns[${i}][order]" value="${i}">
                 `);
+                });
             });
         });
-    });
 
-    if (presets.length) presets[0].click();
-});
+        if (presets.length) presets[0].click();
+    });
 </script>
 
 {{-- =====================================================
    SECTION + REPEATER + DELETE
 ===================================================== --}}
 <script>
-document.addEventListener('click', function (e) {
+    document.addEventListener('click', function(e) {
 
-    /* إضافة قسم */
-    const openAdd = e.target.closest('.js-open-add-section');
-    if (openAdd) {
-        document.getElementById('addSectionLayoutId').value = openAdd.dataset.layout;
-        document.getElementById('addSectionColIndex').value = openAdd.dataset.col;
-        new bootstrap.Modal(document.getElementById('addSectionModal')).show();
-    }
+        /* إضافة قسم */
+        const openAdd = e.target.closest('.js-open-add-section');
+        if (openAdd) {
+            document.getElementById('addSectionLayoutId').value = openAdd.dataset.layout;
+            document.getElementById('addSectionColIndex').value = openAdd.dataset.col;
+            new bootstrap.Modal(document.getElementById('addSectionModal')).show();
+        }
 
-    const addSection = e.target.closest('.js-add-section');
-    if (addSection) {
-        document.getElementById('addSectionType').value = addSection.dataset.type;
-        document.getElementById('addSectionForm').submit();
-    }
+        const addSection = e.target.closest('.js-add-section');
+        if (addSection) {
+            document.getElementById('addSectionType').value = addSection.dataset.type;
+            document.getElementById('addSectionForm').submit();
+        }
 
-    /* حذف قسم */
-    const del = e.target.closest('.js-mark-delete');
-    if (del) {
-        if (!confirm('حذف القسم؟')) return;
-        const chip = del.closest('.js-section-chip');
-        chip.querySelector('.js-delete-flag').value = 1;
-        chip.classList.add('deleted');
-        del.disabled = true;
-        del.innerHTML = '✔';
-    }
+        /* حذف قسم */
+        const del = e.target.closest('.js-mark-delete');
+        if (del) {
+            if (!confirm('حذف القسم؟')) return;
+            const chip = del.closest('.js-section-chip');
+            chip.querySelector('.js-delete-flag').value = 1;
+            chip.classList.add('deleted');
+            del.disabled = true;
+            del.innerHTML = '✔';
+        }
 
-    /* Repeater */
-    const addRepeater = e.target.closest('.js-add-repeater-item');
-    if (addRepeater) {
-        const sectionId = addRepeater.dataset.section;
-        const container = document.querySelector(`.repeater-items[data-section="${sectionId}"]`);
-        const index = container.children.length;
+        /* Repeater */
+        const addRepeater = e.target.closest('.js-add-repeater-item');
+        if (addRepeater) {
+            const sectionId = addRepeater.dataset.section;
+            const container = document.querySelector(`.repeater-items[data-section="${sectionId}"]`);
+            const index = container.children.length;
 
-        container.insertAdjacentHTML('beforeend', `
+            container.insertAdjacentHTML('beforeend', `
             <div class="border rounded p-3 mb-3 repeater-item">
                 <input type="hidden" name="sections[${sectionId}][data][items][${index}][order]" value="${index}">
                 <div class="row g-3">
@@ -1310,7 +1484,7 @@ document.addEventListener('click', function (e) {
         <input type="color"
             class="form-control form-control-color"
             style="width: 48px; height: 38px;"
-            name="sections[{{ $section->id }}][data][items][${sectionId}}][icon_color]"
+            name="sections[${sectionId}][data][items][${sectionId}}][icon_color]"
             value="{{ $item['icon_color'] ?? '#00b4d8' }}">
     </div>
                         <div class="icon-preview mt-2"></div>
@@ -1321,133 +1495,125 @@ document.addEventListener('click', function (e) {
                 </div>
             </div>
         `);
-    }
+        }
 
-    if (e.target.closest('.js-remove-repeater-item')) {
-        e.target.closest('.repeater-item').remove();
-    }
-});
+        if (e.target.closest('.js-remove-repeater-item')) {
+            e.target.closest('.repeater-item').remove();
+        }
+    });
 </script>
 
 {{-- =====================================================
    ICON PICKER
 ===================================================== --}}
 <script>
-let activeIconInput = null;
+    let activeIconInput = null;
 
-document.addEventListener('click', function (e) {
-    const btn = e.target.closest('.js-open-icon-picker');
-    if (!btn) return;
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.js-open-icon-picker');
+        if (!btn) return;
 
-    activeIconInput = btn.closest('.repeater-item').querySelector('.icon-input');
+        activeIconInput = btn.closest('.repeater-item').querySelector('.icon-input');
 
-    window.open(
-        '{{ route("icons.index") }}',
-        'IconPicker',
-        'width=1000,height=650'
-    );
-});
+        window.open(
+            '{{ route("icons.index") }}',
+            'IconPicker',
+            'width=1000,height=650'
+        );
+    });
 
-window.addEventListener('message', function (event) {
-    if (event.data?.type !== 'icon-selected') return;
-    if (!activeIconInput) return;
+    window.addEventListener('message', function(event) {
+        if (event.data?.type !== 'icon-selected') return;
+        if (!activeIconInput) return;
 
-    activeIconInput.value = event.data.icon;
-    activeIconInput.closest('.repeater-item')
-        .querySelector('.icon-preview')
-        .innerHTML = `<i class="${event.data.icon} fa-2x text-primary"></i>`;
-});
+        activeIconInput.value = event.data.icon;
+        activeIconInput.closest('.repeater-item')
+            .querySelector('.icon-preview')
+            .innerHTML = `<i class="${event.data.icon} fa-2x text-primary"></i>`;
+    });
 </script>
 
 {{-- =====================================================
    TINYMCE
 ===================================================== --}}
-<script src="https://cdn.tiny.cloud/1/2zem850nmvd5df5o8joazwyvha498198poptrpebqfmixw7h/tinymce/8/tinymce.min.js"></script>
 
-<script>
-tinymce.init({
-    selector: '.js-editor',
-    language: 'ar',
-    height: 300,
-    plugins: 'image link lists code autoresize',
-    toolbar: `
-        undo redo |
-        bold italic underline |
-        bullist numlist |
-        image media-library |
-        alignleft aligncenter alignright |
-        code
-    `,
-    setup(editor) {
-        editor.ui.registry.addButton('media-library', {
-            text: '📁 مكتبة الوسائط',
-            onAction() {
-                window.activeTinyEditor = editor;
-                window.open(
-                    '{{ route("dashboard.media.index") }}?select_mode=editor',
-                    'MediaLibrary',
-                    'width=1200,height=800'
-                );
-            }
-        });
-    }
-});
-</script>
 
 {{-- =====================================================
    SECTION MEDIA PICKER
 ===================================================== --}}
 <script>
-document.addEventListener('click', function (e) {
-    const btn = e.target.closest('.js-open-media');
-    if (!btn) return;
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.js-open-media');
+        if (!btn) return;
 
-    e.preventDefault();
-    window.activeSectionId = btn.dataset.sectionId;
+        e.preventDefault();
+        window.activeSectionId = btn.dataset.sectionId;
 
-    window.open(
-        '{{ route("dashboard.media.index") }}?select_mode=section',
-        'MediaPicker',
-        'width=1200,height=800'
-    );
-});
+        window.open(
+            '{{ route("dashboard.media.index") }}?select_mode=section',
+            'MediaPicker',
+            'width=1200,height=800'
+        );
+    });
 
-function removeSectionImage(sectionId) {
-    document.getElementById(`section_image_${sectionId}`).value = '';
-    document.getElementById(`section_preview_${sectionId}`).style.display = 'none';
-    document.getElementById(`section_remove_${sectionId}`).style.display = 'none';
-}
+    function removeSectionImage(sectionId) {
+        document.getElementById(`section_image_${sectionId}`).value = '';
+        document.getElementById(`section_preview_${sectionId}`).style.display = 'none';
+        document.getElementById(`section_remove_${sectionId}`).style.display = 'none';
+    }
 </script>
 
 {{-- =====================================================
    MEDIA MESSAGE RECEIVER (EDITOR + SECTION)
 ===================================================== --}}
+
 <script>
-window.addEventListener('message', function (event) {
-    if (!event.data || !event.data.type) return;
+document.addEventListener('DOMContentLoaded', function () {
 
-    /* SECTION IMAGE */
-    if (event.data.type === 'media-selected' && window.activeSectionId) {
-        const media = event.data.media;
-        const id = window.activeSectionId;
+    const panel = document.querySelector('.page-settings-panel');
+    const handle = panel.querySelector('.drag-handle');
 
-        document.getElementById(`section_image_${id}`).value = media.id;
-        document.getElementById(`section_preview_${id}`).src = media.url;
-        document.getElementById(`section_preview_${id}`).style.display = 'block';
-        document.getElementById(`section_remove_${id}`).style.display = 'inline-block';
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0;
+    let panelX = 0;
+    let panelY = 0;
 
-        window.activeSectionId = null;
-        return;
-    }
+    handle.addEventListener('mousedown', function (e) {
+        isDragging = true;
+        panel.classList.add('dragging');
 
-    /* EDITOR IMAGE */
-    if (event.data.type === 'insert-image-editor' && window.activeTinyEditor) {
-        window.activeTinyEditor.insertContent(
-            `<img src="${event.data.media.url}" style="max-width:100%;height:auto;" />`
-        );
-        window.activeTinyEditor = null;
-    }
+        startX = e.clientX;
+        startY = e.clientY;
+
+        const rect = panel.getBoundingClientRect();
+        panelX = rect.left;
+        panelY = rect.top;
+
+        document.body.style.userSelect = 'none';
+    });
+
+    document.addEventListener('mousemove', function (e) {
+        if (!isDragging) return;
+
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        panel.style.left = panelX + dx + 'px';
+        panel.style.top  = panelY + dy + 'px';
+        panel.style.right = 'auto';
+    });
+
+    document.addEventListener('mouseup', function () {
+        if (!isDragging) return;
+
+        isDragging = false;
+        panel.classList.remove('dragging');
+        document.body.style.userSelect = '';
+    });
+
 });
 </script>
+
 
 @endsection

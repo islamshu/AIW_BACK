@@ -69,18 +69,18 @@
                                     </span>
                                 </div>
                             </td>
-                            
+
                             {{-- APPLICATIONS COUNT --}}
                             <td class="text-center">
                                 <a href="{{ route('dashboard.jobs.applications.index', $job) }}"
-                                   class="badge bg-info text-decoration-none">
+                                    class="badge bg-info text-decoration-none">
                                     {{ $job->applications_count }} طلب
                                 </a>
                             </td>
 
                             {{-- STATUS TOGGLE --}}
                             <td>
-                            <input type="checkbox" data-id="{{ $job->id }}" name="status" class="js-switch" {{ $job->is_active == 1 ? 'checked' : '' }}>
+                                <input type="checkbox" data-id="{{ $job->id }}" name="status" class="js-switch" {{ $job->is_active == 1 ? 'checked' : '' }}>
                             </td>
 
                             {{-- ACTIONS --}}
@@ -94,9 +94,9 @@
                                     </a>
 
                                     {{-- Delete Form --}}
-                                    <form method="POST" 
-                                          action="{{ route('dashboard.jobs.destroy', $job) }}"
-                                          class="d-inline js-delete-form">
+                                    <form method="POST"
+                                        action="{{ route('dashboard.jobs.destroy', $job) }}"
+                                        class="d-inline js-delete-form">
                                         @csrf
                                         @method('DELETE')
                                         <button type="button"
@@ -126,7 +126,7 @@
                     </tbody>
                 </table>
             </div>
-            
+
             {{-- PAGINATION --}}
             @if($jobs->hasPages())
             <div class="card-footer border-top-0">
@@ -181,12 +181,12 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
-    input:checked + .slider {
+    input:checked+.slider {
         background-color: #198754;
         border-color: #198754;
     }
 
-    input:checked + .slider:before {
+    input:checked+.slider:before {
         transform: translateX(22px);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
@@ -255,7 +255,7 @@
     .text-center .fa-briefcase {
         color: #e9ecef !important;
     }
-    
+
     /* ===== تحسين التفعيل/الإلغاء ===== */
     .status-badge {
         min-width: 70px;
@@ -269,126 +269,105 @@
     document.addEventListener('DOMContentLoaded', function() {
 
         // ===== دالة عرض الرسائل =====
-        function showToast(message, type = 'info') {
-            if (typeof Swal !== 'undefined') {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: 'top-start',
-                    showConfirmButton: false,
-                    timer: 3000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                        toast.addEventListener('mouseenter', Swal.stopTimer);
-                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+       
+
+        $(document).ready(function() {
+            $('.js-switch').change(function() {
+                let status = $(this).prop('checked') === true ? 1 : 0;
+                const jobId = $(this).data('id');
+
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: `/dashboard/jobs/${jobId}/toggle`, // لاحظ backticks بدلاً من quotes
+                    data: {
+                        'status': status,
+                        'id': jobId
+                    },
+                    success: function(data) {
+                        console.log(data.message);
+                        if (data.success) {
+                            // يمكنك إضافة رسالة نجاح
+                            showToast(data.message, 'success');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Error:', xhr.responseText);
+                        showToast('حدث خطأ في تغيير الحالة', 'error');
+                        // إعادة الحالة السابقة
+                        $(this).prop('checked', !$(this).prop('checked'));
                     }
                 });
-
-                Toast.fire({
-                    icon: type,
-                    title: message
-                });
-            } else {
-                alert(message);
-            }
-        }
-
-        $(document).ready(function(){
-    $('.js-switch').change(function () {
-        let status = $(this).prop('checked') === true ? 1 : 0;
-        const jobId = $(this).data('id');
-        
-        $.ajax({
-            type: "GET",
-            dataType: "json",
-            url: `/dashboard/jobs/${jobId}/toggle`,  // لاحظ backticks بدلاً من quotes
-            data: {
-                'status': status, 
-                'id': jobId
-            },
-            success: function (data) {
-                console.log(data.message);
-                if(data.success) {
-                    // يمكنك إضافة رسالة نجاح
-                    showToast(data.message, 'success');
-                }
-            },
-            error: function (xhr) {
-                console.error('Error:', xhr.responseText);
-                showToast('حدث خطأ في تغيير الحالة', 'error');
-                // إعادة الحالة السابقة
-                $(this).prop('checked', !$(this).prop('checked'));
-            }
-        });
-    });
-});    // ===== تبديل حالة الوظيفة =====
+            });
+        }); // ===== تبديل حالة الوظيفة =====
         document.querySelectorAll('.js-job-toggle').forEach(toggle => {
             toggle.addEventListener('change', function() {
                 const jobId = this.dataset.id;
                 const isActive = this.checked ? 1 : 0;
                 const statusBadge = document.getElementById(`job-status-${jobId}`);
                 const originalState = this.checked;
-                
+
                 console.log('Toggling job:', jobId, 'to:', isActive);
 
                 // إرسال الطلب للخادم باستخدام مسار مطلق
                 fetch(`/dashboard/jobs/${jobId}/toggle`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                    body: JSON.stringify({
-                        is_active: isActive,
-                        _method: 'PATCH'
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({
+                            is_active: isActive,
+                            _method: 'PATCH'
+                        })
                     })
-                })
-                .then(response => {
-                    console.log('Response status:', response.status);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Response data:', data);
-                    
-                    if (data.success) {
-                        // تحديث البادج
-                        if (statusBadge) {
-                            if (data.is_active) {
-                                statusBadge.textContent = 'نشط';
-                                statusBadge.className = 'badge bg-success mt-1';
-                                statusBadge.style.fontSize = '0.7rem';
-                            } else {
-                                statusBadge.textContent = 'غير نشط';
-                                statusBadge.className = 'badge bg-danger mt-1';
-                                statusBadge.style.fontSize = '0.7rem';
-                            }
+                    .then(response => {
+                        console.log('Response status:', response.status);
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
                         }
-                        
-                        // إظهار رسالة نجاح
-                        showToast(data.message || 'تم تغيير الحالة بنجاح', 'success');
-                    } else {
-                        // إعادة الحالة السابقة إذا فشل الخادم
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Response data:', data);
+
+                        if (data.success) {
+                            // تحديث البادج
+                            if (statusBadge) {
+                                if (data.is_active) {
+                                    statusBadge.textContent = 'نشط';
+                                    statusBadge.className = 'badge bg-success mt-1';
+                                    statusBadge.style.fontSize = '0.7rem';
+                                } else {
+                                    statusBadge.textContent = 'غير نشط';
+                                    statusBadge.className = 'badge bg-danger mt-1';
+                                    statusBadge.style.fontSize = '0.7rem';
+                                }
+                            }
+
+                            // إظهار رسالة نجاح
+                            showToast(data.message || 'تم تغيير الحالة بنجاح', 'success');
+                        } else {
+                            // إعادة الحالة السابقة إذا فشل الخادم
+                            this.checked = !originalState;
+                            showToast(data.message || 'حدث خطأ', 'error');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Fetch error:', error);
+                        // إعادة الحالة السابقة عند الخطأ
                         this.checked = !originalState;
-                        showToast(data.message || 'حدث خطأ', 'error');
-                    }
-                })
-                .catch(error => {
-                    console.error('Fetch error:', error);
-                    // إعادة الحالة السابقة عند الخطأ
-                    this.checked = !originalState;
-                    
-                    if (statusBadge) {
-                        statusBadge.textContent = originalState ? 'نشط' : 'غير نشط';
-                        statusBadge.className = originalState ? 'badge bg-success mt-1' : 'badge bg-danger mt-1';
-                        statusBadge.style.fontSize = '0.7rem';
-                    }
-                    
-                    showToast('حدث خطأ في الاتصال بالخادم', 'error');
-                });
+
+                        if (statusBadge) {
+                            statusBadge.textContent = originalState ? 'نشط' : 'غير نشط';
+                            statusBadge.className = originalState ? 'badge bg-success mt-1' : 'badge bg-danger mt-1';
+                            statusBadge.style.fontSize = '0.7rem';
+                        }
+
+                        showToast('حدث خطأ في الاتصال بالخادم', 'error');
+                    });
             });
         });
 
@@ -423,7 +402,7 @@
                                 Swal.showLoading();
                             }
                         });
-                        
+
                         // إرسال النموذج
                         form.submit();
                     }
@@ -446,17 +425,7 @@
         });
 
         // ===== عرض رسائل من الجلسة إذا وجدت =====
-        @if(session('success'))
-            showToast('{{ session('success') }}', 'success');
-        @endif
-        
-        @if(session('error'))
-            showToast('{{ session('error') }}', 'error');
-        @endif
-        
-        @if(session('info'))
-            showToast('{{ session('info') }}', 'info');
-        @endif
+  
 
     });
 </script>

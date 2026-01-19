@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -11,6 +12,8 @@ use Inertia\Inertia;
 */
 use App\Http\Controllers\DashbaordController;
 use App\Http\Controllers\AboutController;
+use App\Http\Controllers\ContactController;
+use App\Http\Controllers\HomeSectionController;
 use App\Http\Controllers\HeroController;
 use App\Http\Controllers\HomeServiceController;
 use App\Http\Controllers\HomeStatController;
@@ -36,16 +39,15 @@ Route::get('/preview/{page}', [PagePreviewController::class, 'show'])
 
 // Home
 Route::get('/', function () {
-    return view('welcom');
+    return view('frontend.index');
 })->name('home');
+// routes/web.php
+Route::get('/sectors', [HomeController::class, 'index'])->name('web.sectors.index');
+Route::get('/sectors/load-more', [HomeController::class, 'loadMore'])->name('sectors.loadMore');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::post('/contact/send', [ContactController::class, 'store'])
+    ->name('contact.send');
 
-// Test Locale
-Route::get('/__test-locale', function () {
-    return [
-        'session_locale' => session('locale'),
-        'app_locale'     => app()->getLocale(),
-    ];
-});
 
 // Language Switch
 Route::get('/lang/{lang}', function ($lang) {
@@ -58,13 +60,7 @@ Route::get('/lang/{lang}', function ($lang) {
 |--------------------------------------------------------------------------
 | Frontend Pages (Inertia)
 |--------------------------------------------------------------------------
-*/
-Route::get('/about', fn () => Inertia::render('About'));
-Route::get('/vision', fn () => Inertia::render('Vision'));
-Route::get('/strategy', fn () => Inertia::render('Strategy'));
-Route::get('/sectors', fn () => Inertia::render('Sectors'));
-Route::get('/contact', fn () => Inertia::render('Contact'));
-
+\
 /*
 |--------------------------------------------------------------------------
 | Jobs Frontend
@@ -130,6 +126,14 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
     Route::post('home_services/sort', [HomeServiceController::class, 'sort'])->name('home-services.sort');
     Route::post('home-services/{homeService}/toggle', [HomeServiceController::class, 'toggleStatus'])->name('home-services.toggle');
 
+
+    Route::get('/contacts', [ContactController::class, 'index'])->name('dashboard.contacts.index');
+    Route::get('/contacts/{contactMessage}', [ContactController::class, 'show'])->name('dashboard.contacts.show');
+    Route::delete(
+        '/contacts/{contactMessage}',
+        [ContactController::class, 'destroy']
+    )->name('dashboard.contacts.destroy');
+
     /*
     |----------------------------------------------------------------------
     | Sectors
@@ -144,7 +148,43 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
     | Icons
     |----------------------------------------------------------------------
     */
-    Route::get('icons', fn () => view('dashboard.icons.index'))->name('icons.index');
+    Route::get('icons', fn() => view('dashboard.icons.index'))->name('icons.index');
+
+
+    Route::post('/sectors_page/toggle', [SectorController::class, 'toggle'])
+        ->name('dashboard.sectors_page.toggle');
+
+    Route::prefix('home-sections')->group(function () {
+
+        Route::get('/', [HomeSectionController::class, 'index'])
+            ->name('dashboard.home-sections.index');
+            Route::delete('/sections/destroy/{id}', [HomeSectionController::class, 'destroy'])
+            ->name('dashboard.sections.destroy');
+            
+        Route::post('/', [HomeSectionController::class, 'store'])
+            ->name('dashboard.home-sections.store');
+
+        Route::post('/{section}/toggle', [HomeSectionController::class, 'toggle']);
+
+        Route::post('/reorder', [HomeSectionController::class, 'reorder'])
+            ->name('dashboard.home-sections.reorder');
+
+        Route::get('/{section}/edit', [HomeSectionController::class, 'edit'])
+            ->name('dashboard.home-sections.edit');
+        Route::put(
+            '/home-sections/{section}',
+            [HomeSectionController::class, 'update']
+        )->name('dashboard.home-sections.update');
+        Route::get(
+            '/{section}/content',
+            [HomeSectionController::class, 'getContent']
+        );
+
+        Route::post(
+            '/{section}/content',
+            [HomeSectionController::class, 'saveContent']
+        );
+    });
 
     /*
     |----------------------------------------------------------------------
@@ -185,6 +225,10 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
         Route::put('pages/{page}/sections/batch', [PageController::class, 'batchUpdateSections'])->name('pages.sections.batchUpdate');
 
         Route::get('pages/{page}/preview', [PageController::class, 'preview'])->name('pages.preview');
+        Route::get('pages/{page}/toggle', [PageController::class, 'toggleStatus'])
+            ->name('pages.toggle');
+        Route::post('/pages/reorder', [PageController::class, 'reorder'])
+            ->name('pages.reorder');
 
         Route::get('/sections/repeater-item', function () {
             return view('dashboard.pages.sections.types.repeater-item-template');
@@ -222,6 +266,7 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
     Route::get('pages/{page}/preview', [PagePreviewController::class, 'showdash'])
         ->name('dashboard.pages.preview');
 });
+Route::get('/{slug}', [PagePreviewController::class, 'show'])->name('page.show');
 
 /*
 |--------------------------------------------------------------------------

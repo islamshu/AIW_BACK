@@ -15,6 +15,7 @@ class Page extends Model
         'excerpt',
         'content',
         'status',
+        'order',
         'published_at'
     ];
 
@@ -29,4 +30,16 @@ class Page extends Model
             ->orderBy('order');
     }
     
+public function show(string $slug)
+{
+    if (in_array($slug, $this->reserved)) {
+        abort(404);
+    }
+
+    $page = Page::where('slug', $slug)
+        ->where('status', 'published')
+        ->firstOrFail();
+
+    return view('frontend.pages.show', compact('page'));
+}
 }

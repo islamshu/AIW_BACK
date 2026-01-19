@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
+use App\Models\Page;
+use Illuminate\Support\Facades\View;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,5 +33,6 @@ class AppServiceProvider extends ServiceProvider
             'locale' => app()->getLocale()
             
         ]);
+     
     }
 }

@@ -1,0 +1,1 @@
+<?php /**PATH C:\laragon\www\aiw_rtl\resources\views/dashboard/inc/footer.blade.php ENDPATH**/ ?>

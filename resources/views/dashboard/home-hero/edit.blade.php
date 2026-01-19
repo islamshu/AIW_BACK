@@ -13,16 +13,12 @@
             </div>
         </div>
 
-        {{-- ALERT --}}
-        @if(session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+     
 
         {{-- FORM --}}
         <div class="card">
             <div class="card-body">
+                @include('dashboard.inc.alerts')
                 <form method="POST"
                       action="{{ route('home-hero.update') }}"
                       enctype="multipart/form-data">
@@ -52,14 +48,14 @@
                         <div class="col-md-6 mb-2">
                             <label>الوصف (AR)</label>
                             <textarea name="subtitle[ar]"
-                                      class="ckeditor"
+                                      class="form-control js-editor"
                                       rows="3">{{ old('subtitle.ar', $hero->getTranslation('subtitle','ar')) }}</textarea>
                         </div>
 
                         <div class="col-md-6 mb-2">
                             <label>Description (EN)</label>
                             <textarea name="subtitle[en]"
-                                      class="ckeditor"
+                                      class="form-control js-editor"
                                       rows="3">{{ old('subtitle.en', $hero->getTranslation('subtitle','en')) }}</textarea>
                         </div>
 
@@ -91,16 +87,32 @@
 
                         {{-- IMAGE --}}
                         <div class="col-md-12 mb-3">
-                            <label>الصورة</label>
-                            <input type="file" name="image" class="form-control">
+                         
+                            <div class="form-group">
+                                <label>الصورة</label>
+                                <div class="col-md-6 mb-3 type-field" id="imageField"></div>
 
-                            @if($hero->image)
+
+                                {{-- hidden input --}}
+                                <input type="hidden" name="image"
+                                    id="imageInput"
+                                    value="{{ $hero->image }}">
+
+                                <button type="button" class="btn btn-outline-primary w-100"
+                                    onclick="openMediaLibrary()">
+                                    📁 اختيار صورة من المكتبة
+                                </button>
+
+                                {{-- IMAGE PREVIEW --}}
                                 <div class="mt-2">
-                                    <img src="{{ asset('storage/'.$hero->image) }}"
-                                         style="max-height: 160px"
-                                         class="img-thumbnail">
+                                    <img id="imagePreview"
+                                        src="{{ asset('storage/' . $hero->image)}}"
+                                        class="img-thumbnail"
+                                        style="max-height:120px">
                                 </div>
-                            @endif
+
+
+                            </div>
                         </div>
 
                     </div>
