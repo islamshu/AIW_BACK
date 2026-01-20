@@ -61,8 +61,19 @@ Route::get('/lang/{lang}', function ($lang) {
 
     session()->put('locale', $lang);
 
-    return redirect('/');
-    
+    $previous = url()->previous();
+
+    // منع أي Loop مع /lang أو slug
+    if (
+        !$previous ||
+        str_contains($previous, '/lang/') ||
+        str_contains($previous, '/login')
+    ) {
+        return redirect()->route('home');
+    }
+
+    return redirect($previous);
+
 })->name('language.switch');
 
 
@@ -276,7 +287,9 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
     Route::get('pages/{page}/preview', [PagePreviewController::class, 'showdash'])
         ->name('dashboard.pages.preview');
 });
-Route::get('/{slug}', [PagePreviewController::class, 'show'])->name('page.show');
+Route::get('/{slug}', [PagePreviewController::class, 'show'])
+    ->where('slug', '^(?!lang|login|dashboard|jobs|api).*$')
+    ->name('page.show');
 
 /*
 |--------------------------------------------------------------------------
