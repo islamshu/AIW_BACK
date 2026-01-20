@@ -8,6 +8,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
+use Illuminate\Session\Middleware\StartSession;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -16,18 +17,27 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
+
+        $middleware->encryptCookies(except: [
+            'appearance',
+            'sidebar_state',
+            'locale', // ✅
+        ]);
+
         $middleware->alias([
             'admin' => AdminMiddleware::class,
         ]);
+
+        // ✅ ترتيب صحيح 100%
         $middleware->web(append: [
+            StartSession::class,               // 🔥 بدونها يحصل 302
             HandleAppearance::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
-            SetLocale::class,
-
+            SetLocale::class,                  // بعد StartSession
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })->create();
+    })
+    ->create();
