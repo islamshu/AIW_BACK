@@ -151,6 +151,28 @@
     
      
 </div>
+<button id="langSwitch"
+    class="w-12 h-12 rounded-full bg-[#112240] text-white shadow-xl">
+    <i class="fas fa-globe"></i>
+</button>
+
+<script>
+document.getElementById('langSwitch').addEventListener('click', function () {
+    const lang = "{{ app()->getLocale() === 'ar' ? 'en' : 'ar' }}";
+
+    fetch("{{ route('language.switch') }}", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+        },
+        body: JSON.stringify({ lang })
+    }).then(() => {
+        window.location.reload();
+    });
+});
+</script>
+
 
 {{-- Scripts --}}
 <script>

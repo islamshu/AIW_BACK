@@ -53,21 +53,20 @@ Route::post('/contact/send', [ContactController::class, 'store'])
 
 
 // Language Switch
-Route::get('/lang/{lang}', function ($lang) {
+Route::post('/lang', function (\Illuminate\Http\Request $request) {
+
+    $lang = $request->input('lang');
 
     if (! in_array($lang, ['ar', 'en'])) {
-        abort(404);
+        abort(400);
     }
 
     session()->put('locale', $lang);
 
-    return response()->noContent(); // 🔥 لا Redirect
+    return response()->json(['ok' => true]);
 
-})
-->withoutMiddleware([
-    \App\Http\Middleware\HandleInertiaRequests::class,
-])
-->name('language.switch');
+})->name('language.switch');
+
 
 
 
