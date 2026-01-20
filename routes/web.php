@@ -51,9 +51,13 @@ Route::post('/contact/send', [ContactController::class, 'store'])
 
 // Language Switch
 Route::get('/lang/{lang}', function ($lang) {
-    session(['locale' => $lang]);
-    app()->setLocale($lang);
-    return back();
+    if (! in_array($lang, ['ar', 'en'])) {
+        abort(400);
+    }
+
+    session()->put('locale', $lang);
+
+    return redirect(url()->previous() ?? '/');
 })->name('language.switch');
 
 /*
