@@ -3,7 +3,7 @@ use Illuminate\Support\Facades\File;
 use App\Models\GeneralValue;
 use App\Models\Media;
 use App\Models\User;
-use Illuminate\Container\Attributes\Auth;
+use Illuminate\Support\Facades\Auth;
 
 if (!function_exists('get_general_value')) {
 
