@@ -36,10 +36,7 @@ use App\Http\Controllers\UserController;
 // Preview Page
 Route::get('/preview/{page}', [PagePreviewController::class, 'show'])
     ->name('pages.preview');
-Route::get('/test-session', function () {
-        session()->put('test', 'OK');
-        return session()->all();
-});
+
 // Home
 Route::get('/', function () {
     return view('frontend.index');
@@ -53,22 +50,11 @@ Route::post('/contact/send', [ContactController::class, 'store'])
 
 
 // Language Switch
-Route::post('/lang', function (\Illuminate\Http\Request $request) {
-
-    $lang = $request->input('lang');
-
-    if (! in_array($lang, ['ar', 'en'])) {
-        abort(400);
-    }
-
-    session()->put('locale', $lang);
-
-    return response()->json(['ok' => true]);
-
+Route::get('/lang/{lang}', function ($lang) {
+    session(['locale' => $lang]);
+    app()->setLocale($lang);
+    return back();
 })->name('language.switch');
-
-
-
 
 /*
 |--------------------------------------------------------------------------
@@ -280,9 +266,7 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
     Route::get('pages/{page}/preview', [PagePreviewController::class, 'showdash'])
         ->name('dashboard.pages.preview');
 });
-Route::get('/{slug}', [PagePreviewController::class, 'show'])
-    ->where('slug', '^(?!lang|login|dashboard|jobs|api).*$')
-    ->name('page.show');
+Route::get('/{slug}', [PagePreviewController::class, 'show'])->name('page.show');
 
 /*
 |--------------------------------------------------------------------------

@@ -124,55 +124,12 @@
 
 {{-- Floating Buttons --}}
 <div class="fixed bottom-8 left-8 flex flex-col gap-4 z-40">
-
-    <a href="{{ route('language.switch', app()->getLocale() === 'ar' ? 'en' : 'ar') }}"
-        class="w-12 h-12 rounded-full
-               bg-gradient-to-br from-[#112240] to-[#1b2b4a]
-               flex items-center justify-center
-               text-white
-               shadow-2xl border border-white/10
-               hover:from-[#00b4d8] hover:to-[#ff5d8f]
-               transition-all duration-300"
-        title="{{ app()->getLocale() === 'ar' ? 'English' : 'العربية' }}">
-     
-         <i class="fas fa-language text-lg"></i>
-     
-     </a>
-     
-    {{-- Scroll To Top --}}
-
-
     <button id="scrollTop"
-        class="w-12 h-12 rounded-full bg-gradient-to-br from-[#00b4d8] to-[#ff5d8f]
-               flex items-center justify-center text-white shadow-xl hover:scale-110 transition">
+            class="w-12 h-12 rounded-full bg-gradient-to-br from-[#00b4d8] to-[#ff5d8f]
+                   flex items-center justify-center">
         <i class="fas fa-arrow-up"></i>
     </button>
-
-    
-     
 </div>
-<button id="langSwitch"
-    class="w-12 h-12 rounded-full bg-[#112240] text-white shadow-xl">
-    <i class="fas fa-globe"></i>
-</button>
-
-<script>
-document.getElementById('langSwitch').addEventListener('click', function () {
-    const lang = "{{ app()->getLocale() === 'ar' ? 'en' : 'ar' }}";
-
-    fetch("{{ route('language.switch') }}", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRF-TOKEN": "{{ csrf_token() }}"
-        },
-        body: JSON.stringify({ lang })
-    }).then(() => {
-        window.location.reload();
-    });
-});
-</script>
-
 
 {{-- Scripts --}}
 <script>
