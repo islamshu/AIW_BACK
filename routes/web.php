@@ -36,7 +36,10 @@ use App\Http\Controllers\UserController;
 // Preview Page
 Route::get('/preview/{page}', [PagePreviewController::class, 'show'])
     ->name('pages.preview');
-
+Route::get('/test-session', function () {
+        session()->put('test', 'OK');
+        return session()->all();
+});
 // Home
 Route::get('/', function () {
     return view('frontend.index');
