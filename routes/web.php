@@ -61,20 +61,14 @@ Route::get('/lang/{lang}', function ($lang) {
 
     session()->put('locale', $lang);
 
-    $previous = url()->previous();
+    return response()->noContent(); // 🔥 لا Redirect
 
-    // منع أي Loop مع /lang أو slug
-    if (
-        !$previous ||
-        str_contains($previous, '/lang/') ||
-        str_contains($previous, '/login')
-    ) {
-        return redirect()->route('home');
-    }
+})
+->withoutMiddleware([
+    \App\Http\Middleware\HandleInertiaRequests::class,
+])
+->name('language.switch');
 
-    return redirect($previous);
-
-})->name('language.switch');
 
 
 /*
