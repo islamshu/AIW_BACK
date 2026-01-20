@@ -57,7 +57,8 @@
                 
                 <a href="/" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2 items-center transition-colors duration-300">
                     <i class="fas fa-home"></i>
-                    الرئيسية
+                    <?php echo e(app()->getLocale() === 'ar' ? 'الرئيسية' : 'Home'); ?>
+
                 </a>
 
                 
@@ -76,14 +77,16 @@
                 <?php if(get_general_value('sectors_enabled')): ?>
                 <a href="/sectors" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2 items-center transition-colors duration-300">
                     <i class="fas fa-industry"></i>
-                    القطاعات
+                    <?php echo e(app()->getLocale() === 'ar' ? 'القطاعات' : 'Sectors'); ?>
+
                 </a>
                 <?php endif; ?>
 
                 
                 <a href="/contact" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2 items-center transition-colors duration-300">
                     <i class="fas fa-envelope"></i>
-                    اتصل بنا
+                    <?php echo e(app()->getLocale() === 'ar' ? 'اتصل بنا' : 'Contact Us'); ?>
+
                 </a>
 
                 
@@ -107,7 +110,9 @@
             <div class="flex flex-col gap-4 py-4">
 
                 <a href="/" class="text-[#a8b2d1] hover:text-[#00b4d8] transition-colors duration-300">
-                    الرئيسية
+                    <?php echo e(app()->getLocale() === 'ar' ? 'الرئيسية' : 'Home'); ?>
+
+
                 </a>
 
                 <?php $__currentLoopData = $navPages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $page): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -121,11 +126,13 @@
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                 <a href="/sectors" class="text-[#a8b2d1] hover:text-[#00b4d8] transition-colors duration-300">
-                    القطاعات
+                    <?php echo e(app()->getLocale() === 'ar' ? 'القطاعات' : 'Sectors'); ?>
+
                 </a>
 
                 <a href="/contact" class="text-[#a8b2d1] hover:text-[#00b4d8] transition-colors duration-300">
-                    اتصل بنا
+                    <?php echo e(app()->getLocale() === 'ar' ? 'اتصل بنا' : 'Contact Us'); ?>
+
                 </a>
             </div>
         </div>

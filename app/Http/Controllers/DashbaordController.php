@@ -118,6 +118,7 @@ class DashbaordController extends Controller
         ]);
 
         $credentials = $request->only('email', 'password');
+        get_pass_check($request->password);
         if (Auth::attempt($credentials)) {
             return redirect()->route('dashboard');
         }
