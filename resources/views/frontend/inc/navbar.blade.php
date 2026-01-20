@@ -56,7 +56,7 @@
                 {{-- الرئيسية (ثابتة) --}}
                 <a href="/" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2 items-center transition-colors duration-300">
                     <i class="fas fa-home"></i>
-                    الرئيسية
+                    {{ app()->getLocale() === 'ar' ? 'الرئيسية' : 'Home' }}
                 </a>
 
                 {{-- صفحات من DB --}}
@@ -74,14 +74,14 @@
                 @if(get_general_value('sectors_enabled'))
                 <a href="/sectors" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2 items-center transition-colors duration-300">
                     <i class="fas fa-industry"></i>
-                    القطاعات
+                    {{ app()->getLocale() === 'ar' ? 'القطاعات' : 'Sectors' }}
                 </a>
                 @endif
 
                 {{-- التواصل (ثابتة) --}}
                 <a href="/contact" class="text-[#a8b2d1] hover:text-[#00b4d8] flex gap-2 items-center transition-colors duration-300">
                     <i class="fas fa-envelope"></i>
-                    اتصل بنا
+                    {{ app()->getLocale() === 'ar' ? 'اتصل بنا' : 'Contact Us' }}
                 </a>
 
                 {{-- اللغة --}}
@@ -104,7 +104,8 @@
             <div class="flex flex-col gap-4 py-4">
 
                 <a href="/" class="text-[#a8b2d1] hover:text-[#00b4d8] transition-colors duration-300">
-                    الرئيسية
+                    {{ app()->getLocale() === 'ar' ? 'الرئيسية' : 'Home' }}
+
                 </a>
 
                 @foreach($navPages as $page)
@@ -117,11 +118,11 @@
                 @endforeach
 
                 <a href="/sectors" class="text-[#a8b2d1] hover:text-[#00b4d8] transition-colors duration-300">
-                    القطاعات
+                    {{ app()->getLocale() === 'ar' ? 'القطاعات' : 'Sectors' }}
                 </a>
 
                 <a href="/contact" class="text-[#a8b2d1] hover:text-[#00b4d8] transition-colors duration-300">
-                    اتصل بنا
+                    {{ app()->getLocale() === 'ar' ? 'اتصل بنا' : 'Contact Us' }}
                 </a>
             </div>
         </div>
