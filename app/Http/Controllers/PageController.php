@@ -23,11 +23,13 @@ class PageController extends Controller
     public function create()
     {
         $page = new Page();
-        $sectionsRegistry = SectionRegistry::all();
+        $sectionsRegistry =   collect(SectionRegistry::all())
+        ->except(['hero_extra']);
         $layouts = [];
 
         return view('dashboard.pages.form', compact('page', 'sectionsRegistry', 'layouts'));
     }
+
 
     // Store New Page
     public function store(Request $request)
@@ -50,11 +52,67 @@ class PageController extends Controller
             ->route('dashboard.pages.edit', $page)
             ->with('success', 'تم إنشاء الصفحة');
     }
+    public function saveAll(Request $request, Page $page)
+{
+    // 1️⃣ تحديث بيانات الصفحة
+    $pageData = $request->validate([
+        'title_ar' => 'required|string|max:255',
+        'title_en' => 'required|string|max:255',
+        'slug' => 'nullable|string|max:255|unique:pages,slug,' . $page->id,
+        'status' => 'required|in:draft,published',
+    ]);
+
+    $page->update([
+        'title' => [
+            'ar' => $pageData['title_ar'],
+            'en' => $pageData['title_en'],
+        ],
+        'slug' => $pageData['slug'] ?: $page->slug,
+        'status' => $pageData['status'],
+        'published_at' => $pageData['status'] === 'published' ? ($page->published_at ?? now()) : null,
+    ]);
+
+    // 2️⃣ تحديث الأقسام (Sections)
+    $sections = $request->input('sections', []);
+    
+    foreach ($sections as $id => $payload) {
+        $section = PageSection::where('page_id', $page->id)->where('id', $id)->first();
+        if (!$section) continue;
+
+        // حذف القسم إذا كان محدد للحذف
+        if (!empty($payload['_delete'])) {
+            $section->delete();
+            continue;
+        }
+
+        // تحديث بيانات القسم
+        $data = $payload['data'] ?? [];
+        $isActive = isset($payload['is_active']) ? (bool)$payload['is_active'] : false;
+        $order = isset($payload['order']) ? (int)$payload['order'] : $section->order;
+
+        $type = $section->type;
+        if (isset($payload['type']) && is_string($payload['type']) && $payload['type'] !== '') {
+            $type = $payload['type'];
+        }
+
+        $section->update([
+            'type' => $type,
+            'data' => $data,
+            'is_active' => $isActive,
+            'order' => $order,
+        ]);
+    }
+
+    return redirect()
+        ->route('dashboard.pages.edit', $page)
+        ->with('success', '✅ تم حفظ جميع التغييرات بنجاح');
+}
 
     // Edit Page
     public function edit(Page $page)
     {
-        $sectionsRegistry = SectionRegistry::all();
+        $sectionsRegistry = collect(SectionRegistry::all())
+        ->except(['hero_extra']);
 
         $sections = $page->sections()->orderBy('order')->get();
 

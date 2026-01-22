@@ -16,30 +16,18 @@ class Page extends Model
         'content',
         'status',
         'order',
-        'published_at'
+        'published_at',
     ];
 
     protected $casts = [
-        'title' => 'array',
-        'excerpt' => 'array',
+        'title'        => 'array',
+        'excerpt'      => 'array',
+        'content'      => 'array',
         'published_at' => 'datetime',
     ];
+
     public function sections()
     {
-        return $this->hasMany(PageSection::class)
-            ->orderBy('order');
+        return $this->hasMany(PageSection::class)->orderBy('order');
     }
-    
-public function show(string $slug)
-{
-    if (in_array($slug, $this->reserved)) {
-        abort(404);
-    }
-
-    $page = Page::where('slug', $slug)
-        ->where('status', 'published')
-        ->firstOrFail();
-
-    return view('frontend.pages.show', compact('page'));
-}
 }

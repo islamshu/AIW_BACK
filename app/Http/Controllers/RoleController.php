@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\PermissionRegistrar;
 
 class RoleController extends Controller
 {
@@ -56,6 +57,7 @@ class RoleController extends Controller
 
         $role->update(['name' => $data['name']]);
         $role->syncPermissions($data['permissions'] ?? []);
+        app(PermissionRegistrar::class)->forgetCachedPermissions();
 
         return redirect()
             ->route('dashboard.roles.index')

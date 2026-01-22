@@ -58,37 +58,33 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script src="https://cdn.tiny.cloud/1/2zem850nmvd5df5o8joazwyvha498198poptrpebqfmixw7h/tinymce/8/tinymce.min.js">
-</script>
+<script src="<?php echo e(asset('vendor/editor/tinymce.min.js')); ?>"></script>
 
 <script>
-    tinymce.init({
-        selector: '.js-editor',
-        language: 'ar',
-        height: 300,
-        plugins: 'image link lists code autoresize',
-        toolbar: `
-        undo redo |
-        bold italic underline |
-        bullist numlist |
-        image media-library |
-        alignleft aligncenter alignright |
-        code
-    `,
-        setup(editor) {
-            editor.ui.registry.addButton('media-library', {
-                text: '📁 مكتبة الوسائط',
-                onAction() {
-                    window.activeTinyEditor = editor;
-                    window.open(
-                        '<?php echo e(route('dashboard.media.index')); ?>?select_mode=editor',
-                        'MediaLibrary',
-                        'width=1200,height=800'
-                    );
-                }
-            });
-        }
-    });
+tinymce.init({
+    selector: '.js-editor',
+    license_key: 'gpl',
+    language: 'ar',
+    directionality: 'rtl',
+    height: 300,
+    plugins: 'image link lists code autoresize',
+    toolbar:
+        'undo redo | bold italic underline | bullist numlist | image media-library | alignleft aligncenter alignright | code',
+    branding: false,
+    setup: function (editor) {
+        editor.ui.registry.addButton('media-library', {
+            text: '📁 مكتبة الوسائط',
+            onAction: function () {
+                window.activeTinyEditor = editor;
+                window.open(
+                    '<?php echo e(route('dashboard.media.index')); ?>?select_mode=editor',
+                    'MediaLibrary',
+                    'width=1200,height=800'
+                );
+            }
+        });
+    }
+});
 </script>
 
 <script>
@@ -343,7 +339,53 @@
         }
     });
 </script>
+<script>
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.js-open-media');
+        if (!btn) return;
 
+        e.preventDefault();
+        window.activeSectionId = btn.dataset.sectionId;
+
+        window.open(
+            '/dashboard/media?select_mode=section',
+            'MediaPicker',
+            'width=1200,height=800'
+        );
+    });
+
+    function removeSectionImage(sectionId) {
+        document.getElementById(`section_image_${sectionId}`).value = '';
+        document.getElementById(`section_preview_${sectionId}`).style.display = 'none';
+        document.getElementById(`section_remove_${sectionId}`).style.display = 'none';
+    }
+</script>
+<script>
+    let activeIconInput = null;
+
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.js-open-icon-picker');
+        if (!btn) return;
+
+        activeIconInput = btn.closest('.repeater-item').querySelector('.icon-input');
+
+        window.open(
+            '/dashboard/icons',
+            'IconPicker',
+            'width=1000,height=650'
+        );
+    });
+
+    window.addEventListener('message', function(event) {
+        if (event.data?.type !== 'icon-selected') return;
+        if (!activeIconInput) return;
+
+        activeIconInput.value = event.data.icon;
+        activeIconInput.closest('.repeater-item')
+            .querySelector('.icon-preview')
+            .innerHTML = `<i class="${event.data.icon} fa-2x text-primary"></i>`;
+    });
+</script>
 <!-- END PAGE LEVEL JS-->
 </body>
 

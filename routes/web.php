@@ -229,6 +229,8 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
             ->name('pages.toggle');
         Route::post('/pages/reorder', [PageController::class, 'reorder'])
             ->name('pages.reorder');
+            Route::put('pages/{page}/save-all', [PageController::class, 'saveAll'])
+            ->name('pages.saveAll');
 
         Route::get('/sections/repeater-item', function () {
             return view('dashboard.pages.sections.types.repeater-item-template');
