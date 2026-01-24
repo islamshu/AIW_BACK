@@ -1108,7 +1108,7 @@
                 <span class="input-group-text">
                     <i class="fas fa-link"></i>
                 </span>
-                <input type="url"
+                <input type="text"
                        class="form-control"
                        name="sections[{{ $section->id }}][data][cta_url]"
                        value="{{ $data['cta_url'] ?? '' }}"
