@@ -1,7 +1,7 @@
 @php
     $isAr = app()->getLocale() === 'ar';
 
-    /* ================= TEXT ================= */
+    // ================= TEXT =================
     $title = $isAr ? ($data['title_ar'] ?? '') : ($data['title_en'] ?? '');
     $desc  = $isAr ? ($data['desc_ar'] ?? '')  : ($data['desc_en'] ?? '');
 
@@ -11,33 +11,35 @@
 
     $ctaUrl = $data['cta_url'] ?? null;
 
-    /* ================= IMAGE ================= */
+    // ================= IMAGE =================
     $imageId = $data['image_id'] ?? null;
     $media   = $imageId ? \App\Models\Media::find($imageId) : null;
     $hasImage = !empty($media);
 
+    // settings
     $imgPosition = $data['image_position'] ?? 'right'; // left | right | top | bottom
     $imgSize     = $data['image_size'] ?? 'md';        // sm | md | lg | full
     $imgStyle    = $data['image_style'] ?? 'rounded';  // rounded | circle | square
     $imgShadow   = $data['image_shadow'] ?? 'md';      // none | sm | md | lg
 
-    /* ================= GRID LOGIC ================= */
+    // ================= GRID LOGIC =================
     $isSideImage = $hasImage && in_array($imgPosition, ['left','right']);
 
     if ($isSideImage) {
         $gridCols = match($imgSize) {
-            'sm' => 'lg:grid-cols-[1fr_3fr]',
-            'lg' => 'lg:grid-cols-[2fr_3fr]',
-            default => 'lg:grid-cols-2',
+            'sm' => 'lg:grid-cols-[1fr_3fr]',   // 25% image
+            'lg' => 'lg:grid-cols-[2fr_3fr]',   // ~40% image
+            default => 'lg:grid-cols-2',        // 50/50
         };
 
+        // swap if image on left
         if ($imgPosition === 'left') {
             $gridCols = str_replace('[1fr_3fr]', '[3fr_1fr]', $gridCols);
             $gridCols = str_replace('[2fr_3fr]', '[3fr_2fr]', $gridCols);
         }
     }
 
-    /* ================= IMAGE STYLE ================= */
+    // ================= IMAGE STYLE =================
     $imgRadius = match($imgStyle) {
         'circle' => 'rounded-full',
         'square' => 'rounded-none',
@@ -50,27 +52,28 @@
         'lg'   => 'shadow-[0_30px_80px_rgba(0,0,0,.45)]',
         default => 'shadow-2xl',
     };
-
-    $imgSrc = $hasImage ? $media->url : null;
 @endphp
 
 <section class="relative bg-[#0a192f] overflow-hidden">
     <div class="container mx-auto px-4">
         <div class="min-h-[75vh] flex items-center py-20">
 
-            {{-- IMAGE TOP --}}
+            {{-- ================= IMAGE TOP ================= --}}
             @if($hasImage && $imgPosition === 'top')
                 <div class="flex justify-center mb-16">
-                    <img src="{{ $imgSrc }}"
+                    <img src="{{ $media->url }}"
                          alt="{{ $media->alt ?? $title }}"
                          class="w-full max-w-4xl {{ $imgRadius }} {{ $imgShadowClass }} object-cover">
                 </div>
             @endif
 
-            {{-- GRID --}}
-            <div class="grid gap-14 items-center w-full {{ $isSideImage ? $gridCols : 'grid-cols-1' }}">
+            {{-- ================= GRID ================= --}}
+            <div class="
+                grid gap-14 items-center w-full
+                {{ $isSideImage ? $gridCols : 'grid-cols-1' }}
+            ">
 
-                {{-- IMAGE LEFT / RIGHT --}}
+                {{-- ================= IMAGE (LEFT / RIGHT) ================= --}}
                 @if($hasImage && $isSideImage)
                     <div class="flex justify-center">
                         <div class="relative w-full">
@@ -80,15 +83,22 @@
                                 bg-gradient-to-r from-[#00b4d8]/20 to-[#ff5d8f]/20
                                 blur-2xl"></div>
 
-                            <img src="{{ $imgSrc }}"
+                            <img src="{{ $media->url }}"
                                  alt="{{ $media->alt ?? $title }}"
-                                 class="relative w-full {{ $imgRadius }} {{ $imgShadowClass }} object-cover">
+                                 class="
+                                    relative w-full
+                                    {{ $imgRadius }}
+                                    {{ $imgShadowClass }}
+                                    object-cover
+                                 ">
                         </div>
                     </div>
                 @endif
 
-                {{-- TEXT --}}
-                <div class="{{ $isAr ? 'text-right' : 'text-left' }} {{ !$hasImage ? 'text-center' : '' }}">
+                {{-- ================= TEXT ================= --}}
+                <div class="{{ $isAr ? 'text-right' : 'text-left' }}
+                    {{ !$hasImage ? 'text-center' : '' }}
+                ">
 
                     <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
                         <span class="bg-gradient-to-r from-[#00b4d8] via-[#a8b2d1] to-[#ff5d8f]
@@ -98,11 +108,13 @@
                     </h1>
 
                     @if($desc)
-                        <div class="mt-6 text-base md:text-lg text-[#a8b2d1] leading-relaxed
+                        <div class="
+                            mt-6 text-base md:text-lg text-[#a8b2d1] leading-relaxed
                             {{ $hasImage
                                 ? 'max-w-xl ' . ($isAr ? 'ms-auto' : '')
                                 : 'max-w-3xl mx-auto'
-                            }}">
+                            }}
+                        ">
                             {!! $desc !!}
                         </div>
                     @endif
@@ -125,10 +137,10 @@
 
             </div>
 
-            {{-- IMAGE BOTTOM --}}
+            {{-- ================= IMAGE BOTTOM ================= --}}
             @if($hasImage && $imgPosition === 'bottom')
                 <div class="flex justify-center mt-16">
-                    <img src="{{ $imgSrc }}"
+                    <img src="{{ $media->url }}"
                          alt="{{ $media->alt ?? $title }}"
                          class="w-full max-w-4xl {{ $imgRadius }} {{ $imgShadowClass }} object-cover">
                 </div>
