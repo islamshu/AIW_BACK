@@ -337,19 +337,35 @@ new Sortable(document.getElementById('sortable-sections'), {
     animation: 150,
     handle: '.fa-grip-vertical',
     onEnd() {
+
         let order = [];
-        document.querySelectorAll('#sortable-sections tr').forEach(r => order.push(r.dataset.id));
+        document.querySelectorAll('#sortable-sections tr').forEach(row => {
+            order.push(row.dataset.id);
+        });
 
         fetch("<?php echo e(route('dashboard.home-sections.reorder')); ?>", {
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
             body: JSON.stringify({ order })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                showToast('تم حفظ ترتيب السكاشن بنجاح', 'success');
+            } else {
+                showToast('فشل حفظ الترتيب', 'error');
+            }
+        })
+        .catch(() => {
+            showToast('حدث خطأ أثناء الحفظ', 'error');
         });
     }
 });
+
 
 /* ===== TOGGLE ===== */
 document.querySelectorAll('.js-toggle').forEach(el => {
