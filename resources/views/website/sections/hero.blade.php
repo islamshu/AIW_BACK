@@ -13,12 +13,11 @@
     $media   = $imageId ? \App\Models\Media::find($imageId) : null;
     $hasImage = !empty($media);
 
-    $imgPosition = $data['image_position'] ?? 'right'; // top | bottom | left | right
-    $imgSize     = $data['image_size'] ?? 'md';        // sm | md | lg | full
-    $imgStyle    = $data['image_style'] ?? 'rounded';  // rounded | circle | square
-    $imgShadow   = $data['image_shadow'] ?? 'md';      // none | sm | md | lg
+    $imgPosition = $data['image_position'] ?? 'right';
+    $imgSize     = $data['image_size'] ?? 'md';
+    $imgStyle    = $data['image_style'] ?? 'rounded';
+    $imgShadow   = $data['image_shadow'] ?? 'md';
 
-    /* ================= IMAGE SIZE (REAL SIZE) ================= */
     $imgMaxWidth = match ($imgSize) {
         'sm'   => '220px',
         'md'   => '360px',
@@ -27,7 +26,6 @@
         default => '360px',
     };
 
-    /* ================= IMAGE STYLE ================= */
     $imgRadius = match ($imgStyle) {
         'circle' => 'rounded-full',
         'square' => 'rounded-none',
@@ -44,8 +42,18 @@
     $isSideImage = $hasImage && in_array($imgPosition, ['left','right']);
 @endphp
 
-<section class="relative bg-[#0a192f] overflow-hidden">
-    <div class="container mx-auto px-4 py-20">
+<section
+    class="relative overflow-hidden"
+    style="
+        background:
+            linear-gradient(
+                180deg,
+                var(--bg-color),
+                color-mix(in srgb, var(--bg-color) 88%, var(--primary-color))
+            );
+    "
+>
+    <div class="container mx-auto px-4 py-20 relative z-10">
 
         {{-- IMAGE TOP --}}
         @if($hasImage && $imgPosition === 'top')
@@ -54,15 +62,13 @@
                     src="{{ $media->url }}"
                     alt="{{ $media->alt ?? $title }}"
                     class="{{ $imgRadius }} {{ $imgShadowClass }} object-contain"
-                    style="max-width: {{ $imgMaxWidth }}; height:auto;"
+                    style="max-width: {{ $imgMaxWidth }};"
                 >
             </div>
         @endif
 
         {{-- CONTENT --}}
-        <div class="
-            {{ $isSideImage ? 'grid lg:grid-cols-2 gap-14 items-center' : 'text-center' }}
-        ">
+        <div class="{{ $isSideImage ? 'grid lg:grid-cols-2 gap-14 items-center' : 'text-center' }}">
 
             {{-- IMAGE LEFT --}}
             @if($hasImage && $imgPosition === 'left')
@@ -71,41 +77,61 @@
                         src="{{ $media->url }}"
                         alt="{{ $media->alt ?? $title }}"
                         class="{{ $imgRadius }} {{ $imgShadowClass }} object-contain"
-                        style="max-width: {{ $imgMaxWidth }}; height:auto;"
+                        style="max-width: {{ $imgMaxWidth }};"
                     >
                 </div>
             @endif
 
             {{-- TEXT --}}
             <div class="{{ $isAr ? 'text-right' : 'text-left' }}">
+
                 <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
-                    <span class="bg-gradient-to-r from-[#00b4d8] via-[#a8b2d1] to-[#ff5d8f]
-                                 bg-clip-text text-transparent">
+                    <span
+                        style="
+                            background: linear-gradient(
+                                135deg,
+                                var(--primary-color),
+                                var(--secondary-color)
+                            );
+                            -webkit-background-clip: text;
+                            color: transparent;
+                        "
+                    >
                         {{ $title }}
                     </span>
                 </h1>
 
                 @if($desc)
-                    <div class="mt-6 text-base md:text-lg text-[#a8b2d1] leading-relaxed
-                        {{ $isSideImage ? 'max-w-xl' : 'max-w-3xl mx-auto' }}">
+                    <div
+                        class="mt-6 text-base md:text-lg leading-relaxed
+                               {{ $isSideImage ? 'max-w-xl' : 'max-w-3xl mx-auto' }}"
+                        style="color: color-mix(in srgb, var(--text-color) 75%, transparent);"
+                    >
                         {!! $desc !!}
                     </div>
                 @endif
 
                 @if($ctaText && $ctaUrl)
                     <div class="mt-8 {{ !$isSideImage ? 'flex justify-center' : '' }}">
-                        <a href="{{ $ctaUrl }}"
-                           class="inline-flex items-center gap-2
-                                  rounded-full
-                                  bg-gradient-to-r from-[#00b4d8] to-[#ff5d8f]
-                                  px-8 py-4
-                                  text-white font-semibold
-                                  shadow-lg
-                                  hover:scale-105 transition">
+                        <a
+                            href="{{ $ctaUrl }}"
+                            class="inline-flex items-center gap-2 px-8 py-4 rounded-full
+                                   font-semibold text-white
+                                   transition-all duration-300 hover:scale-105"
+                            style="
+                                background: linear-gradient(
+                                    135deg,
+                                    var(--primary-color),
+                                    var(--secondary-color)
+                                );
+                                box-shadow: 0 20px 50px color-mix(in srgb, var(--primary-color) 35%, transparent);
+                            "
+                        >
                             {{ $ctaText }}
                         </a>
                     </div>
                 @endif
+
             </div>
 
             {{-- IMAGE RIGHT --}}
@@ -115,7 +141,7 @@
                         src="{{ $media->url }}"
                         alt="{{ $media->alt ?? $title }}"
                         class="{{ $imgRadius }} {{ $imgShadowClass }} object-contain"
-                        style="max-width: {{ $imgMaxWidth }}; height:auto;"
+                        style="max-width: {{ $imgMaxWidth }};"
                     >
                 </div>
             @endif
@@ -129,10 +155,25 @@
                     src="{{ $media->url }}"
                     alt="{{ $media->alt ?? $title }}"
                     class="{{ $imgRadius }} {{ $imgShadowClass }} object-contain"
-                    style="max-width: {{ $imgMaxWidth }}; height:auto;"
+                    style="max-width: {{ $imgMaxWidth }};"
                 >
             </div>
         @endif
 
     </div>
+
+    {{-- Divider --}}
+    <div
+        class="absolute inset-x-0 bottom-0 h-px"
+        style="
+            background: linear-gradient(
+                90deg,
+                transparent,
+                var(--primary-color),
+                transparent
+            );
+            opacity: .25;
+        "
+    ></div>
+
 </section>

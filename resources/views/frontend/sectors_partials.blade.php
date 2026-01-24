@@ -1,47 +1,104 @@
 @foreach($sectors as $sector)
-<div class="sector-card bg-[#233554] rounded-2xl overflow-hidden card-hover fade-in appear">
+<div
+    class="sector-card rounded-2xl overflow-hidden card-hover fade-in appear
+           backdrop-blur-md border transition-all duration-300"
+    style="
+        background: color-mix(in srgb, var(--bg-color) 88%, white);
+        border-color: color-mix(in srgb, var(--text-color) 12%, transparent);
+    "
+>
 
+    {{-- HEADER --}}
     <div class="relative">
+
         @if($sector->badge_text)
-            <div class="sector-badge">
+            <div
+                class="sector-badge"
+                style="
+                    background: linear-gradient(
+                        135deg,
+                        var(--primary-color),
+                        var(--secondary-color)
+                    );
+                "
+            >
                 {{ $sector->getTranslation('badge_text', app()->getLocale()) }}
             </div>
         @endif
 
-        <div class="h-48 bg-gradient-to-r
-            from-[{{ $sector->gradient_from }}]
-            to-[{{ $sector->gradient_to }}]
-            flex items-center justify-center">
-
+        {{-- ICON / GRADIENT --}}
+        <div
+            class="h-48 flex items-center justify-center"
+            style="
+                background: linear-gradient(
+                    135deg,
+                    {{ $sector->gradient_from }},
+                    {{ $sector->gradient_to }}
+                );
+            "
+        >
             @if($sector->icon)
-                <i class="{{ $sector->icon }} text-white text-6xl sector-icon"></i>
+                <i
+                    class="{{ $sector->icon }} text-6xl sector-icon"
+                    style="color: var(--text-color)"
+                ></i>
             @endif
         </div>
     </div>
 
+    {{-- CONTENT --}}
     <div class="p-6">
-        <h3 class="text-xl font-bold text-white mb-3">
+
+        <h3
+            class="text-xl font-bold mb-3"
+            style="color: var(--text-color)"
+        >
             {{ $sector->getTranslation('title', app()->getLocale()) }}
         </h3>
 
-        <p class="text-[#8892b0] mb-4">
+        <p
+            class="mb-4 leading-relaxed"
+            style="color: color-mix(in srgb, var(--text-color) 75%, transparent);"
+        >
             {!! $sector->getTranslation('description', app()->getLocale()) !!}
         </p>
 
-        {{-- Market --}}
+        {{-- MARKET --}}
         @if($sector->market_value && $sector->market_percent)
-            <div class="mb-2 flex justify-between">
-                <span class="text-sm text-[#a8b2d1]">{{ __('حجم السوق') }}</span>
-                <span class="text-sm font-bold text-[#00b4d8]">
+            <div class="mb-2 flex justify-between items-center">
+                <span
+                    class="text-sm"
+                    style="color: color-mix(in srgb, var(--text-color) 70%, transparent);"
+                >
+                    {{ __('حجم السوق') }}
+                </span>
+
+                <span
+                    class="text-sm font-bold"
+                    style="color: var(--primary-color)"
+                >
                     {{ $sector->market_value }}B
                 </span>
             </div>
 
-            <div class="w-full bg-gray-700 rounded-full h-2">
-                <div class="market-size-bar h-2 rounded-full"
-                     style="width: {{ $sector->market_percent }}%"></div>
+            <div
+                class="w-full h-2 rounded-full overflow-hidden"
+                style="background: color-mix(in srgb, var(--text-color) 20%, transparent);"
+            >
+                <div
+                    class="h-2 rounded-full transition-all duration-700"
+                    style="
+                        width: {{ $sector->market_percent }}%;
+                        background: linear-gradient(
+                            90deg,
+                            var(--primary-color),
+                            var(--secondary-color)
+                        );
+                    "
+                ></div>
             </div>
         @endif
+
     </div>
 
 </div>

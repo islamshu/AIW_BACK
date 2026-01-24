@@ -8,25 +8,56 @@
     $excludedSlugs = ['home', 'sectors', 'contact'];
 ?>
 
-<footer class="relative bg-[#0a192f] border-t border-[#00b4d8]/10 pt-20 pb-8 overflow-hidden">
+<footer
+    class="relative pt-20 pb-8 overflow-hidden"
+    style="
+        background: var(--bg-color);
+        border-top: 1px solid
+            color-mix(in srgb, var(--primary-color) 25%, transparent);
+    "
+>
 
     
     <div class="absolute inset-0 pointer-events-none">
-        <div class="absolute -top-32 -right-32 w-96 h-96 bg-[#00b4d8]/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-32 -left-32 w-96 h-96 bg-[#ff5d8f]/10 rounded-full blur-3xl"></div>
+        <div
+            class="absolute -top-32 -right-32 w-96 h-96 rounded-full blur-3xl"
+            style="
+                background: var(--primary-color);
+                opacity: .08;
+            "
+        ></div>
+
+        <div
+            class="absolute -bottom-32 -left-32 w-96 h-96 rounded-full blur-3xl"
+            style="
+                background: var(--secondary-color);
+                opacity: .08;
+            "
+        ></div>
     </div>
 
     <div class="relative container mx-auto px-4">
 
         
         <div class="max-w-3xl mx-auto text-center mb-16">
-            <p class="text-[#8892b0] text-sm md:text-base leading-relaxed">
+            <p
+                class="text-sm md:text-base leading-relaxed"
+                style="color: color-mix(in srgb, var(--text-color) 70%, transparent);"
+            >
                 <?php echo get_general_value('description_'.app()->getLocale()); ?>
 
             </p>
 
-            <div class="w-24 h-[2px] bg-gradient-to-r from-[#00b4d8] to-[#ff5d8f]
-                        mx-auto mt-6 rounded-full"></div>
+            <div
+                class="w-24 h-[2px] mx-auto mt-6 rounded-full"
+                style="
+                    background: linear-gradient(
+                        135deg,
+                        var(--primary-color),
+                        var(--secondary-color)
+                    );
+                "
+            ></div>
         </div>
 
         
@@ -36,21 +67,26 @@
             <div class="flex justify-center md:justify-start">
                 <img
                     src="<?php echo e(asset('storage/'.get_general_value('website_logo'))); ?>"
-                    alt="AIW Logo"
-                    class="object-contain drop-shadow-xl w-auto h-auto
-                           max-w-[180px] md:max-w-[220px] lg:max-w-[260px]">
+                    alt="Logo"
+                    class="object-contain drop-shadow-xl
+                           max-w-[180px] md:max-w-[220px] lg:max-w-[260px]"
+                >
             </div>
 
             
             <div>
-                <h5 class="text-white font-semibold mb-4">
+                <h5 class="font-semibold mb-4" style="color: var(--text-color)">
                     <?php echo e(app()->getLocale() === 'ar' ? 'روابط سريعة' : 'Quick Links'); ?>
 
                 </h5>
 
                 <ul class="space-y-3">
                     <li>
-                        <a href="/" class="text-[#8892b0] hover:text-[#00b4d8] transition">
+                        <a href="/"
+                           class="transition"
+                           style="color: color-mix(in srgb, var(--text-color) 70%, transparent);"
+                           onmouseover="this.style.color='var(--primary-color)'"
+                           onmouseout="this.style.color='color-mix(in srgb, var(--text-color) 70%, transparent)'">
                             <?php echo e(app()->getLocale() === 'ar' ? 'الرئيسية' : 'Home'); ?>
 
                         </a>
@@ -60,7 +96,10 @@
                         <?php if(in_array($page->slug, $excludedSlugs)) continue; ?>
                         <li>
                             <a href="<?php echo e(url($page->slug)); ?>"
-                               class="text-[#8892b0] hover:text-[#00b4d8] transition">
+                               class="transition"
+                               style="color: color-mix(in srgb, var(--text-color) 70%, transparent);"
+                               onmouseover="this.style.color='var(--primary-color)'"
+                               onmouseout="this.style.color='color-mix(in srgb, var(--text-color) 70%, transparent)'">
                                 <?php echo e($page->title[app()->getLocale()] ?? $page->title['ar']); ?>
 
                             </a>
@@ -69,7 +108,11 @@
 
                     <?php if(get_general_value('sectors_enabled')): ?>
                         <li>
-                            <a href="/sectors" class="text-[#8892b0] hover:text-[#00b4d8] transition">
+                            <a href="/sectors"
+                               class="transition"
+                               style="color: color-mix(in srgb, var(--text-color) 70%, transparent);"
+                               onmouseover="this.style.color='var(--primary-color)'"
+                               onmouseout="this.style.color='color-mix(in srgb, var(--text-color) 70%, transparent)'">
                                 <?php echo e(app()->getLocale() === 'ar' ? 'القطاعات' : 'Sectors'); ?>
 
                             </a>
@@ -77,7 +120,11 @@
                     <?php endif; ?>
 
                     <li>
-                        <a href="/contact" class="text-[#8892b0] hover:text-[#00b4d8] transition">
+                        <a href="/contact"
+                           class="transition"
+                           style="color: color-mix(in srgb, var(--text-color) 70%, transparent);"
+                           onmouseover="this.style.color='var(--primary-color)'"
+                           onmouseout="this.style.color='color-mix(in srgb, var(--text-color) 70%, transparent)'">
                             <?php echo e(app()->getLocale() === 'ar' ? 'اتصل بنا' : 'Contact Us'); ?>
 
                         </a>
@@ -87,19 +134,22 @@
 
             
             <div>
-                <h5 class="text-white font-semibold mb-4">
+                <h5 class="font-semibold mb-4" style="color: var(--text-color)">
                     <?php echo e(app()->getLocale() === 'ar' ? 'تواصل معنا' : 'Get in Touch'); ?>
 
                 </h5>
 
-                <ul class="space-y-4 text-[#8892b0] text-sm">
+                <ul
+                    class="space-y-4 text-sm"
+                    style="color: color-mix(in srgb, var(--text-color) 70%, transparent);"
+                >
                     <li class="flex items-center justify-center md:justify-start gap-3">
-                        <i class="fas fa-envelope text-[#00b4d8]"></i>
+                        <i class="fas fa-envelope" style="color: var(--primary-color)"></i>
                         <?php echo e(get_general_value('website_email')); ?>
 
                     </li>
                     <li class="flex items-center justify-center md:justify-start gap-3">
-                        <i class="fas fa-phone text-[#00b4d8]"></i>
+                        <i class="fas fa-phone" style="color: var(--primary-color)"></i>
                         <?php echo e(get_general_value('phone')); ?>
 
                     </li>
@@ -109,23 +159,23 @@
         </div>
 
         
-        <div class="border-t border-[#00b4d8]/10 pt-6 text-center text-[#8892b0] text-sm">
+        <div
+            class="pt-6 text-center text-sm"
+            style="
+                border-top: 1px solid
+                    color-mix(in srgb, var(--primary-color) 25%, transparent);
+                color: color-mix(in srgb, var(--text-color) 65%, transparent);
+            "
+        >
+            © <?php echo e(date('Y')); ?>
 
-            <p class="mb-1">
-                © <?php echo e(date('Y')); ?>
+            <span class="font-semibold" style="color: var(--text-color)">
+                <?php echo e(get_general_value('website_name_'.app()->getLocale())); ?>
 
-                <span class="text-white font-semibold">
-                    <?php echo e(get_general_value('website_name_'.app()->getLocale())); ?>
+            </span>
+            — <?php echo e(app()->getLocale() === 'ar' ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'); ?>
 
-                </span>
-                — <?php echo e(app()->getLocale() === 'ar' ? 'جميع الحقوق محفوظة.' : 'All rights reserved.'); ?>
-
-            </p>
-        
-          
-        
         </div>
-        
 
     </div>
 </footer>

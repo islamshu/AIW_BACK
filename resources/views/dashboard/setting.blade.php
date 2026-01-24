@@ -2,231 +2,283 @@
 @section('title', __('اعدادات الموقع'))
 
 @section('content')
-    <div class="app-content content">
-        <div class="content-wrapper">
-            <div class="content-header row">
-                <div class="content-header-left col-md-6 col-12 mb-2">
-                    <h3 class="content-header-title">{{ __('إعدادات الموقع') }}</h3>
-                    <div class="row breadcrumbs-top">
-                        <div class="breadcrumb-wrapper col-12">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('الرئيسية') }}</a></li>
-                                <li class="breadcrumb-item active">{{ __('إعدادات الموقع') }}</li>
-                            </ol>
-                        </div>
-                    </div>
+<div class="app-content content">
+    <div class="content-wrapper">
+
+        {{-- HEADER --}}
+        <div class="content-header row">
+            <div class="content-header-left col-md-6 col-12 mb-2">
+                <h3 class="content-header-title">{{ __('إعدادات الموقع') }}</h3>
+                <div class="breadcrumb-wrapper col-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('home') }}">{{ __('الرئيسية') }}</a>
+                        </li>
+                        <li class="breadcrumb-item active">{{ __('إعدادات الموقع') }}</li>
+                    </ol>
                 </div>
             </div>
+        </div>
 
-            <div class="content-body">
-                <section id="validation">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4 class="card-title">{{ __('إعدادات الموقع') }}</h4>
-                                </div>
+        {{-- CONTENT --}}
+        <div class="content-body">
+            <section id="settings">
 
-                                <div class="card-content collapse show">
-                                    <div class="card-body">
-                                        <form class="form" action="{{ route('add_general') }}" method="post"
-                                            enctype="multipart/form-data">
-                                            @csrf
+                <div class="row">
+                    <div class="col-12">
 
-                                            <!-- القسم العام -->
-                                            <div class="form-section mb-4">
-                                                <h5 class="section-title"><i class="ft-settings"></i>
-                                                    {{ __('الإعدادات العامة') }}</h5>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>{{ __('شعار الموقع') }}</label>
-                                                            <div class="col-md-6 mb-3 type-field" id="imageField"></div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">{{ __('إعدادات الموقع') }}</h4>
+                            </div>
 
+                            <div class="card-content collapse show">
+                                <div class="card-body">
 
-                                                            {{-- hidden input --}}
-                                                            <input type="hidden" name="general[website_logo]"
-                                                                id="imageInput"
-                                                                value="{{ get_general_value('website_logo') }}">
+                                    <form action="{{ route('add_general') }}"
+                                          method="POST"
+                                          enctype="multipart/form-data">
+                                        @csrf
 
-                                                            <button type="button" class="btn btn-outline-primary w-100"
-                                                                onclick="openMediaLibrary()">
-                                                                📁 اختيار صورة من المكتبة
-                                                            </button>
+                                        {{-- ================================================= --}}
+                                        {{-- الإعدادات العامة --}}
+                                        {{-- ================================================= --}}
+                                        <div class="form-section mb-5">
+                                            <h5 class="section-title mb-3">
+                                                <i class="ft-settings"></i>
+                                                {{ __('الإعدادات العامة') }}
+                                            </h5>
 
-                                                            {{-- IMAGE PREVIEW --}}
-                                                            <div class="mt-2">
-                                                                <img id="imagePreview"
-                                                                    src="{{ asset('storage/' . get_general_value('website_logo')) }}"
-                                                                    class="img-thumbnail"
-                                                                    style="max-height:120px">
-                                                            </div>
+                                            <div class="row">
 
+                                                {{-- LOGO --}}
+                                                <div class="col-md-6">
+                                                    <label>{{ __('شعار الموقع') }}</label>
 
-                                                        </div>
-                                                    </div>
+                                                    <input type="hidden"
+                                                           name="general[website_logo]"
+                                                           id="imageInput"
+                                                           value="{{ get_general_value('website_logo') }}">
 
+                                                    <button type="button"
+                                                            class="btn btn-outline-primary w-100"
+                                                            onclick="openMediaLibrary()">
+                                                        📁 {{ __('اختيار صورة من المكتبة') }}
+                                                    </button>
 
-
-                                                </div>
-
-                                                <div class="row mt-2">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>{{ __('البريد الإلكتروني') }}</label>
-                                                            <div class="input-group">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text"><i
-                                                                            class="ft-mail"></i></span>
-                                                                </div>
-                                                                <input type="email"
-                                                                    value="{{ get_general_value('website_email') }}"
-                                                                    class="form-control" name="general[website_email]"
-                                                                    placeholder="info@example.com">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-6">
-                                                        <div class="form-group">
-                                                            <label>{{ __('هاتف الموقع') }}</label>
-                                                            <div class="input-group">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text"><i
-                                                                            class="ft-phone"></i></span>
-                                                                </div>
-                                                                <input type="text"
-                                                                    value="{{ get_general_value('phone') }}"
-                                                                    class="form-control" name="general[phone]"
-                                                                    placeholder="+123456789">
-                                                            </div>
-                                                        </div>
+                                                    <div class="mt-2">
+                                                        <img id="imagePreview"
+                                                             src="{{ asset('storage/'.get_general_value('website_logo')) }}"
+                                                             class="img-thumbnail"
+                                                             style="max-height:120px">
                                                     </div>
                                                 </div>
+
                                             </div>
-                                    </div>
 
+                                            <div class="row mt-3">
+                                                <div class="col-md-6">
+                                                    <label>{{ __('البريد الإلكتروني') }}</label>
+                                                    <input type="email"
+                                                           class="form-control"
+                                                           name="general[website_email]"
+                                                           value="{{ get_general_value('website_email') }}">
+                                                </div>
 
-
-                                    <!-- قسم اللغة العربية -->
-                                    <div class="form-section mb-4">
-                                        <h5 class="section-title"><i class="ft-flag"></i>
-                                            {{ __('إعدادات اللغة العربية') }}</h5>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>{{ __('اسم الموقع') }}</label>
+                                                <div class="col-md-6">
+                                                    <label>{{ __('هاتف الموقع') }}</label>
                                                     <input type="text"
-                                                        value="{{ get_general_value('website_name_ar') }}" required
-                                                        class="form-control" name="general[website_name_ar]"
-                                                        placeholder="اسم الموقع بالعربية">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>{{ __('عنوان الموقع') }}</label>
-                                                    <input type="text"
-                                                        value="{{ get_general_value('address_ar') }}" required
-                                                        class="form-control" name="general[address_ar]"
-                                                        placeholder="عنوان الموقع بالعربية">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>{{ __('وصف الموقع') }}</label>
-                                                    <textarea name="general[description_ar]" class="form-control  js-editor" rows="2"
-                                                        placeholder="وصف الموقع بالعربية">{{ get_general_value('description_ar') }}</textarea>
+                                                           class="form-control"
+                                                           name="general[phone]"
+                                                           value="{{ get_general_value('phone') }}">
                                                 </div>
                                             </div>
                                         </div>
 
+                                        {{-- ================================================= --}}
+                                        {{-- نظام الألوان (في وسط الصفحة) --}}
+                                        {{-- ================================================= --}}
+                                        <div class="form-section mb-5">
+                                            <h5 class="section-title text-center mb-4">
+                                                <i class="ft-droplet"></i>
+                                                {{ __('نظام ألوان الموقع') }}
+                                            </h5>
 
-                                    </div>
+                                            <div class="row justify-content-center">
+                                                <div class="col-md-10">
 
-                                    <!-- قسم اللغة الانجليزية -->
-                                    <div class="form-section mb-4">
-                                        <h5 class="section-title"><i class="ft-flag"></i>
-                                            {{ __('إعدادات اللغة الانجليزية') }}</h5>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>{{ __('اسم الموقع') }}</label>
-                                                    <input type="text"
-                                                        value="{{ get_general_value('website_name_en') }}" required
-                                                        class="form-control text-right" name="general[website_name_en]"
-                                                        placeholder="اسم الموقع">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>{{ __('عنوان الموقع') }}</label>
-                                                    <input type="text"
-                                                        value="{{ get_general_value('address_en') }}" required
-                                                        class="form-control" name="general[address_en]"
-                                                        placeholder="عنوان الموقع بالانجليزية">
-                                                </div>
-                                            </div>
+                                                    <div class="card border shadow-sm">
+                                                        <div class="card-body">
 
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label>{{ __('وصف الموقع') }}</label>
-                                                    <textarea name="general[description_en]" class="form-control js-editor text-right" rows="2"
-                                                        placeholder="وصف الموقع">{{ get_general_value('description_en') }}</textarea>
+                                                            <div class="row text-center">
+
+                                                                <div class="col-md-3">
+                                                                    <label class="font-weight-bold mb-2 d-block">
+                                                                        {{ __('اللون الرئيسي') }}
+                                                                    </label>
+                                                                    <input type="color"
+                                                                           class="form-control"
+                                                                           name="general[prime_color]"
+                                                                           value="{{ get_general_value('prime_color') ?? '#00b4d8' }}">
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label class="font-weight-bold mb-2 d-block">
+                                                                        {{ __('اللون الثانوي') }}
+                                                                    </label>
+                                                                    <input type="color"
+                                                                           class="form-control"
+                                                                           name="general[second_color]"
+                                                                           value="{{ get_general_value('second_color') ?? '#ff5d8f' }}">
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label class="font-weight-bold mb-2 d-block">
+                                                                        {{ __('لون الخلفية') }}
+                                                                    </label>
+                                                                    <input type="color"
+                                                                           class="form-control"
+                                                                           name="general[bg_color]"
+                                                                           value="{{ get_general_value('bg_color') ?? '#0a192f' }}">
+                                                                </div>
+
+                                                                <div class="col-md-3">
+                                                                    <label class="font-weight-bold mb-2 d-block">
+                                                                        {{ __('لون النص') }}
+                                                                    </label>
+                                                                    <input type="color"
+                                                                           class="form-control"
+                                                                           name="general[text_color]"
+                                                                           value="{{ get_general_value('text_color') ?? '#ffffff' }}">
+                                                                </div>
+
+                                                            </div>
+
+                                                            {{-- PREVIEW --}}
+                                                            <div class="mt-4 p-4 rounded text-center"
+                                                                 style="
+                                                                    background: {{ get_general_value('bg_color') ?? '#0a192f' }};
+                                                                    color: {{ get_general_value('text_color') ?? '#ffffff' }};
+                                                                    border: 1px solid {{ get_general_value('prime_color') ?? '#00b4d8' }};
+                                                                 ">
+                                                                <h4 style="
+                                                                    background: linear-gradient(
+                                                                        135deg,
+                                                                        {{ get_general_value('prime_color') ?? '#00b4d8' }},
+                                                                        {{ get_general_value('second_color') ?? '#ff5d8f' }}
+                                                                    );
+                                                                    -webkit-background-clip: text;
+                                                                    color: transparent;
+                                                                ">
+                                                                    {{ __('معاينة الألوان') }}
+                                                                </h4>
+
+                                                                <p class="mb-0">
+                                                                    {{ __('هذا مثال مباشر على ألوان الموقع') }}
+                                                                </p>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
 
+                                        {{-- ================================================= --}}
+                                        {{-- اللغة العربية --}}
+                                        {{-- ================================================= --}}
+                                        <div class="form-section mb-5">
+                                            <h5 class="section-title">
+                                                <i class="ft-flag"></i>
+                                                {{ __('إعدادات اللغة العربية') }}
+                                            </h5>
 
-                                    </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>{{ __('اسم الموقع') }}</label>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           name="general[website_name_ar]"
+                                                           value="{{ get_general_value('website_name_ar') }}">
+                                                </div>
 
+                                                <div class="col-md-6">
+                                                    <label>{{ __('العنوان') }}</label>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           name="general[address_ar]"
+                                                           value="{{ get_general_value('address_ar') }}">
+                                                </div>
 
-                                    <!-- زر الحفظ -->
-                                    <div class="form-actions text-center mt-3">
-                                        <button type="submit" class="btn btn-primary btn-lg">
-                                            <i class="la la-check-square-o"></i> {{ __('حفظ التغييرات') }}
-                                        </button>
-                                    </div>
+                                                <div class="col-md-12 mt-2">
+                                                    <label>{{ __('وصف الموقع') }}</label>
+                                                    <textarea class="form-control js-editor"
+                                                              rows="3"
+                                                              name="general[description_ar]">
+                                                        {{ get_general_value('description_ar') }}
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- ================================================= --}}
+                                        {{-- اللغة الإنجليزية --}}
+                                        {{-- ================================================= --}}
+                                        <div class="form-section mb-4">
+                                            <h5 class="section-title">
+                                                <i class="ft-flag"></i>
+                                                {{ __('إعدادات اللغة الإنجليزية') }}
+                                            </h5>
+
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label>{{ __('اسم الموقع') }}</label>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           name="general[website_name_en]"
+                                                           value="{{ get_general_value('website_name_en') }}">
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label>{{ __('العنوان') }}</label>
+                                                    <input type="text"
+                                                           class="form-control"
+                                                           name="general[address_en]"
+                                                           value="{{ get_general_value('address_en') }}">
+                                                </div>
+
+                                                <div class="col-md-12 mt-2">
+                                                    <label>{{ __('وصف الموقع') }}</label>
+                                                    <textarea class="form-control js-editor"
+                                                              rows="3"
+                                                              name="general[description_en]">
+                                                        {{ get_general_value('description_en') }}
+                                                    </textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- SAVE --}}
+                                        <div class="text-center">
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-lg">
+                                                <i class="la la-check"></i>
+                                                {{ __('حفظ التغييرات') }}
+                                            </button>
+                                        </div>
+
                                     </form>
+
                                 </div>
                             </div>
                         </div>
+
                     </div>
-            </div>
+                </div>
+
             </section>
         </div>
     </div>
-    </div>
-@endsection
-
-@section('script')
-    <script>
-        // Script for file input label update
-        $(document).ready(function() {
-            $('.custom-file-input').on('change', function() {
-                let fileName = $(this).val().split('\\').pop();
-                $(this).next('.custom-file-label').html(fileName);
-            });
-
-            // Image preview functionality
-            function readURL(input, preview) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        $(preview).attr('src', e.target.result);
-                    }
-                    reader.readAsDataURL(input.files[0]);
-                }
-            }
-
-            $(".imagee").change(function() {
-                readURL(this, '.image-previeww');
-            });
-
-            $(".image").change(function() {
-                readURL(this, '.image-preview');
-            });
-        });
-    </script>
-
+</div>
 @endsection

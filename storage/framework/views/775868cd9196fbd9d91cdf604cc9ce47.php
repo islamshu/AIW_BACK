@@ -1,17 +1,15 @@
-<html lang="<?php echo e(app()->getLocale()); ?>" dir="<?php echo e(app()->getLocale() === 'ar' ? 'rtl' : 'ltr'); ?>">
+<!DOCTYPE html>
+<html lang="<?php echo e(app()->getLocale()); ?>"
+      dir="<?php echo e(app()->getLocale() === 'ar' ? 'rtl' : 'ltr'); ?>">
 
 <head>
-    
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $__env->yieldContent('title','AIW'); ?></title>
+
     
-    <!-- Favicons متعددة التنسيقات -->
-    <link rel="apple-touch-icon" sizes="180x180" href="<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>">
-    <link rel="icon" type="image/png" sizes="32x32" href="<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>">
-    <link rel="icon" type="image/png" sizes="16x16" href="<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>">
-    <link rel="manifest" href="<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>">
-    <link rel="shortcut icon" href="<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>" type="image/x-icon">
+    <link rel="icon" href="<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>">
 
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -27,28 +25,80 @@
     
     <style>
         :root {
-            --navy: #0a192f;
-            --sky-blue: #00b4d8;
-            --pink: #ff5d8f;
+            /* ألوان من لوحة التحكم */
+            --bg-color: <?php echo e(get_general_value('bg_color') ?? '#0a192f'); ?>;
+            --text-color: <?php echo e(get_general_value('text_color') ?? '#e6f1ff'); ?>;
+            --primary-color: <?php echo e(get_general_value('prime_color') ?? '#00b4d8'); ?>;
+            --secondary-color: <?php echo e(get_general_value('second_color') ?? '#ff5d8f'); ?>;
         }
 
         body {
+            margin: 0;
             font-family: 'Cairo', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
         }
-        .sector-badge {
-            position: absolute;
-            top: 15px;
-            left: 15px;
-            background: linear-gradient(135deg, var(--sky-blue), var(--pink));
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
+
         body[dir="ltr"] {
             font-family: 'Poppins', sans-serif;
         }
+
+        /* ================= UTILITIES ================= */
+
+        .gradient-bg {
+            background: linear-gradient(
+                135deg,
+                var(--primary-color),
+                var(--secondary-color)
+            );
+        }
+
+        .gradient-text {
+            background: linear-gradient(
+                135deg,
+                var(--primary-color),
+                var(--secondary-color)
+            );
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .text-primary {
+            color: var(--primary-color);
+        }
+
+        .border-primary {
+            border-color: var(--primary-color);
+        }
+
+        .soft-bg {
+            background:
+                linear-gradient(
+                    135deg,
+                    color-mix(in srgb, var(--primary-color) 10%, transparent),
+                    color-mix(in srgb, var(--secondary-color) 10%, transparent)
+                );
+        }
+
+        /* ================= BUTTONS ================= */
+
+        .btn-primary {
+            background: linear-gradient(
+                135deg,
+                var(--primary-color),
+                var(--secondary-color)
+            );
+            color: #fff;
+            transition: all .3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px
+                color-mix(in srgb, var(--primary-color) 40%, transparent);
+        }
+
+        /* ================= ANIMATIONS ================= */
 
         .fade-in {
             opacity: 0;
@@ -83,34 +133,24 @@
             transform: translateX(0);
         }
 
-        .gradient-text {
-            background: linear-gradient(to right, var(--sky-blue), var(--pink));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-        }
-
         .card-hover {
             transition: all .3s ease;
         }
 
         .card-hover:hover {
             transform: translateY(-10px);
-            box-shadow: 0 10px 30px -15px rgba(2,12,27,.7);
+            box-shadow: 0 20px 40px -20px
+                color-mix(in srgb, var(--primary-color) 50%, transparent);
         }
     </style>
 
     <?php echo $__env->yieldContent('style'); ?>
 </head>
 
-<body class="bg-[#0a192f] text-white">
-
-
-
+<body>
 
 
 <?php echo $__env->make('frontend.inc.navbar', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-
 
 
 <main class="pt-32">
@@ -118,38 +158,29 @@
 </main>
 
 
-
-
 <?php echo $__env->make('frontend.inc.footer', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
 
 <div class="fixed bottom-8 left-8 flex flex-col gap-4 z-40">
 
-    <a href="<?php echo e(route('language.switch', app()->getLocale() === 'ar' ? 'en' : 'ar')); ?>"
-        class="w-12 h-12 rounded-full
-               bg-gradient-to-br from-[#112240] to-[#1b2b4a]
-               flex items-center justify-center
-               text-white
-               shadow-2xl border border-white/10
-               hover:from-[#00b4d8] hover:to-[#ff5d8f]
-               transition-all duration-300"
-        title="<?php echo e(app()->getLocale() === 'ar' ? 'English' : 'العربية'); ?>">
-     
-         <i class="fas fa-language text-lg"></i>
-     
-     </a>
-     
     
+    <a href="<?php echo e(route('language.switch', app()->getLocale() === 'ar' ? 'en' : 'ar')); ?>"
+       class="w-12 h-12 rounded-full gradient-bg
+              flex items-center justify-center
+              text-white shadow-2xl
+              transition hover:scale-110">
+        <i class="fas fa-language text-lg"></i>
+    </a>
 
-
+    
     <button id="scrollTop"
-        class="w-12 h-12 rounded-full bg-gradient-to-br from-[#00b4d8] to-[#ff5d8f]
-               flex items-center justify-center text-white shadow-xl hover:scale-110 transition">
+        class="w-12 h-12 rounded-full gradient-bg
+               flex items-center justify-center
+               text-white shadow-2xl
+               transition hover:scale-110">
         <i class="fas fa-arrow-up"></i>
     </button>
 
-    
-     
 </div>
 
 
@@ -159,11 +190,10 @@
     });
 
     document.getElementById('scrollTop')?.addEventListener('click', () => {
-        window.scrollTo({top:0,behavior:'smooth'});
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 </script>
 
-<?php echo $__env->yieldContent('script'); ?>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -174,15 +204,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 observer.unobserve(entry.target);
             }
         });
-    }, {
-        threshold: 0.2
-    });
+    }, { threshold: 0.2 });
 
     document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right')
         .forEach(el => observer.observe(el));
 
 });
 </script>
+
+<?php echo $__env->yieldContent('script'); ?>
 <?php echo $__env->yieldContent('scripts'); ?>
 
 </body>
