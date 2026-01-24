@@ -1,5 +1,6 @@
 <?php
     use App\Models\Page;
+    use App\Models\Job;
 
     $navPages = Page::where('status', 'published')
         ->orderBy('order')
@@ -7,7 +8,24 @@
 
     $excludedSlugs = ['home', 'sectors', 'contact'];
     $logo = get_general_value('website_logo');
+
+    $navPages = Page::where('status', 'published')
+        ->orderBy('order')
+        ->get();
+
+    $excludedSlugs = ['home', 'sectors', 'contact'];
+    $logo = get_general_value('website_logo');
+
+    // 👇 هل يوجد وظائف منشورة؟
+    $hasJobs = Job::where('is_active', 1)
+        ->whereDate('publish_from', '<=', now())
+        ->where(function ($q) {
+            $q->whereNull('publish_to')
+              ->orWhereDate('publish_to', '>=', now());
+        })
+        ->exists();
 ?>
+
 
 <nav
     class="fixed top-0 w-full backdrop-blur-sm z-50 py-4"
@@ -95,6 +113,18 @@
 
                 </a>
                 <?php endif; ?>
+                <?php if($hasJobs): ?>
+                <a href="/jobs"
+                class="flex gap-2 items-center transition-colors duration-300"
+                style="color: var(--text-color)"
+                onmouseover="this.style.color='var(--primary-color)'"
+                onmouseout="this.style.color='var(--text-color)'">
+                    <i class="fas fa-briefcase"></i>
+                    <?php echo e(app()->getLocale() === 'ar' ? 'الوظائف' : 'Jobs'); ?>
+
+                </a>
+                <?php endif; ?>
+
 
                 
                 <a href="/contact"
@@ -161,7 +191,7 @@
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 <?php if(get_general_value('sectors_enabled')): ?>
 
-                <a href="/contact"
+                <a href="/sectors"
                    class="transition-colors duration-300"
                    style="color: var(--text-color)"
                    onmouseover="this.style.color='var(--primary-color)'"
@@ -170,6 +200,17 @@
 
                 </a>
                 <?php endif; ?>
+                <?php if($hasJobs): ?>
+                <a href="/jobs"
+                class="transition-colors duration-300"
+                style="color: var(--text-color)"
+                onmouseover="this.style.color='var(--primary-color)'"
+                onmouseout="this.style.color='var(--text-color)'">
+                    <?php echo e(app()->getLocale() === 'ar' ? 'الوظائف' : 'Jobs'); ?>
+
+                </a>
+                <?php endif; ?>
+
                 <a href="/contact"
                    class="transition-colors duration-300"
                    style="color: var(--text-color)"
