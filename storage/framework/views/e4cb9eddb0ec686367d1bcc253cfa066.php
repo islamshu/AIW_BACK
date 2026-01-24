@@ -8,9 +8,7 @@
         
         <h2
             class="text-3xl md:text-4xl font-extrabold text-center mb-16 fade-in"
-            style="
-                color: var(--primary-color);
-            "
+            style="color: var(--primary-color);"
         >
             <?php echo e(app()->getLocale() === 'ar' ? 'لماذا تختار AIW؟' : 'Why Choose AIW?'); ?>
 
@@ -31,11 +29,12 @@
 
                     
                     <div
-                        class="w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-6"
+                        class="w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-6 overflow-hidden"
                         style="
                             background: color-mix(in srgb, var(--primary-color) 12%, transparent);
                         "
                     >
+                        
                         <?php if($service->icon): ?>
                             <i
                                 class="<?php echo e($service->icon); ?>"
@@ -44,6 +43,14 @@
                                     font-size: 24px;
                                 "
                             ></i>
+
+                        
+                        <?php elseif($service->image): ?>
+                            <img
+                                src="<?php echo e(asset('storage/' . $service->image)); ?>"
+                                alt="<?php echo e($service->title); ?>"
+                                class="w-8 h-8 object-contain"
+                            >
                         <?php endif; ?>
                     </div>
 
@@ -76,15 +83,11 @@
     <div class="absolute inset-0 pointer-events-none">
         <div
             class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl"
-            style="
-                background: color-mix(in srgb, var(--primary-color) 15%, transparent);
-            "
+            style="background: color-mix(in srgb, var(--primary-color) 15%, transparent);"
         ></div>
         <div
             class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl"
-            style="
-                background: color-mix(in srgb, var(--secondary-color) 15%, transparent);
-            "
+            style="background: color-mix(in srgb, var(--secondary-color) 15%, transparent);"
         ></div>
     </div>
 

@@ -8,9 +8,7 @@
         {{-- TITLE --}}
         <h2
             class="text-3xl md:text-4xl font-extrabold text-center mb-16 fade-in"
-            style="
-                color: var(--primary-color);
-            "
+            style="color: var(--primary-color);"
         >
             {{ app()->getLocale() === 'ar' ? 'لماذا تختار AIW؟' : 'Why Choose AIW?' }}
         </h2>
@@ -28,13 +26,14 @@
                     "
                 >
 
-                    {{-- ICON --}}
+                    {{-- ICON OR IMAGE --}}
                     <div
-                        class="w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-6"
+                        class="w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-6 overflow-hidden"
                         style="
                             background: color-mix(in srgb, var(--primary-color) 12%, transparent);
                         "
                     >
+                        {{-- ICON --}}
                         @if ($service->icon)
                             <i
                                 class="{{ $service->icon }}"
@@ -43,6 +42,14 @@
                                     font-size: 24px;
                                 "
                             ></i>
+
+                        {{-- IMAGE --}}
+                        @elseif ($service->image)
+                            <img
+                                src="{{ asset('storage/' . $service->image) }}"
+                                alt="{{ $service->title }}"
+                                class="w-8 h-8 object-contain"
+                            >
                         @endif
                     </div>
 
@@ -73,15 +80,11 @@
     <div class="absolute inset-0 pointer-events-none">
         <div
             class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl"
-            style="
-                background: color-mix(in srgb, var(--primary-color) 15%, transparent);
-            "
+            style="background: color-mix(in srgb, var(--primary-color) 15%, transparent);"
         ></div>
         <div
             class="absolute -bottom-40 -left-40 w-96 h-96 rounded-full blur-3xl"
-            style="
-                background: color-mix(in srgb, var(--secondary-color) 15%, transparent);
-            "
+            style="background: color-mix(in srgb, var(--secondary-color) 15%, transparent);"
         ></div>
     </div>
 
