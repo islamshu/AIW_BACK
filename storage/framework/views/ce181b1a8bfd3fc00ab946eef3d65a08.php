@@ -159,7 +159,17 @@
 
                     </a>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                <?php if(get_general_value('sectors_enabled')): ?>
 
+                <a href="/contact"
+                   class="transition-colors duration-300"
+                   style="color: var(--text-color)"
+                   onmouseover="this.style.color='var(--primary-color)'"
+                   onmouseout="this.style.color='var(--text-color)'">
+                    <?php echo e(app()->getLocale() === 'ar' ? 'القطاعات' : 'Sectors'); ?>
+
+                </a>
+                <?php endif; ?>
                 <a href="/contact"
                    class="transition-colors duration-300"
                    style="color: var(--text-color)"

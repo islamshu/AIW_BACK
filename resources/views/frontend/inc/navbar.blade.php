@@ -151,7 +151,16 @@
                         {{ $page->title[app()->getLocale()] ?? $page->title['ar'] }}
                     </a>
                 @endforeach
+                @if(get_general_value('sectors_enabled'))
 
+                <a href="/contact"
+                   class="transition-colors duration-300"
+                   style="color: var(--text-color)"
+                   onmouseover="this.style.color='var(--primary-color)'"
+                   onmouseout="this.style.color='var(--text-color)'">
+                    {{ app()->getLocale() === 'ar' ? 'القطاعات' : 'Sectors' }}
+                </a>
+                @endif
                 <a href="/contact"
                    class="transition-colors duration-300"
                    style="color: var(--text-color)"
