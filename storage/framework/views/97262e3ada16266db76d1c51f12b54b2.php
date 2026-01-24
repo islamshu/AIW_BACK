@@ -1114,7 +1114,7 @@
                 <span class="input-group-text">
                     <i class="fas fa-link"></i>
                 </span>
-                <input type="url"
+                <input type="text"
                        class="form-control"
                        name="sections[<?php echo e($section->id); ?>][data][cta_url]"
                        value="<?php echo e($data['cta_url'] ?? ''); ?>"
