@@ -11,6 +11,8 @@ class HomeSection extends Model
         'is_active',
         'contentable_id',
         'contentable_type',
+        'admin_title',
+        'admin_note',
     ];
 
     public function contentable()

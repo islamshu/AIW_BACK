@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('_', function (Blueprint $table) {
-            $table->id();
-            $table->string('key');        // hero, statistic, services, sectors
-            $table->integer('order')->default(0);
-            $table->boolean('is_active')->default(true);
-            $table->timestamps();
+        Schema::table('home_sections', function (Blueprint $table) {
+            $table->string('admin_title')->nullable();
+            $table->text('admin_note')->nullable();
         });
     }
 
@@ -25,6 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('home_sections');
+        Schema::table('home_sections', function (Blueprint $table) {
+            //
+        });
     }
 };

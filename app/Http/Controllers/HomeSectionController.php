@@ -69,16 +69,29 @@ class HomeSectionController extends Controller
         $section->update([
             'is_active' => ! $section->is_active
         ]);
-
-        return response()->json(['success' => true]);
+    
+        return response()->json([
+            'success' => true,
+            'is_active' => $section->is_active
+        ]);
     }
+    
+
     
     public function destroy($id)
     {
-        $section = HomeSection::find($id);
+        $section = HomeSection::findOrFail($id);
+    
+        // (اختياري) حذف المحتوى المرتبط
+        if ($section->contentable) {
+            $section->contentable->delete();
+        }
+    
         $section->delete();
-        return redirect()->back();
+    
+        return response()->json(['success' => true]);
     }
+    
 
     public function reorder(Request $request)
     {
@@ -126,31 +139,42 @@ class HomeSectionController extends Controller
     }
 
     public function getContent(HomeSection $section)
-    {
-        if ($section->key === 'text') {
-            return response()->json([
-                'content' => $section->contentable->content ?? [],
-                'button_text' => $section->contentable->button_text ?? [],
-                'button_link' => $section->contentable->button_link ?? [],
-            ]);
-        }
+{
+    $base = [
+        'admin_title' => $section->admin_title,
+        'admin_note'  => $section->admin_note,
+    ];
 
-        if ($section->key === 'hero_extra') {
-            return response()->json([
-                'title' => $section->contentable->title ?? [],
-                'subtitle' => $section->contentable->subtitle ?? [],
-                'button_text' => $section->contentable->button_text ?? [],
-                'button_link' => $section->contentable->button_link ?? [],
-            ]);
-        }
-
-        return response()->json([]);
+    if ($section->key === 'text') {
+        return response()->json(array_merge($base, [
+            'content' => $section->contentable->content ?? [],
+            'button_text' => $section->contentable->button_text ?? [],
+            'button_link' => $section->contentable->button_link ?? [],
+        ]));
     }
+
+    if ($section->key === 'hero_extra') {
+        return response()->json(array_merge($base, [
+            'title' => $section->contentable->title ?? [],
+            'subtitle' => $section->contentable->subtitle ?? [],
+            'button_text' => $section->contentable->button_text ?? [],
+            'button_link' => $section->contentable->button_link ?? [],
+        ]));
+    }
+
+    return response()->json($base);
+}
+
 
 
 
     public function saveContent(Request $request, HomeSection $section)
     {
+        $section->update([
+            'admin_title' => $request->admin_title,
+            'admin_note'  => $request->admin_note,
+        ]);
+
         if ($section->key === 'text') {
             $section->contentable->update([
                 'content' => [
