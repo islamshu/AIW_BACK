@@ -1,0 +1,128 @@
+@extends('layouts.frontend')
+
+@section('title', app()->getLocale() === 'ar' ? 'خدماتنا' : 'Services')
+
+@section('style')
+<style>
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity .8s ease, transform .8s ease;
+}
+.fade-in.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.card-hover {
+    transition: .35s ease;
+}
+.card-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 25px 50px -25px
+        color-mix(in srgb, var(--primary-color) 35%, transparent);
+}
+
+.service-card {
+    position: relative;
+    background: #fff;
+    border-radius: 1.25rem;
+    border: 1px solid #e2e8f0;
+    overflow: hidden;
+}
+
+.service-icon {
+    transition: .4s ease;
+}
+.service-card:hover .service-icon {
+    transform: scale(1.2) rotate(5deg);
+}
+
+.gradient-text {
+    background: linear-gradient(
+        to right,
+        var(--primary-color),
+        var(--secondary-color)
+    );
+    -webkit-background-clip: text;
+    color: transparent;
+}
+</style>
+@endsection
+
+@section('content')
+
+{{-- ================= HERO ================= --}}
+<section class="pt-32 pb-20 text-center relative overflow-hidden"
+    style="background: linear-gradient(135deg,var(--bg-color),color-mix(in srgb,var(--bg-color) 85%,white));">
+
+    <div class="container mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 gradient-text fade-in">
+            {{ app()->getLocale() === 'ar' ? 'خدماتنا' : 'Services' }}
+        </h1>
+
+        <p class="text-xl max-w-3xl mx-auto fade-in"
+           style="color: color-mix(in srgb, var(--text-color) 70%, transparent);">
+            {{ app()->getLocale() === 'ar' ? 'نقدم حلولاً متكاملة تساعد الشركات على النمو بثقة واستدامة' : 'We offer integrated solutions that help companies grow confidently and sustainably.' }}
+        </p>
+    </div>
+</section>
+
+{{-- ================= SERVICES GRID ================= --}}
+<section class="py-20" style="background: var(--bg-color)">
+    <div class="container mx-auto px-4">
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+
+            @foreach($services as $index => $service)
+                <div class="service-card card-hover fade-in"
+                     style="transition-delay: {{ $index * .1 }}s">
+
+                    {{-- ICON / IMAGE --}}
+                    <div class="flex items-center justify-center h-40"
+                        style="background: color-mix(in srgb,var(--primary-color) 10%,transparent)">
+                        @if($service->icon)
+                            <i class="{{ $service->icon }} text-5xl service-icon"
+                               style="color: var(--primary-color)"></i>
+                        @elseif($service->image)
+                            <img src="{{ asset('storage/'.$service->image) }}"
+                                 class="w-16 h-16 object-contain service-icon">
+                        @endif
+                    </div>
+
+                    {{-- CONTENT --}}
+                    <div class="p-6 text-center">
+                        <h3 class="text-xl font-bold mb-3" style="color: var(--text-color)">
+                            {{ $service->title }}
+                        </h3>
+
+                        <p class="text-sm mb-6 leading-relaxed"
+                           style="color: color-mix(in srgb,var(--text-color) 70%,transparent)">
+                            {{ Str::limit(strip_tags($service->description), 120) }}
+                        </p>
+
+                        <a href="{{ route('services.show', $service->id) }}"
+                           class="inline-flex items-center gap-2 font-bold text-sm"
+                           style="color: var(--primary-color)">
+                            {{ __('عرض التفاصيل') }}
+                            <span>→</span>
+                        </a>
+                    </div>
+
+                </div>
+            @endforeach
+
+        </div>
+
+    </div>
+</section>
+
+@endsection
+
+@section('scripts')
+<script>
+document.querySelectorAll('.fade-in').forEach((el, i) => {
+    setTimeout(() => el.classList.add('appear'), i * 120);
+});
+</script>
+@endsection

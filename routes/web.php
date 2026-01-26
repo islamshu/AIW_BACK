@@ -20,6 +20,7 @@ use App\Http\Controllers\HomeStatController;
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\JobsFrontController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PagePreviewController;
 use App\Http\Controllers\PermissionController;
@@ -47,6 +48,9 @@ Route::get('/sectors/load-more', [HomeController::class, 'loadMore'])->name('sec
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::post('/contact/send', [ContactController::class, 'store'])
     ->name('contact.send');
+    Route::get('/news', [HomeController::class, 'news'])->name('news.index');
+Route::get('/news/{news}', [HomeController::class, 'show_new'])->name('news.show');
+
 
 
 // Language Switch
@@ -71,6 +75,9 @@ Route::prefix('jobs')->name('jobs.')->group(function () {
     Route::get('/{job}/json', [JobsFrontController::class, 'showJson'])->name('json');
     Route::post('/apply', [JobsFrontController::class, 'apply'])->name('apply');
 });
+Route::get('/services', [HomeController::class, 'services_index'])->name('services.index');
+Route::get('/services/{service:slug}', [HomeController::class, 'services_show'])->name('services.show');
+
 
 /*
 |--------------------------------------------------------------------------
@@ -98,6 +105,8 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
     Route::post('/add_general', [DashbaordController::class, 'add_general'])->name('add_general');
     Route::get('/logout', [DashbaordController::class, 'logout'])->name('logout');
     Route::get('/setting', [DashbaordController::class, 'setting'])->name('setting');
+
+
 
     /*
     |----------------------------------------------------------------------
@@ -154,13 +163,22 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
     Route::post('/sectors_page/toggle', [SectorController::class, 'toggle'])
         ->name('dashboard.sectors_page.toggle');
 
+    Route::post('/services-page/toggle', [HomeServiceController::class, 'toggle'])
+        ->name('dashboard.services_page.toggle');
+        Route::post('/news-page/toggle', [NewsController::class, 'toggle_dashboard'])
+        ->name('dashboard.news_page.toggle');
+    Route::resource('news', NewsController::class)->names('dashboard.news');
+    Route::post(
+        'news/{news}/toggle',
+        [NewsController::class, 'toggle']
+    )->name('dashboard.news.toggle');
     Route::prefix('home-sections')->group(function () {
 
         Route::get('/', [HomeSectionController::class, 'index'])
             ->name('dashboard.home-sections.index');
-            Route::delete('/sections/destroy/{id}', [HomeSectionController::class, 'destroy'])
+        Route::delete('/sections/destroy/{id}', [HomeSectionController::class, 'destroy'])
             ->name('dashboard.sections.destroy');
-            
+
         Route::post('/', [HomeSectionController::class, 'store'])
             ->name('dashboard.home-sections.store');
 
@@ -229,7 +247,7 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
             ->name('pages.toggle');
         Route::post('/pages/reorder', [PageController::class, 'reorder'])
             ->name('pages.reorder');
-            Route::put('pages/{page}/save-all', [PageController::class, 'saveAll'])
+        Route::put('pages/{page}/save-all', [PageController::class, 'saveAll'])
             ->name('pages.saveAll');
 
         Route::get('/sections/repeater-item', function () {

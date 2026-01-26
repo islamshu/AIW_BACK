@@ -1,28 +1,31 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Spatie\Translatable\HasTranslations;
 
-class HomeService extends Model
+class News extends Model
 {
     use HasTranslations;
 
     protected $fillable = [
         'title',
-        'description',
-        'long_description', // ✅ جديد
-        'icon',
-        'image',    
-        'order',
+        'excerpt',
+        'content',
+        'image',
         'is_active',
+        'published_at',
     ];
 
     public $translatable = [
         'title',
-        'description',
-        'long_description', // ✅
+        'excerpt',
+        'content',
+    ];
+
+    protected $casts = [
+        'published_at' => 'datetime',
+        'is_active' => 'boolean',
     ];
 }
-

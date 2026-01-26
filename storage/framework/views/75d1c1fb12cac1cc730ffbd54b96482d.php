@@ -24,32 +24,36 @@
                     <div class="col-md-6 mb-2">
                         <label>العنوان (AR)</label>
                         <input type="text" name="title[ar]" class="form-control"
-                           
-                        value="<?php echo e(old('title.ar', optional($homeService)->getTranslation('title', 'ar'))); ?>">
+                            value="<?php echo e(old('title.ar', optional($homeService)->getTranslation('title', 'ar'))); ?>">
                     </div>
 
                     <div class="col-md-6 mb-2">
                         <label>Title (EN)</label>
                         <input type="text" name="title[en]" class="form-control"
-                        value="<?php echo e(old('title.en', optional($homeService)->getTranslation('title', 'en'))); ?>">
+                            value="<?php echo e(old('title.en', optional($homeService)->getTranslation('title', 'en'))); ?>">
                     </div>
 
                     
                     <div class="col-md-6 mb-2">
-                        <label>الوصف (AR)</label>
-                        <textarea id="desc_ar"
-                        name="description[ar]"
-                        class="form-control js-editor"
-                        rows="5"><?php echo old('description.ar', optional($homeService)->getTranslation('description', 'ar')); ?></textarea>
-                                        </div>
+                        <label>الوصف الصغير (AR)</label>
+                        <textarea id="desc_ar" name="description[ar]" class="form-control js-editor" rows="5"><?php echo old('description.ar', optional($homeService)->getTranslation('description', 'ar')); ?></textarea>
+                    </div>
 
                     <div class="col-md-6 mb-2">
-                        <label>Description (EN)</label>
-                        <textarea id="desc_en"
-                        name="description[en]"
-                        class="form-control js-editor"
-                        rows="5"><?php echo old('description.en', optional($homeService)->getTranslation('description', 'en')); ?></textarea>
-                                        </div>
+                        <label>Small Description (EN)</label>
+                        <textarea id="desc_en" name="description[en]" class="form-control js-editor" rows="5"><?php echo old('description.en', optional($homeService)->getTranslation('description', 'en')); ?></textarea>
+                    </div>
+
+                    
+                    <div class="col-md-6 mb-3">
+                        <label>الوصف التفصيلي (AR)</label>
+                        <textarea name="long_description[ar]" class="form-control js-editor" rows="7"><?php echo old('long_description.ar', optional($homeService)->getTranslation('long_description', 'ar')); ?></textarea>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label>Long Description (EN)</label>
+                        <textarea name="long_description[en]" class="form-control js-editor" rows="7"><?php echo old('long_description.en', optional($homeService)->getTranslation('long_description', 'en')); ?></textarea>
+                    </div>
 
                     
                     <?php
@@ -81,8 +85,7 @@
                             <input type="text" name="icon" class="form-control icon-input"
                                 placeholder="fa-solid fa-truck" value="<?php echo e(old('icon', $homeService->icon ?? '')); ?>"
                                 <?php echo e($type === 'image' ? 'disabled' : ''); ?>>
-                                <button type="button"
-                                class="btn btn-outline-secondary js-open-icon-picker">
+                            <button type="button" class="btn btn-outline-secondary js-open-icon-picker">
                                 اختيار
                             </button>
                         </div>
@@ -131,126 +134,124 @@
 
 <?php $__env->stopSection(); ?>
 <?php $__env->startSection('script'); ?>
-<script>
-/* ============================================================
-   TOGGLE ICON / IMAGE FIELDS
-============================================================ */
-document.addEventListener('DOMContentLoaded', function () {
-
-    const iconField  = document.getElementById('iconField');
-    const imageField = document.getElementById('imageField');
-
-    const iconInput  = document.querySelector('input[name="icon"]');
-    const imageInput = document.getElementById('imageInput');
-
-    const imagePreview = document.getElementById('imagePreview');
-    const iconPreview  = document.querySelector('.icon-preview');
-
-    function toggleFields() {
-        const selectedType = document.querySelector('input[name="type"]:checked')?.value;
-
-        if (selectedType === 'icon') {
-            // Show icon
-            iconField.style.display = 'block';
-            imageField.style.display = 'none';
-
-            // Enable / Disable
-            iconInput.disabled = false;
-            imageInput.disabled = true;
-
-            // Clear image
-            imageInput.value = '';
-            imagePreview.src = '';
-            imagePreview.style.display = 'none';
-
-            // Remove remove_image checkbox if exists
-            const removeCheckbox = document.querySelector('input[name="remove_image"]');
-            if (removeCheckbox) removeCheckbox.checked = false;
-
-        } else if (selectedType === 'image') {
-            // Show image
-            iconField.style.display = 'none';
-            imageField.style.display = 'block';
-
-            // Enable / Disable
-            iconInput.disabled = true;
-            imageInput.disabled = false;
-
-            // Clear icon
-            iconInput.value = '';
-            if (iconPreview) iconPreview.innerHTML = '';
-        }
-    }
-
-    document.querySelectorAll('.type-radio').forEach(radio => {
-        radio.addEventListener('change', toggleFields);
-    });
-
-    // Init
-    toggleFields();
-});
-
-
-/* ============================================================
-   OPEN MEDIA LIBRARY
-============================================================ */
-
-
-/* ============================================================
-   ICON PICKER (SIMPLE VERSION)
-============================================================ */
-
-</script>
-<script>
-    /* ============================================================
-       ICON PICKER – SAME PRINCIPLE AS MEDIA LIBRARY
+    <script>
+        /* ============================================================
+       TOGGLE ICON / IMAGE FIELDS
     ============================================================ */
-    
-    let activeIconInput   = null;
-    let activeIconPreview = null;
-    
-    // فتح نافذة اختيار الأيقونات
-    document.addEventListener('click', function (e) {
-        const btn = e.target.closest('.js-open-icon-picker');
-        if (!btn) return;
-    
-        // input و preview مباشرة (ليس repeater)
-        activeIconInput   = document.querySelector('input[name="icon"]');
-        activeIconPreview = document.querySelector('.icon-preview');
-    
-        window.open(
-            '<?php echo e(route("icons.index")); ?>',
-            'IconPicker',
-            'width=1000,height=650,scrollbars=yes,resizable=yes'
-        );
-    });
-    
-    // استقبال الأيقونة من نافذة Icon Picker
-    window.addEventListener('message', function (event) {
-    
-        if (!event.data || event.data.type !== 'icon-selected') return;
-        if (!activeIconInput) return;
-    
-        const iconClass = event.data.icon;
-    
-        // تعبئة input
-        activeIconInput.value = iconClass;
-    
-        // عرض المعاينة
-        if (activeIconPreview) {
-            activeIconPreview.innerHTML =
-                `<i class="${iconClass} fa-2x text-primary"></i>`;
-        }
-    
-        // تفعيل وضع الأيقونة تلقائيًا
-        const iconRadio = document.getElementById('type_icon');
-        if (iconRadio) {
-            iconRadio.checked = true;
-            iconRadio.dispatchEvent(new Event('change'));
-        }
-    });
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const iconField = document.getElementById('iconField');
+            const imageField = document.getElementById('imageField');
+
+            const iconInput = document.querySelector('input[name="icon"]');
+            const imageInput = document.getElementById('imageInput');
+
+            const imagePreview = document.getElementById('imagePreview');
+            const iconPreview = document.querySelector('.icon-preview');
+
+            function toggleFields() {
+                const selectedType = document.querySelector('input[name="type"]:checked')?.value;
+
+                if (selectedType === 'icon') {
+                    // Show icon
+                    iconField.style.display = 'block';
+                    imageField.style.display = 'none';
+
+                    // Enable / Disable
+                    iconInput.disabled = false;
+                    imageInput.disabled = true;
+
+                    // Clear image
+                    imageInput.value = '';
+                    imagePreview.src = '';
+                    imagePreview.style.display = 'none';
+
+                    // Remove remove_image checkbox if exists
+                    const removeCheckbox = document.querySelector('input[name="remove_image"]');
+                    if (removeCheckbox) removeCheckbox.checked = false;
+
+                } else if (selectedType === 'image') {
+                    // Show image
+                    iconField.style.display = 'none';
+                    imageField.style.display = 'block';
+
+                    // Enable / Disable
+                    iconInput.disabled = true;
+                    imageInput.disabled = false;
+
+                    // Clear icon
+                    iconInput.value = '';
+                    if (iconPreview) iconPreview.innerHTML = '';
+                }
+            }
+
+            document.querySelectorAll('.type-radio').forEach(radio => {
+                radio.addEventListener('change', toggleFields);
+            });
+
+            // Init
+            toggleFields();
+        });
+
+
+        /* ============================================================
+           OPEN MEDIA LIBRARY
+        ============================================================ */
+
+
+        /* ============================================================
+           ICON PICKER (SIMPLE VERSION)
+        ============================================================ */
     </script>
-    
+    <script>
+        /* ============================================================
+           ICON PICKER – SAME PRINCIPLE AS MEDIA LIBRARY
+        ============================================================ */
+
+        let activeIconInput = null;
+        let activeIconPreview = null;
+
+        // فتح نافذة اختيار الأيقونات
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.js-open-icon-picker');
+            if (!btn) return;
+
+            // input و preview مباشرة (ليس repeater)
+            activeIconInput = document.querySelector('input[name="icon"]');
+            activeIconPreview = document.querySelector('.icon-preview');
+
+            window.open('<?php echo e(route('icons.index')); ?>',
+                'IconPicker',
+                'width=1000,height=650,scrollbars=yes,resizable=yes'
+            );
+        });
+
+        // استقبال الأيقونة من نافذة Icon Picker
+        window.addEventListener('message', function(event) {
+
+            if (!event.data || event.data.type !== 'icon-selected') return;
+            if (!activeIconInput) return;
+
+            const iconClass = event.data.icon;
+
+            // تعبئة input
+            activeIconInput.value = iconClass;
+
+            // عرض المعاينة
+            if (activeIconPreview) {
+                activeIconPreview.innerHTML =
+                    `<i class="${iconClass} fa-2x text-primary"></i>`;
+            }
+
+            // تفعيل وضع الأيقونة تلقائيًا
+            const iconRadio = document.getElementById('type_icon');
+            if (iconRadio) {
+                iconRadio.checked = true;
+                iconRadio.dispatchEvent(new Event('change'));
+            }
+        });
+    </script>
+
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\aiw_rtl\resources\views/dashboard/home-services/form.blade.php ENDPATH**/ ?>

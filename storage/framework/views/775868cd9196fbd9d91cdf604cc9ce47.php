@@ -143,7 +143,10 @@
                 color-mix(in srgb, var(--primary-color) 50%, transparent);
         }
     </style>
+    <style>
+        <?php echo e(get_general_value('custom_css')); ?>
 
+    </style>
     <?php echo $__env->yieldContent('style'); ?>
 </head>
 

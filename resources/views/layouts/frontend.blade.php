@@ -21,6 +21,7 @@
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&display=swap"
           rel="stylesheet">
+    {{ get_general_value('custom_html_head') }}
 
     {{-- ================= THEME SYSTEM ================= --}}
     <style>
@@ -143,7 +144,9 @@
                 color-mix(in srgb, var(--primary-color) 50%, transparent);
         }
     </style>
-
+    <style>
+        {{ get_general_value('custom_css') }}
+    </style>
     @yield('style')
 </head>
 
@@ -182,6 +185,7 @@
     </button>
 
 </div>
+{{ get_general_value('custom_html_body') }}
 
 {{-- ================= SCRIPTS ================= --}}
 <script>
@@ -214,6 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 @yield('script')
 @yield('scripts')
-
+{{ get_general_value('custom_js') }}
 </body>
 </html>

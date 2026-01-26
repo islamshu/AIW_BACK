@@ -198,6 +198,150 @@
                                         
                                         
                                         <div class="form-section mb-5">
+                                            <h5 class="section-title mb-3">
+                                                <i class="ft-layout"></i>
+                                                <?php echo e(__('CSS مخصص')); ?>
+
+                                            </h5>
+                                            <div class="alert alert-info">
+                                                <i class="ft-info"></i>
+                                                <?php echo e(__('يتم تطبيق هذا الكود في جميع صفحات الموقع داخل وسم <style>')); ?>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label><?php echo e(__('أضف أكواد CSS مخصصة')); ?></label>
+                                                    <textarea class="form-control"
+                                                              rows="8"
+                                                              name="general[custom_css]"
+                                                              placeholder="/* أكواد CSS مخصصة */
+.custom-button {
+    background: linear-gradient(135deg, #00b4d8, #ff5d8f);
+    border-radius: 25px;
+    padding: 10px 30px;
+}
+
+.header-transparent {
+    background: transparent !important;
+    backdrop-filter: blur(10px);
+}"
+                                                            ><?php echo e(get_general_value('custom_css')); ?></textarea>
+                                                    <small class="text-muted">
+                                                        <?php echo e(__('استخدم Selectors محددة لتجنب التعارض مع الأنماط الافتراضية')); ?>
+
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+                                        
+                                        
+                                        <div class="form-section mb-5">
+                                            <h5 class="section-title mb-3">
+                                                <i class="ft-code"></i>
+                                                <?php echo e(__('HTML مخصص')); ?>
+
+                                            </h5>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <label><?php echo e(__('HTML في Header')); ?></label>
+                                                    <div class="alert alert-warning">
+                                                        <i class="ft-alert-triangle"></i>
+                                                        <?php echo e(__('يتم إضافة هذا الكود قبل إغلاق وسم </head>')); ?>
+
+                                                    </div>
+                                                    <textarea class="form-control"
+                                                              rows="6"
+                                                              name="general[custom_html_head]"
+                                                              placeholder="<!-- أكواد مخصصة في ال head -->
+<meta property='og:image' content='<?php echo e(asset('storage/'.get_general_value('website_logo'))); ?>'>
+<link rel='preconnect' href='https://fonts.googleapis.com'>"
+                                                            ><?php echo e(get_general_value('custom_html_head')); ?></textarea>
+                                                    <small class="text-muted">
+                                                        <?php echo e(__('مثال: روابط خطوط، meta tags، إلخ')); ?>
+
+                                                    </small>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label><?php echo e(__('HTML في Body')); ?></label>
+                                                    <div class="alert alert-warning">
+                                                        <i class="ft-alert-triangle"></i>
+                                                        <?php echo e(__('يتم إضافة هذا الكود قبل إغلاق وسم </body>')); ?>
+
+                                                    </div>
+                                                    <textarea class="form-control"
+                                                              rows="6"
+                                                              name="general[custom_html_body]"
+                                                              placeholder="<!-- أكواد مخصصة في نهاية ال body -->
+<div class='floating-whatsapp'>
+    <a href='https://wa.me/<?php echo e(get_general_value('phone')); ?>'>
+        <i class='ft-phone-call'></i>
+    </a>
+</div>"
+                                                            ><?php echo e(get_general_value('custom_html_body')); ?></textarea>
+                                                    <small class="text-muted">
+                                                        <?php echo e(__('مثال: ويدجت، شات، أزرار عائمة، إلخ')); ?>
+
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+                                        
+                                        
+                                        <div class="form-section mb-5">
+                                            <h5 class="section-title mb-3">
+                                                <i class="ft-terminal"></i>
+                                                <?php echo e(__('JavaScript مخصص')); ?>
+
+                                            </h5>
+                                            <div class="alert alert-danger">
+                                                <i class="ft-alert-octagon"></i>
+                                                <?php echo e(__('تنبيه: تأكد من صحة كود JavaScript قبل الحفظ لتجنب أخطاء الموقع')); ?>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label><?php echo e(__('أضف أكواد JavaScript')); ?></label>
+                                                    <textarea class="form-control"
+                                                              rows="8"
+                                                              name="general[custom_js]"
+                                                              placeholder="// أكواد JavaScript مخصصة
+document.addEventListener('DOMContentLoaded', function() {
+    // كود لتحريك العناصر
+    const buttons = document.querySelectorAll('.btn-primary');
+    buttons.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+            btn.style.transform = 'scale(1.05)';
+        });
+        btn.addEventListener('mouseleave', () => {
+            btn.style.transform = 'scale(1)';
+        });
+    });
+
+    // تتبع الأحداث
+    document.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', function(e) {
+            console.log('تم النقر على رابط:', this.href);
+        });
+    });
+});"
+                                                            ><?php echo e(get_general_value('custom_js')); ?></textarea>
+                                                    <small class="text-muted">
+                                                        <?php echo e(__('استخدم console.log() للتصحيح. تجنب استخدام document.write()')); ?>
+
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        
+                                        
+                                        
+                                        <div class="form-section mb-5">
                                             <h5 class="section-title">
                                                 <i class="ft-flag"></i>
                                                 <?php echo e(__('إعدادات اللغة العربية')); ?>
@@ -296,5 +440,4 @@
     </div>
 </div>
 <?php $__env->stopSection(); ?>
-
 <?php echo $__env->make('layouts.master', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\aiw_rtl\resources\views/dashboard/setting.blade.php ENDPATH**/ ?>

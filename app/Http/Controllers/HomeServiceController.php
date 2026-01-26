@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\GeneralValue;
 use App\Models\HomeService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -16,6 +17,17 @@ class HomeServiceController extends Controller
         $services = HomeService::orderBy('order')->get();
         return view('dashboard.home-services.index', compact('services'));
     }
+ 
+public function toggle(Request $request)
+{
+    GeneralValue::setValue('services_enabled', $request->status);
+
+
+    return response()->json([
+        'success' => true
+    ]);
+}
+
 
     /* ======================
         CREATE
@@ -159,27 +171,31 @@ class HomeServiceController extends Controller
         VALIDATION
     =======================*/
     private function validateService(Request $request)
-    {
-        $rules = [
-            'title.ar'        => 'required|string|max:255',
-            'title.en'        => 'required|string|max:255',
-            'description.ar'  => 'nullable|string',
-            'description.en'  => 'nullable|string',
-            'type'            => 'required|in:icon,image',
-        ];
+{
+    $rules = [
+        'title.ar'               => 'required|string|max:255',
+        'title.en'               => 'required|string|max:255',
 
-        // Conditional validation based on type
-        if ($request->type === 'icon') {
-            $rules['icon'] = 'required|string|max:100';
-        } elseif ($request->type === 'image') {
-            if ($request->hasFile('image')) {
-                $rules['image'] = 'image|mimes:jpg,jpeg,png,webp|max:2048';
-            } elseif (!$request->has('remove_image')) {
-                // Image is optional when updating (unless remove_image is checked)
-                $rules['image'] = 'nullable';
-            }
+        'description.ar'         => 'nullable|string',
+        'description.en'         => 'nullable|string',
+
+        'long_description.ar'    => 'nullable|string', // ✅
+        'long_description.en'    => 'nullable|string', // ✅
+
+        'type'                   => 'required|in:icon,image',
+    ];
+
+    if ($request->type === 'icon') {
+        $rules['icon'] = 'required|string|max:100';
+    } elseif ($request->type === 'image') {
+        if ($request->hasFile('image')) {
+            $rules['image'] = 'image|mimes:jpg,jpeg,png,webp|max:2048';
+        } else {
+            $rules['image'] = 'nullable';
         }
-
-        return $request->validate($rules);
     }
+
+    return $request->validate($rules);
+}
+
 }

@@ -30,6 +30,17 @@ h3 {
     border: 1px solid #eaecef;
     height: 100%;
 }
+.page-card.info {
+    border-color: rgba(99,102,241,.25);
+}
+
+.page-card.info .icon {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+}
+
+.page-card.info h5 {
+    color: #4f46e5;
+}
 
 .page-card:hover {
     transform: translateY(-6px);
@@ -236,6 +247,12 @@ code {
 .page-card.success {
     border-color: rgba(25,135,84,.25);
 }
+.page-card.warning {
+    border-color: rgba(231, 108, 32, 0.25);
+}
+.page-card.warning .icon {
+    background: #FF9149  !important;
+}
 
 .page-card.danger {
     border-color: rgba(220,53,69,.25);
@@ -311,6 +328,61 @@ code {
         
             </div>
         </div>
+
+        <div class="col-md-4">
+            <div class="page-card warning" id="service-card">
+        
+                {{-- SWITCH --}}
+                <div class="page-action">
+                    <label class="switch">
+                        <input type="checkbox"
+                               id="serviceSwitch"
+                               {{ get_general_value('services_enabled') ? 'checked' : '' }}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+        
+                <div class="icon">
+                    <i class="fas fa-briefcase"></i>
+                </div>
+        
+                <h5>الخدمات</h5>
+                <small>/services</small>
+        
+                <div id="service-status-text" class="mt-2 text-muted small">
+                    {{ get_general_value('services_enabled') ? 'نشط' : 'معطّل' }}
+                </div>
+        
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="page-card info" id="news-card">
+        
+                {{-- SWITCH --}}
+                <div class="page-action">
+                    <label class="switch">
+                        <input type="checkbox"
+                               id="newsSwitch"
+                               {{ get_general_value('news_enabled') ? 'checked' : '' }}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+        
+                <div class="icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+        
+                <h5>الأخبار</h5>
+                <small>/news</small>
+        
+                <div id="news-status-text" class="mt-2 text-muted small">
+                    {{ get_general_value('news_enabled') ? 'نشط' : 'معطّل' }}
+                </div>
+        
+            </div>
+        </div>
+        
+        
         
         <div class="col-md-4">
             <div class="page-card danger position-relative">
@@ -471,5 +543,100 @@ document.querySelectorAll('.js-delete').forEach(btn => {
         });
     });
     </script>
-    
+    <script>
+        document.getElementById('serviceSwitch').addEventListener('change', function () {
+        
+            const isActive   = this.checked;
+            const statusText = document.getElementById('service-status-text');
+            const card       = document.getElementById('service-card');
+        
+            if (isActive === false) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'تنبيه مهم',
+                    html: `
+                        <p style="font-size:14px; line-height:1.8">
+                            عند إيقاف قسم <strong>الخدمات</strong>:
+                            <br><br>
+                            • سيتم إخفاء صفحة الخدمات من الموقع.<br>
+                            • سيتم عرض <strong>أول 3 خدمات فقط</strong>
+                              في <strong>الصفحة الرئيسية</strong>.
+                        </p>
+                    `,
+                });
+            }
+        
+            fetch("{{ route('dashboard.services_page.toggle') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: isActive ? 1 : 0
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    statusText.innerText = isActive ? 'نشط' : 'معطّل';
+        
+                    card.classList.toggle('success', isActive);
+                    card.classList.toggle('danger', !isActive);
+                }
+            })
+            .catch(() => {
+                alert('حدث خطأ');
+                this.checked = !isActive;
+            });
+        });
+        </script>
+    <script>
+        document.getElementById('newsSwitch').addEventListener('change', function () {
+        
+            const isActive   = this.checked;
+            const statusText = document.getElementById('news-status-text');
+            const card       = document.getElementById('news-card');
+        
+            if (!isActive) {
+                Swal.fire({
+                    icon: 'info',
+                    title: 'تنبيه',
+                    html: `
+                        <p style="font-size:14px; line-height:1.8">
+                            عند إيقاف قسم <strong>الأخبار</strong>:
+                            <br><br>
+                            • سيتم إخفاء صفحة الأخبار من الموقع.<br>
+                            •سيتم فقط عرض اخر 3 اخبار بالشاشة الرئيسية
+                        </p>
+                    `,
+                });
+            }
+        
+            fetch("{{ route('dashboard.news_page.toggle') }}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    status: isActive ? 1 : 0
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    statusText.innerText = isActive ? 'نشط' : 'معطّل';
+        
+                    card.classList.toggle('success', isActive);
+                    card.classList.toggle('danger', !isActive);
+                }
+            })
+            .catch(() => {
+                alert('حدث خطأ');
+                this.checked = !isActive;
+            });
+        });
+        </script>
+        
 @endsection
