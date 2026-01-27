@@ -87,14 +87,16 @@
                 @if($hasExtraPages)
                 <div class="relative group">
 
-                    <button
-                        class="flex items-center gap-2 px-4 py-2 rounded-full
-                               bg-gray-100 hover:bg-gray-200 transition"
-                        style="color:#333">
-                        <i class="fas fa-file-alt text-sm"></i>
-                        {{ app()->getLocale() === 'ar' ? 'الصفحات' : 'Pages' }}
-                        <i class="fas fa-chevron-down text-xs"></i>
-                    </button>
+                    <a href="javascript:void(0)"
+                    class="flex items-center gap-2 transition-colors
+                           relative group"
+                    style="color:var(--text-color)">
+                 
+                     <i class="fas fa-file-alt"></i>
+                     {{ app()->getLocale() === 'ar' ? 'الصفحات' : 'Pages' }}
+                     <i class="fas fa-chevron-down text-xs opacity-70"></i>
+                 </a>
+                 
 
                     <div
                         class="absolute top-full right-0 mt-3 min-w-[230px]
