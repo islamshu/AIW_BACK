@@ -148,60 +148,61 @@
             background: color-mix(in srgb, #be0e0e, transparent);
             border: 1px solid #ff0404;
         }
+
         /* ================= TOAST ALERT ================= */
-.toast-container {
-    position: fixed;
-    top: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 99999;
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    pointer-events: none;
-}
+        .toast-container {
+            position: fixed;
+            top: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+        }
 
-.toast {
-    min-width: 320px;
-    max-width: 520px;
-    padding: 16px 20px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-weight: 600;
-    box-shadow: 0 20px 40px rgba(0,0,0,.35);
-    animation: toastIn .4s ease forwards;
-}
+        .toast {
+            min-width: 320px;
+            max-width: 520px;
+            padding: 16px 20px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 600;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, .35);
+            animation: toastIn .4s ease forwards;
+        }
 
-.toast-success {
-    background: linear-gradient(135deg, #00b4d8, #3dd5f3);
-    color: #fff;
-}
+        .toast-success {
+            background: linear-gradient(135deg, #00b4d8, #3dd5f3);
+            color: #fff;
+        }
 
-.toast-error {
-    background: linear-gradient(135deg, #dc2626, #ef4444);
-    color: #fff;
-}
+        .toast-error {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: #fff;
+        }
 
-@keyframes toastIn {
-    from {
-        opacity: 0;
-        transform: translateY(-20px) scale(.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
+        @keyframes toastIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px) scale(.95);
+            }
 
-@keyframes toastOut {
-    to {
-        opacity: 0;
-        transform: translateY(-20px) scale(.95);
-    }
-}
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
 
+        @keyframes toastOut {
+            to {
+                opacity: 0;
+                transform: translateY(-20px) scale(.95);
+            }
+        }
     </style>
 <?php $__env->stopSection(); ?>
 
@@ -371,24 +372,24 @@
 
         const toastContainer = document.getElementById('toastContainer');
 
-function showAlert(message, type = 'success') {
-    if (!toastContainer) return;
+        function showAlert(message, type = 'success') {
+            if (!toastContainer) return;
 
-    const toast = document.createElement('div');
-    toast.className = `toast toast-${type}`;
-    toast.innerHTML = `
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
         <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-times-circle'} text-xl"></i>
         <span>${message}</span>
     `;
 
-    toastContainer.appendChild(toast);
+            toastContainer.appendChild(toast);
 
-    // اختفاء تلقائي
-    setTimeout(() => {
-        toast.style.animation = 'toastOut .4s ease forwards';
-        setTimeout(() => toast.remove(), 400);
-    }, 3500);
-}
+            // اختفاء تلقائي
+            setTimeout(() => {
+                toast.style.animation = 'toastOut .4s ease forwards';
+                setTimeout(() => toast.remove(), 400);
+            }, 3500);
+        }
 
 
 
