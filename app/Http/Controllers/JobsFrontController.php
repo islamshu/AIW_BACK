@@ -6,54 +6,109 @@ use App\Models\Job;
 use App\Models\JobApplication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\JobGroup;
 
 class JobsFrontController extends Controller
 {
     public function index(Request $request)
     {
-        // جلب الوظائف الفعالة والمنشورة فقط
-        $jobs = Job::query()
+        // الصفحة فقط (بدون payload)
+        $groups = JobGroup::where('is_active', 1)
+            ->orderBy('order')
+            ->get();
+
+        // لو ما في مجموعات (أو بدك تتحقق عبر ajax)، خليها عادي
+        if ($groups->isEmpty()) {
+            return view('website.jobs.empty');
+        }
+
+        return view('website.jobs.apply', [
+            'groups' => $groups,
+        ]);
+    }
+
+    private function jobsQuery()
+    {
+        return Job::query()
             ->where('is_active', 1)
             ->whereDate('publish_from', '<=', now())
             ->where(function ($q) {
                 $q->whereNull('publish_to')
                   ->orWhereDate('publish_to', '>=', now());
-            })
-            ->get();
-    
-        // إذا لا يوجد أي وظيفة متاحة → 404
-        if ($jobs->isEmpty()) {
-            return view('website.jobs.empty');
-        }
-    
-        // اختيار الوظيفة المحددة
-        $selectedId = (int) $request->get('job_id');
-    
-        if ($selectedId) {
-            $selectedJob = $jobs->firstWhere('id', $selectedId);
-    
-            // إذا تم تمرير job_id غير صالح → 404
-            if (!$selectedJob) {
-                abort(404);
-            }
-        } else {
-            // أول وظيفة كاختيار افتراضي
-            $selectedJob = $jobs->first();
-        }
-    
-        return view('website.jobs.apply', compact('jobs', 'selectedJob'));
+            });
     }
-    
 
-    public function showJson(Job $job)
+    public function ajaxGroups()
     {
-        abort_unless($job->is_active && $job->isPublished(), 404);
+        $locale = app()->getLocale();
+
+        $groups = JobGroup::where('is_active', 1)
+            ->orderBy('order')
+            ->get()
+            ->filter(function ($group) {
+                return $this->jobsQuery()->where('job_group_id', $group->id)->exists();
+            })
+            ->values()
+            ->map(function ($group) use ($locale) {
+                return [
+                    'id'    => $group->id,
+                    'title' => $group->getTranslation('title', $locale),
+                ];
+            });
+
+        return response()->json([
+            'success' => true,
+            'groups'  => $groups,
+        ]);
+    }
+
+    public function ajaxGroupJobs(JobGroup $group)
+    {
+        abort_if(!$group->is_active, 404);
 
         $locale = app()->getLocale();
+
+        $jobs = $this->jobsQuery()
+            ->where('job_group_id', $group->id)
+            ->orderBy('id', 'desc')
+            ->get()
+            ->map(function ($job) use ($locale) {
+                return [
+                    'id'          => $job->id,
+                    'title'       => $job->getTranslation('title', $locale),
+                    'requirements'=> $job->getTranslation('requirements', $locale),
+                    'share_url'   => url('/jobs') . '#job-' . $job->id,
+                ];
+            })
+            ->values();
+
         return response()->json([
-            'id' => $job->id,
-            'title' => $job->getTranslation('title', $locale),
-            'requirements' => $job->getTranslation('requirements', $locale),
+            'success' => true,
+            'group'   => [
+                'id'    => $group->id,
+                'title' => $group->getTranslation('title', $locale),
+            ],
+            'jobs'    => $jobs,
+        ]);
+    }
+
+    public function ajaxJob(Job $job)
+    {
+        // لازم تكون الوظيفة منشورة وفعالة
+        $exists = $this->jobsQuery()->where('id', $job->id)->exists();
+        abort_if(!$exists, 404);
+
+        $locale = app()->getLocale();
+
+        return response()->json([
+            'success' => true,
+            'job' => [
+                'id'           => $job->id,
+                'group_id'     => $job->job_group_id,
+                'title'        => $job->getTranslation('title', $locale),
+                'requirements' => $job->getTranslation('requirements', $locale),
+                'share_url'    => url('/jobs') . '#job-' . $job->id,
+            ],
         ]);
     }
 
@@ -63,6 +118,7 @@ class JobsFrontController extends Controller
             'job_id' => ['required', 'exists:jobs_site,id'],
             'name'   => ['required', 'string', 'max:255'],
             'phone'  => ['required', 'string', 'max:30'],
+            'summary'=>['required', 'string',''],
             'cv'     => ['required', 'file', 'mimes:pdf,doc,docx', 'max:5120'],
         ]);
     
@@ -81,6 +137,7 @@ class JobsFrontController extends Controller
             'job_id'  => $job->id,
             'name'    => $validated['name'],
             'phone'   => $validated['phone'],
+            // 'summary'=>$validated['summary'],
             'cv_path' => $cvPath,
         ]);
     

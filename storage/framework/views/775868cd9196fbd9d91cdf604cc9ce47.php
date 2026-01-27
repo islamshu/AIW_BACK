@@ -6,7 +6,30 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $__env->yieldContent('title','AIW'); ?></title>
+
+    
+    <meta property="og:type" content="website">
+
+    <meta property="og:title"
+          id="og-title"
+          content="<?php echo $__env->yieldContent('og:title', get_general_value('website_name_' . app()->getLocale())); ?>">
+    
+    <meta property="og:description"
+          id="og-description"
+          content="<?php echo $__env->yieldContent('og:description', get_general_value('website_description_' . app()->getLocale())); ?>">
+    
+    <meta property="og:url"
+          id="og-url"
+          content="<?php echo $__env->yieldContent('og:url', url()->current()); ?>">
+    
+    <meta property="og:image"
+          id="og-image"
+          content="<?php echo $__env->yieldContent('og:image', asset('storage/' . get_general_value('website_logo'))); ?>">
+    
+    <title id="page-title">
+        <?php echo $__env->yieldContent('title', get_general_value('website_name_' . app()->getLocale())); ?>
+    </title>
+    
 
     
     <link rel="icon" href="<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>">
@@ -21,6 +44,10 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&display=swap"
           rel="stylesheet">
+
+    
+    <?php echo get_general_value('custom_html_head'); ?>
+
 
     
     <style>
@@ -144,7 +171,7 @@
         }
     </style>
     <style>
-        <?php echo e(get_general_value('custom_css')); ?>
+        <?php echo get_general_value('custom_css'); ?>
 
     </style>
     <?php echo $__env->yieldContent('style'); ?>
@@ -185,6 +212,8 @@
     </button>
 
 </div>
+<?php echo get_general_value('custom_html_body'); ?>
+
 
 
 <script>
@@ -217,6 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 <?php echo $__env->yieldContent('script'); ?>
 <?php echo $__env->yieldContent('scripts'); ?>
+<?php echo get_general_value('custom_js'); ?>
 
 </body>
 </html>

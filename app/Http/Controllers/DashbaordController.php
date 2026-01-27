@@ -52,13 +52,11 @@ class DashbaordController extends Controller
         if ($request->has('general')) {
 
             foreach ($request->input('general') as $name => $value) {
-                if ($value == null) {
-                    continue;
-                }
+                // if ($value == null) {
+                //     continue;
+                // }
                 GeneralValue::setValue($name, $value);
-                if ($name == 'country_code' || $name == 'whataspp') {
-                    GeneralValue::setValue('whatsapp_number', get_general_value('country_code') . get_general_value('whataspp'));
-                }
+                
             }
         }
 

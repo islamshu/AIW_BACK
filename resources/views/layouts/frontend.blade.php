@@ -6,7 +6,30 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title','AIW')</title>
+
+    {{-- ================= Open Graph (Default) ================= --}}
+    <meta property="og:type" content="website">
+
+    <meta property="og:title"
+          id="og-title"
+          content="@yield('og:title', get_general_value('website_name_' . app()->getLocale()))">
+    
+    <meta property="og:description"
+          id="og-description"
+          content="@yield('og:description', get_general_value('website_description_' . app()->getLocale()))">
+    
+    <meta property="og:url"
+          id="og-url"
+          content="@yield('og:url', url()->current())">
+    
+    <meta property="og:image"
+          id="og-image"
+          content="@yield('og:image', asset('storage/' . get_general_value('website_logo')))">
+    
+    <title id="page-title">
+        @yield('title', get_general_value('website_name_' . app()->getLocale()))
+    </title>
+    
 
     {{-- Favicons --}}
     <link rel="icon" href="{{ asset('storage/' . get_general_value('website_logo')) }}">
@@ -21,7 +44,9 @@
     {{-- Fonts --}}
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Poppins:wght@300;400;500;600&display=swap"
           rel="stylesheet">
-    {{ get_general_value('custom_html_head') }}
+
+    {{-- Custom HTML Head --}}
+    {!! get_general_value('custom_html_head') !!}
 
     {{-- ================= THEME SYSTEM ================= --}}
     <style>
@@ -145,7 +170,7 @@
         }
     </style>
     <style>
-        {{ get_general_value('custom_css') }}
+        {!! get_general_value('custom_css') !!}
     </style>
     @yield('style')
 </head>
@@ -185,7 +210,7 @@
     </button>
 
 </div>
-{{ get_general_value('custom_html_body') }}
+{!! get_general_value('custom_html_body') !!}
 
 {{-- ================= SCRIPTS ================= --}}
 <script>
@@ -218,6 +243,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 @yield('script')
 @yield('scripts')
-{{ get_general_value('custom_js') }}
+{!! get_general_value('custom_js') !!}
 </body>
 </html>

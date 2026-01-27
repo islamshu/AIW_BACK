@@ -18,6 +18,7 @@ use App\Http\Controllers\HeroController;
 use App\Http\Controllers\HomeServiceController;
 use App\Http\Controllers\HomeStatController;
 use App\Http\Controllers\JobController;
+use App\Http\Controllers\JobGroupController;
 use App\Http\Controllers\JobsFrontController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\NewsController;
@@ -48,7 +49,7 @@ Route::get('/sectors/load-more', [HomeController::class, 'loadMore'])->name('sec
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::post('/contact/send', [ContactController::class, 'store'])
     ->name('contact.send');
-    Route::get('/news', [HomeController::class, 'news'])->name('news.index');
+Route::get('/news', [HomeController::class, 'news'])->name('news.index');
 Route::get('/news/{news}', [HomeController::class, 'show_new'])->name('news.show');
 
 
@@ -70,11 +71,17 @@ Route::get('/lang/{lang}', function ($lang) {
 | Jobs Frontend
 |--------------------------------------------------------------------------
 */
-Route::prefix('jobs')->name('jobs.')->group(function () {
-    Route::get('/', [JobsFrontController::class, 'index'])->name('index');
-    Route::get('/{job}/json', [JobsFrontController::class, 'showJson'])->name('json');
-    Route::post('/apply', [JobsFrontController::class, 'apply'])->name('apply');
-});
+Route::get('/jobs', [JobsFrontController::class, 'index'])->name('jobs.index');
+
+// API endpoints للـ AJAX
+Route::get('/jobs/ajax/groups', [JobsFrontController::class, 'ajaxGroups'])->name('jobs.ajax.groups');
+Route::get('/jobs/ajax/group/{group}', [JobsFrontController::class, 'ajaxGroupJobs'])->name('jobs.ajax.group.jobs');
+Route::get('/jobs/ajax/job/{job}', [JobsFrontController::class, 'ajaxJob'])->name('jobs.ajax.job');
+
+// إرسال الطلب
+Route::post('/jobs/apply', [JobsFrontController::class, 'apply'])->name('jobs.apply');
+
+
 Route::get('/services', [HomeController::class, 'services_index'])->name('services.index');
 Route::get('/services/{service:slug}', [HomeController::class, 'services_show'])->name('services.show');
 
@@ -165,7 +172,7 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
 
     Route::post('/services-page/toggle', [HomeServiceController::class, 'toggle'])
         ->name('dashboard.services_page.toggle');
-        Route::post('/news-page/toggle', [NewsController::class, 'toggle_dashboard'])
+    Route::post('/news-page/toggle', [NewsController::class, 'toggle_dashboard'])
         ->name('dashboard.news_page.toggle');
     Route::resource('news', NewsController::class)->names('dashboard.news');
     Route::post(
@@ -259,6 +266,15 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
         | Jobs
         |------------------------------------------------------------------
         */
+        // routes/web.php
+        Route::post(
+            'job-groups/reorder',
+            [JobGroupController::class, 'reorder']
+        )->name('job-groups.reorder');
+
+        Route::resource('job-groups', JobGroupController::class)->except('show');
+        Route::get('job-groups/{id}/toggle', [JobGroupController::class, 'toggle'])->name('job-groups.toggle');
+
         Route::resource('jobs', JobController::class)->names('jobs');
         Route::get('jobs/{job}/toggle', [JobController::class, 'toggle'])->name('jobs.toggle');
         Route::get('jobs/{job}/applications', [JobController::class, 'index_applications'])
