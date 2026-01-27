@@ -139,32 +139,31 @@ class HomeSectionController extends Controller
     }
 
     public function getContent(HomeSection $section)
-{
-    $base = [
-        'admin_title' => $section->admin_title,
-        'admin_note'  => $section->admin_note,
-    ];
-
-    if ($section->key === 'text') {
-        return response()->json(array_merge($base, [
-            'content' => $section->contentable->content ?? [],
-            'button_text' => $section->contentable->button_text ?? [],
-            'button_link' => $section->contentable->button_link ?? [],
-        ]));
+    {
+        $base = [
+            'admin_title' => $section->admin_title,
+            'admin_note'  => $section->admin_note,
+            'button_text' => $section->button_text ?? [],
+            'button_link' => $section->button_link,
+        ];
+    
+        if ($section->key === 'text') {
+            return response()->json(array_merge($base, [
+                'content' => $section->contentable->content ?? [],
+            ]));
+        }
+    
+        if ($section->key === 'hero_extra') {
+            return response()->json(array_merge($base, [
+                'title'    => $section->contentable->title ?? [],
+                'subtitle' => $section->contentable->subtitle ?? [],
+            ]));
+        }
+    
+        return response()->json($base);
     }
-
-    if ($section->key === 'hero_extra') {
-        return response()->json(array_merge($base, [
-            'title' => $section->contentable->title ?? [],
-            'subtitle' => $section->contentable->subtitle ?? [],
-            'button_text' => $section->contentable->button_text ?? [],
-            'button_link' => $section->contentable->button_link ?? [],
-        ]));
-    }
-
-    return response()->json($base);
-}
-
+    
+    
 
 
 
@@ -173,21 +172,19 @@ class HomeSectionController extends Controller
         $section->update([
             'admin_title' => $request->admin_title,
             'admin_note'  => $request->admin_note,
+            'button_text' => [
+                'ar' => $request->button_text_ar,
+                'en' => $request->button_text_en,
+            ],
+            'button_link' => $request->button_link,
         ]);
-
+    
+        // سكشن نص
         if ($section->key === 'text') {
             $section->contentable->update([
                 'content' => [
                     'ar' => $request->content_ar,
                     'en' => $request->content_en,
-                ],
-                'button_text' => [
-                    'ar' => $request->button_text_ar,
-                    'en' => $request->button_text_en,
-                ],
-                'button_link' => [
-                    'ar' => $request->button_link_ar,
-                    'en' => $request->button_link_en,
                 ],
             ]);
         }
@@ -206,10 +203,7 @@ class HomeSectionController extends Controller
                     'ar' => $request->button_text_ar,
                     'en' => $request->button_text_en,
                 ],
-                'button_link' => [
-                    'ar' => $request->button_link_ar,
-                    'en' => $request->button_link_en,
-                ],
+                'button_link' =>$request->button_link
             ]);
         }
 

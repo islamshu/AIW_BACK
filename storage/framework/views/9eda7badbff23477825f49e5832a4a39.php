@@ -43,6 +43,7 @@
 ?>
 
 <section
+    dir="<?php echo e($isAr ? 'rtl' : 'ltr'); ?>"
     class="relative overflow-hidden"
     style="
         background:
@@ -57,7 +58,7 @@
 
         
         <?php if($hasImage && $imgPosition === 'top'): ?>
-            <div class="flex justify-center mb-10">
+            <div class="flex justify-center mb-12">
                 <img
                     src="<?php echo e($media->url); ?>"
                     alt="<?php echo e($media->alt ?? $title); ?>"
@@ -68,11 +69,18 @@
         <?php endif; ?>
 
         
-        <div class="<?php echo e($isSideImage ? 'grid lg:grid-cols-2 gap-14 items-center' : 'text-center'); ?>">
+        <div
+            class="
+                <?php echo e($isSideImage
+                    ? 'grid lg:grid-cols-2 gap-16 items-center'
+                    : 'flex flex-col items-center text-center'); ?>
+
+            "
+        >
 
             
             <?php if($hasImage && $imgPosition === 'left'): ?>
-                <div class="flex justify-center">
+                <div class="flex justify-center lg:order-1">
                     <img
                         src="<?php echo e($media->url); ?>"
                         alt="<?php echo e($media->alt ?? $title); ?>"
@@ -83,50 +91,79 @@
             <?php endif; ?>
 
             
-            <div class="<?php echo e($isAr ? 'text-right' : 'text-left'); ?>">
+            <div
+                class="
+                    flex flex-col
+                    <?php echo e($isSideImage
+                        ? ($isAr ? 'text-right' : 'items-start text-left')
+                        : 'items-center text-center'); ?>
 
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
-                    <span
-                        style="
-                            background: linear-gradient(
-                                135deg,
-                                var(--primary-color),
-                                var(--secondary-color)
-                            );
-                            -webkit-background-clip: text;
-                            color: transparent;
-                        "
-                    >
-                        <?php echo e($title); ?>
+                    <?php echo e($hasImage && $imgPosition === 'left' ? 'lg:order-2' : ''); ?>
 
-                    </span>
+                "
+            >
+
+                
+                <h1
+                    class="
+                        font-extrabold
+                        leading-tight
+                        tracking-tight
+                        text-[clamp(2.2rem,4vw,3.5rem)]
+                    "
+                    style="
+                        background: linear-gradient(
+                            135deg,
+                            var(--primary-color),
+                            var(--secondary-color)
+                        );
+                        -webkit-background-clip: text;
+                        color: transparent;
+                    "
+                >
+                    <?php echo e($title); ?>
+
                 </h1>
 
+                
                 <?php if($desc): ?>
                     <div
-                        class="mt-6 text-base md:text-lg leading-relaxed
-                               <?php echo e($isSideImage ? 'max-w-xl' : 'max-w-3xl mx-auto'); ?>"
-                        style="color: color-mix(in srgb, var(--text-color) 75%, transparent);"
+                        class="
+                            mt-6
+                            text-[1.05rem] md:text-[1.15rem]
+                            leading-[1.9]
+                            <?php echo e($isSideImage ? 'max-w-lg' : 'max-w-3xl'); ?>
+
+                        "
+                        style="color: color-mix(in srgb, var(--text-color) 78%, transparent);"
                     >
                         <?php echo $desc; ?>
 
                     </div>
                 <?php endif; ?>
 
+                
                 <?php if($ctaText && $ctaUrl): ?>
-                    <div class="mt-8 <?php echo e(!$isSideImage ? 'flex justify-center' : ''); ?>">
+                    <div class="mt-10">
                         <a
                             href="<?php echo e($ctaUrl); ?>"
-                            class="inline-flex items-center gap-2 px-8 py-4 rounded-full
-                                   font-semibold text-white
-                                   transition-all duration-300 hover:scale-105"
+                            class="
+                                inline-flex items-center gap-2
+                                px-9 py-4
+                                rounded-full
+                                font-semibold
+                                text-white
+                                transition-all duration-300
+                                hover:scale-[1.06]
+                            "
                             style="
                                 background: linear-gradient(
                                     135deg,
                                     var(--primary-color),
                                     var(--secondary-color)
                                 );
-                                box-shadow: 0 20px 50px color-mix(in srgb, var(--primary-color) 35%, transparent);
+                                box-shadow: 0 18px 45px
+                                    color-mix(in srgb, var(--primary-color) 40%, transparent);
                             "
                         >
                             <?php echo e($ctaText); ?>
@@ -139,7 +176,7 @@
 
             
             <?php if($hasImage && $imgPosition === 'right'): ?>
-                <div class="flex justify-center">
+                <div class="flex justify-center lg:order-2">
                     <img
                         src="<?php echo e($media->url); ?>"
                         alt="<?php echo e($media->alt ?? $title); ?>"
@@ -153,7 +190,7 @@
 
         
         <?php if($hasImage && $imgPosition === 'bottom'): ?>
-            <div class="flex justify-center mt-10">
+            <div class="flex justify-center mt-12">
                 <img
                     src="<?php echo e($media->url); ?>"
                     alt="<?php echo e($media->alt ?? $title); ?>"
@@ -178,6 +215,5 @@
             opacity: .25;
         "
     ></div>
-
 </section>
 <?php /**PATH C:\laragon\www\aiw_rtl\resources\views/website/sections/hero.blade.php ENDPATH**/ ?>

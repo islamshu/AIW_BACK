@@ -13,6 +13,12 @@ class HomeSection extends Model
         'contentable_type',
         'admin_title',
         'admin_note',
+        'button_text',
+        'button_link',
+    ];
+
+    protected $casts = [
+        'button_text' => 'array',
     ];
 
     public function contentable()

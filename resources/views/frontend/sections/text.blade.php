@@ -1,5 +1,22 @@
 @php
+    /** @var \App\Models\HomeSection $section */
+
     $lang = app()->getLocale();
+
+    /*
+    |--------------------------------------------------------------------------
+    | CONTENT (من contentable)
+    |--------------------------------------------------------------------------
+    */
+    $content = $section->contentable->content[$lang] ?? '';
+
+    /*
+    |--------------------------------------------------------------------------
+    | BUTTON (من home_sections)
+    |--------------------------------------------------------------------------
+    */
+    $buttonText = $section->button_text[$lang] ?? null;
+    $buttonLink = $section->button_link ?? null;
 @endphp
 
 <section
@@ -20,23 +37,31 @@
             style="background: rgba(255,255,255,0.04)"
         >
 
-            {{-- CONTENT --}}
-            <div
-                class="text-lg leading-relaxed mb-10 max-w-3xl mx-auto"
-                style="color: color-mix(in srgb, var(--text-color) 70%, transparent);"
-            >
-                {!! $data->content[$lang] ?? '' !!}
-            </div>
+            {{-- ================= CONTENT ================= --}}
+            @if($content)
+                <div
+                    class="text-lg leading-relaxed mb-10 max-w-3xl mx-auto"
+                    style="color: color-mix(in srgb, var(--text-color) 70%, transparent);"
+                >
+                    {!! $content !!}
+                </div>
+            @endif
 
-            {{-- BUTTON --}}
-            @if(!empty($data->button_text[$lang]))
+            {{-- ================= BUTTON ================= --}}
+            @if($buttonText && $buttonLink)
                 <div class="flex justify-center">
                     <a
-                        href="{{ $data->button_link[$lang] }}"
-                        class="inline-flex items-center gap-2
-                               px-8 py-3 rounded-full font-semibold text-white
-                               transition-all duration-300
-                               hover:-translate-y-1 hover:shadow-2xl"
+                        href="{{ $buttonLink }}"
+                        class="
+                            inline-flex items-center gap-3
+                            px-9 py-4
+                            rounded-full
+                            font-semibold
+                            text-white
+                            transition-all duration-300
+                            hover:-translate-y-1
+                            hover:shadow-2xl
+                        "
                         style="
                             background: linear-gradient(
                                 135deg,
@@ -45,8 +70,13 @@
                             );
                         "
                     >
-                        {{ $data->button_text[$lang] }}
-                        <i class="fas fa-arrow-{{ app()->getLocale() === 'ar' ? 'left' : 'right' }}"></i>
+                        {{ $buttonText }}
+
+                        @if($lang === 'ar')
+                            <i class="fas fa-arrow-left"></i>
+                        @else
+                            <i class="fas fa-arrow-right"></i>
+                        @endif
                     </a>
                 </div>
             @endif
@@ -55,7 +85,7 @@
 
     </div>
 
-    {{-- Divider --}}
+    {{-- ================= DIVIDER ================= --}}
     <div
         class="absolute inset-x-0 bottom-0 h-px"
         style="

@@ -43,6 +43,7 @@
 @endphp
 
 <section
+    dir="{{ $isAr ? 'rtl' : 'ltr' }}"
     class="relative overflow-hidden"
     style="
         background:
@@ -57,7 +58,7 @@
 
         {{-- IMAGE TOP --}}
         @if($hasImage && $imgPosition === 'top')
-            <div class="flex justify-center mb-10">
+            <div class="flex justify-center mb-12">
                 <img
                     src="{{ $media->url }}"
                     alt="{{ $media->alt ?? $title }}"
@@ -67,12 +68,19 @@
             </div>
         @endif
 
-        {{-- CONTENT --}}
-        <div class="{{ $isSideImage ? 'grid lg:grid-cols-2 gap-14 items-center' : 'text-center' }}">
+        {{-- MAIN CONTENT --}}
+        <div
+            class="
+                {{ $isSideImage
+                    ? 'grid lg:grid-cols-2 gap-16 items-center'
+                    : 'flex flex-col items-center text-center'
+                }}
+            "
+        >
 
             {{-- IMAGE LEFT --}}
             @if($hasImage && $imgPosition === 'left')
-                <div class="flex justify-center">
+                <div class="flex justify-center lg:order-1">
                     <img
                         src="{{ $media->url }}"
                         alt="{{ $media->alt ?? $title }}"
@@ -83,48 +91,75 @@
             @endif
 
             {{-- TEXT --}}
-            <div class="{{ $isAr ? 'text-right' : 'text-left' }}">
+            <div
+                class="
+                    flex flex-col
+                    {{ $isSideImage
+                        ? ($isAr ? 'text-right' : 'items-start text-left')
+                        : 'items-center text-center'
+                    }}
+                    {{ $hasImage && $imgPosition === 'left' ? 'lg:order-2' : '' }}
+                "
+            >
 
-                <h1 class="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight">
-                    <span
-                        style="
-                            background: linear-gradient(
-                                135deg,
-                                var(--primary-color),
-                                var(--secondary-color)
-                            );
-                            -webkit-background-clip: text;
-                            color: transparent;
-                        "
-                    >
-                        {{ $title }}
-                    </span>
+                {{-- TITLE --}}
+                <h1
+                    class="
+                        font-extrabold
+                        leading-tight
+                        tracking-tight
+                        text-[clamp(2.2rem,4vw,3.5rem)]
+                    "
+                    style="
+                        background: linear-gradient(
+                            135deg,
+                            var(--primary-color),
+                            var(--secondary-color)
+                        );
+                        -webkit-background-clip: text;
+                        color: transparent;
+                    "
+                >
+                    {{ $title }}
                 </h1>
 
+                {{-- DESCRIPTION --}}
                 @if($desc)
                     <div
-                        class="mt-6 text-base md:text-lg leading-relaxed
-                               {{ $isSideImage ? 'max-w-xl' : 'max-w-3xl mx-auto' }}"
-                        style="color: color-mix(in srgb, var(--text-color) 75%, transparent);"
+                        class="
+                            mt-6
+                            text-[1.05rem] md:text-[1.15rem]
+                            leading-[1.9]
+                            {{ $isSideImage ? 'max-w-lg' : 'max-w-3xl' }}
+                        "
+                        style="color: color-mix(in srgb, var(--text-color) 78%, transparent);"
                     >
                         {!! $desc !!}
                     </div>
                 @endif
 
+                {{-- CTA --}}
                 @if($ctaText && $ctaUrl)
-                    <div class="mt-8 {{ !$isSideImage ? 'flex justify-center' : '' }}">
+                    <div class="mt-10">
                         <a
                             href="{{ $ctaUrl }}"
-                            class="inline-flex items-center gap-2 px-8 py-4 rounded-full
-                                   font-semibold text-white
-                                   transition-all duration-300 hover:scale-105"
+                            class="
+                                inline-flex items-center gap-2
+                                px-9 py-4
+                                rounded-full
+                                font-semibold
+                                text-white
+                                transition-all duration-300
+                                hover:scale-[1.06]
+                            "
                             style="
                                 background: linear-gradient(
                                     135deg,
                                     var(--primary-color),
                                     var(--secondary-color)
                                 );
-                                box-shadow: 0 20px 50px color-mix(in srgb, var(--primary-color) 35%, transparent);
+                                box-shadow: 0 18px 45px
+                                    color-mix(in srgb, var(--primary-color) 40%, transparent);
                             "
                         >
                             {{ $ctaText }}
@@ -136,7 +171,7 @@
 
             {{-- IMAGE RIGHT --}}
             @if($hasImage && $imgPosition === 'right')
-                <div class="flex justify-center">
+                <div class="flex justify-center lg:order-2">
                     <img
                         src="{{ $media->url }}"
                         alt="{{ $media->alt ?? $title }}"
@@ -150,7 +185,7 @@
 
         {{-- IMAGE BOTTOM --}}
         @if($hasImage && $imgPosition === 'bottom')
-            <div class="flex justify-center mt-10">
+            <div class="flex justify-center mt-12">
                 <img
                     src="{{ $media->url }}"
                     alt="{{ $media->alt ?? $title }}"
@@ -162,7 +197,7 @@
 
     </div>
 
-    {{-- Divider --}}
+    {{-- DIVIDER --}}
     <div
         class="absolute inset-x-0 bottom-0 h-px"
         style="
@@ -175,5 +210,4 @@
             opacity: .25;
         "
     ></div>
-
 </section>
