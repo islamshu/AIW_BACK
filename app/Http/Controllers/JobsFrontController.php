@@ -28,15 +28,16 @@ class JobsFrontController extends Controller
     }
 
     private function jobsQuery()
-    {
-        return Job::query()
-            ->where('is_active', 1)
-            ->whereDate('publish_from', '<=', now())
-            ->where(function ($q) {
-                $q->whereNull('publish_to')
-                  ->orWhereDate('publish_to', '>=', now());
-            });
-    }
+{
+    return Job::query()
+        ->where('is_active', 1)
+        ->whereDate('publish_from', '<=', now())
+        ->where(function ($q) {
+            $q->whereNull('publish_to')
+              ->orWhereDate('publish_to', '>=', now());
+        });
+}
+
 
     public function ajaxGroups()
     {
