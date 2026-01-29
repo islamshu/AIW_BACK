@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Job;
+use App\Models\JobApplication;
 use App\Models\JobGroup;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class JobController extends Controller
 {
@@ -103,5 +105,43 @@ class JobController extends Controller
             'publish_from' => 'required|date',
             'publish_to'   => 'nullable|date|after_or_equal:publish_from',
         ]);
+    }
+    public function show_app(Job $job, $id)
+    {
+        $application = JobApplication::findOrFail($id);
+        // التأكد من أن الطلب ينتمي لهذه الوظيفة
+        if ($application->job_id !== $job->id) {
+            abort(404);
+        }
+
+        return view('dashboard.jobs.applications.show', compact('job', 'application'));
+    }
+
+    public function destroy_app(Job $job, $id)
+    {
+        $application = JobApplication::findOrFail($id);
+
+        // التحقق من أن الطلب ينتمي لهذه الوظيفة
+        if ($application->job_id !== $job->id) {
+            abort(404);
+        }
+
+        try {
+            // حذف ملف السيرة الذاتية إذا كان موجوداً
+            if ($application->cv_path && Storage::exists($application->cv_path)) {
+                Storage::delete($application->cv_path);
+            }
+
+            // حذف الطلب من قاعدة البيانات
+            $application->delete();
+
+            return redirect()
+                ->route('dashboard.jobs.applications.index', $job->id)
+                ->with('success', 'تم حذف طلب التقديم بنجاح.');
+        } catch (\Exception $e) {
+            return redirect()
+                ->route('dashboard.jobs.applications.index', $job->id)
+                ->with('error', 'حدث خطأ أثناء حذف طلب التقديم: ' . $e->getMessage());
+        }
     }
 }

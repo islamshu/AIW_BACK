@@ -243,18 +243,15 @@ tinymce.init({
     }
 
     <?php if(session('success')): ?>
-        showToast('<?php echo e(session('
-                    success ')); ?>', 'success');
+        showToast('<?php echo e(session('success')); ?>', 'success');
     <?php endif; ?>
 
     <?php if(session('error')): ?>
-        showToast('<?php echo e(session('
-                    error ')); ?>', 'error');
+        showToast('<?php echo e(session('error')); ?>', 'error');
     <?php endif; ?>
 
     <?php if(session('info')): ?>
-        showToast('<?php echo e(session('
-                    info ')); ?>', 'info');
+        showToast('<?php echo e(session('info')); ?>', 'info');
     <?php endif; ?>
 </script>
 

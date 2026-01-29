@@ -279,6 +279,10 @@ Route::middleware(['admin'])->prefix('dashboard')->group(function () {
         Route::get('jobs/{job}/toggle', [JobController::class, 'toggle'])->name('jobs.toggle');
         Route::get('jobs/{job}/applications', [JobController::class, 'index_applications'])
             ->name('jobs.applications.index');
+            Route::get('jobs/{job}/applications/{app}/show', [JobController::class, 'show_app'])
+            ->name('jobs.applications.show');
+            Route::delete('jobs/{job}/applications/{app}', [JobController::class, 'destroy_app'])
+            ->name('jobs.applications.destroy');
     });
 
     /*

@@ -11,6 +11,7 @@ class JobApplication extends Model
         'name',
         'phone',
         'cv_path',
+        'summary',
     ];
 
     public function job()

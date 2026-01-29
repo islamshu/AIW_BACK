@@ -244,18 +244,15 @@ tinymce.init({
     }
 
     @if (session('success'))
-        showToast('{{ session('
-                    success ') }}', 'success');
+        showToast('{{ session('success') }}', 'success');
     @endif
 
     @if (session('error'))
-        showToast('{{ session('
-                    error ') }}', 'error');
+        showToast('{{ session('error') }}', 'error');
     @endif
 
     @if (session('info'))
-        showToast('{{ session('
-                    info ') }}', 'info');
+        showToast('{{ session('info') }}', 'info');
     @endif
 </script>
 
