@@ -41,11 +41,16 @@ class Job extends Model
         return $this->hasMany(JobApplication::class);
     }
 
-    public function isPublished()
+    public function isPublished(): bool
     {
-        return now()->between(
-            $this->publish_from,
-            $this->publish_to ?? now()->addYears(10)
-        );
+        $today = now()->toDateString();
+    
+        return
+            $this->publish_from <= $today &&
+            (
+                is_null($this->publish_to) ||
+                $this->publish_to >= $today
+            );
     }
+    
 }
