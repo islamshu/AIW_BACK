@@ -37,6 +37,7 @@ class MediaController extends Controller
 
         $uploadedMedia = [];
 
+        // 🔥 المسار الصحيح داخل public_html
         $pathDir = public_path('uploads/media');
 
         if (!file_exists($pathDir)) {
@@ -49,19 +50,22 @@ class MediaController extends Controller
                 continue;
             }
 
+            // اسم فريد للملف
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            // رفع مباشر داخل public_html/uploads/media
+            // 🔥 رفع داخل public_html/uploads/media
             $file->move($pathDir, $filename);
 
             $media = Media::create([
                 'file_name' => $file->getClientOriginalName(),
 
-                // 🔥 نخزن بدون public
+                // 🔥 نخزن المسار بدون public
                 'file_path' => 'uploads/media/' . $filename,
 
                 'mime_type' => $file->getClientMimeType(),
-                'size' => file_exists($pathDir . '/' . $filename) ? filesize($pathDir . '/' . $filename) : 0,
+                'size' => file_exists($pathDir . '/' . $filename)
+                    ? filesize($pathDir . '/' . $filename)
+                    : 0,
             ]);
 
             $uploadedMedia[] = $media;
@@ -96,7 +100,7 @@ class MediaController extends Controller
                 'description' => $media->description,
                 'file_name' => $media->file_name,
                 'created_at' => $media->created_at->format('Y/m/d'),
-                'url' => asset('public/'.$media->file_path),
+                'url' => asset($media->file_path),
                 'human_size' => $media->human_size,
             ]
         ]);
