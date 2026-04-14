@@ -21,7 +21,7 @@ class Media extends Model
 
     public function getUrlAttribute()
     {
-        return asset('storage/' . $this->file_path);
+        return asset( $this->file_path);
     }
 
     public function getHumanSizeAttribute()
