@@ -39,7 +39,6 @@ class MediaController extends Controller
 
         $pathDir = public_path('uploads/media');
 
-        // إنشاء المجلد إذا غير موجود
         if (!file_exists($pathDir)) {
             mkdir($pathDir, 0777, true);
         }
@@ -50,19 +49,19 @@ class MediaController extends Controller
                 continue;
             }
 
-            // اسم ملف فريد
             $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
 
-            // رفع مباشر للمجلد العام
+            // رفع مباشر داخل public_html/uploads/media
             $file->move($pathDir, $filename);
-
-            $fullPath = $pathDir . '/' . $filename;
 
             $media = Media::create([
                 'file_name' => $file->getClientOriginalName(),
+
+                // 🔥 نخزن بدون public
                 'file_path' => 'uploads/media/' . $filename,
+
                 'mime_type' => $file->getClientMimeType(),
-                'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
+                'size' => file_exists($pathDir . '/' . $filename) ? filesize($pathDir . '/' . $filename) : 0,
             ]);
 
             $uploadedMedia[] = $media;
