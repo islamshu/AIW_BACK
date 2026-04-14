@@ -106,7 +106,7 @@
                                 {{-- IMAGE PREVIEW --}}
                                 <div class="mt-2">
                                     <img id="imagePreview"
-                                        src="{{ asset('storage/' . $hero->image)}}"
+                                        src="{{ asset('public/' . $hero->image)}}"
                                         class="img-thumbnail"
                                         style="max-height:120px">
                                 </div>

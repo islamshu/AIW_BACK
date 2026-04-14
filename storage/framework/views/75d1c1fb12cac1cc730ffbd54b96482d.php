@@ -116,7 +116,7 @@
                         
                         <div class="mt-2">
                             <img id="imagePreview"
-                                src="<?php echo e(isset($homeService) && $homeService->image ? asset('storage/' . $homeService->image) : ''); ?>"
+                                src="<?php echo e(isset($homeService) && $homeService->image ? asset('public/' . $homeService->image) : ''); ?>"
                                 class="img-thumbnail"
                                 style="max-height:120px; <?php echo e(isset($homeService) && $homeService->image ? '' : 'display:none'); ?>">
                         </div>

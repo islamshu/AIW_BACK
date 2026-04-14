@@ -31,7 +31,7 @@ $count = App\Models\News::where('is_active', true)->count();
 
                     {{-- IMAGE --}}
                     <div class="h-48 overflow-hidden">
-                        <img src="{{ asset('storage/' . $news->image) }}" class="w-full h-full object-cover">
+                        <img src="{{ asset('public/' . $news->image) }}" class="w-full h-full object-cover">
                     </div>
 
                     {{-- CONTENT --}}

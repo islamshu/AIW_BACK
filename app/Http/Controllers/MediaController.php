@@ -100,7 +100,7 @@ class MediaController extends Controller
                 'description' => $media->description,
                 'file_name' => $media->file_name,
                 'created_at' => $media->created_at->format('Y/m/d'),
-                'url' => asset($media->file_path),
+                'url' => asset('public/'.$media->file_path),
                 'human_size' => $media->human_size,
             ]
         ]);

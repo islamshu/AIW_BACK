@@ -18,7 +18,7 @@
 
                 
                 <div class="h-48 overflow-hidden">
-                    <img src="<?php echo e(asset('storage/' . $item->image)); ?>"
+                    <img src="<?php echo e(asset('public/' . $item->image)); ?>"
                          class="w-full h-full object-cover">
                 </div>
 

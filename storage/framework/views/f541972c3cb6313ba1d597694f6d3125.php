@@ -154,7 +154,7 @@
                                 
                                 <td>
                                     <?php if($item->image): ?>
-                                        <img src="<?php echo e(asset('storage/' . $item->image)); ?>" alt="news image"
+                                        <img src="<?php echo e(asset('public/' . $item->image)); ?>" alt="news image"
                                             class="news-thumb">
                                     <?php else: ?>
                                         <span>لا يوجد صورة</span>

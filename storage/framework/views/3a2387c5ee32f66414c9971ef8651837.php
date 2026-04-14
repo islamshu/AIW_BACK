@@ -108,7 +108,7 @@
                                bg-white shadow-2xl flex items-center justify-center pulse"
                     >
                         <img
-                            src="<?php echo e(asset('storage/'.$hero->image)); ?>"
+                            src="<?php echo e(asset('public/'.$hero->image)); ?>"
                             alt="Hero Image"
                             class="w-full h-full object-contain"
                         >

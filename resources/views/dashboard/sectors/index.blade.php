@@ -88,7 +88,7 @@
     {{-- أيقونة / صورة --}}
     <td class="text-center">
         @if($sector->image)
-            <img src="{{ asset($sector->image) }}" width="120">
+            <img src="{{ asset('public/'.$sector->image) }}" width="120">
         @elseif($sector->icon)
             <i class="{{ $sector->icon }} fa-2x"></i>
         @endif

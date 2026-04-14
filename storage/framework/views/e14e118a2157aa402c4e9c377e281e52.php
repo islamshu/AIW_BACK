@@ -7,7 +7,7 @@
     <div class="container mx-auto px-4 max-w-4xl">
 
         
-        <img src="<?php echo e(asset('storage/' . $news->image)); ?>"
+        <img src="<?php echo e(asset('public/' . $news->image)); ?>"
              class="rounded-2xl mb-8 w-full">
 
         

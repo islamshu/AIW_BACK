@@ -12,10 +12,10 @@
     <meta name="author" content="PIXINVENT">
 
     <title><?php echo e(get_general_value('website_name_' . app()->getLocale())); ?> - <?php echo e(__('تسجيل الدخول')); ?></title>
-    <link rel="icon" href="<?php echo e(asset('storage/' . get_general_value('website_icon'))); ?>">
+    <link rel="icon" href="<?php echo e(asset('public/' . get_general_value('website_icon'))); ?>">
 
-    <link rel="apple-touch-icon" href="<?php echo e(asset('storage/' . get_general_value('website_icon'))); ?>">
-    <link rel="shortcut icon" type="image/x-icon" href="<?php echo e(asset('storage/' . get_general_value('website_icon'))); ?>">
+    <link rel="apple-touch-icon" href="<?php echo e(asset('public/' . get_general_value('website_icon'))); ?>">
+    <link rel="shortcut icon" type="image/x-icon" href="<?php echo e(asset('public/' . get_general_value('website_icon'))); ?>">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
     <link
@@ -232,7 +232,7 @@
 
 <style>
   body {
-    background: url('<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>') no-repeat center center fixed;
+    background: url('<?php echo e(asset('public/' . get_general_value('website_logo'))); ?>') no-repeat center center fixed;
     background-size: cover;
     position: relative;
     font-family: 'Cairo', sans-serif;

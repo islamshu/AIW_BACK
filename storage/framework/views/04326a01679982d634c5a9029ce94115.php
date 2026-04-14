@@ -66,7 +66,7 @@
             
             <div class="flex justify-center md:justify-start">
                 <img
-                    src="<?php echo e(asset('storage/'.get_general_value('website_logo'))); ?>"
+                    src="<?php echo e(asset('public/'.get_general_value('website_logo'))); ?>"
                     alt="Logo"
                     class="object-contain drop-shadow-xl
                            max-w-[180px] md:max-w-[220px] lg:max-w-[260px]"

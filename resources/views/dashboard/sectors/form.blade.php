@@ -111,7 +111,7 @@
                         {{-- IMAGE PREVIEW --}}
                         <div class="mt-2">
                             <img id="imagePreview"
-                                src="{{ isset($sector) && $sector->image ? asset('storage/' . $sector->image) : '' }}"
+                                src="{{ isset($sector) && $sector->image ? asset('public/' . $sector->image) : '' }}"
                                 class="img-thumbnail"
                                 style="max-height:120px; {{ isset($sector) && $sector->image ? '' : 'display:none' }}">
                         </div>

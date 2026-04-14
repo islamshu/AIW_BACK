@@ -103,7 +103,7 @@
                                                         for="popup_image">{{ __('اختر ملف') }}</label>
                                                 </div>
                                                 <div class="mt-2">
-                                                    <img src="{{ asset('storage/' . get_general_value('popup_image')) }}"
+                                                    <img src="{{ asset('public/' . get_general_value('popup_image')) }}"
                                                         style="width: 150px; height: auto;"
                                                         class="img-thumbnail image-preview" alt="">
                                                 </div>

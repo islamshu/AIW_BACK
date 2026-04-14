@@ -89,7 +89,7 @@
                     
                     <td class="text-center">
                         <?php if($service->image): ?>
-                        <img src="<?php echo e(asset('storage/'.$service->image)); ?>"
+                        <img src="<?php echo e(asset('public/'.$service->image)); ?>"
                             width="120">
                         <?php elseif($service->icon): ?>
                         <i class="<?php echo e($service->icon); ?> fa-2x"></i>

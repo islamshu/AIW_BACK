@@ -174,7 +174,7 @@
 
                         
                         <div class="mt-2">
-                            <img id="imagePreview" src="<?php echo e(asset('storage/' . $news?->image)); ?>" class="img-thumbnail"
+                            <img id="imagePreview" src="<?php echo e(asset('public/' . $news?->image)); ?>" class="img-thumbnail"
                                 style="max-height:120px">
                         </div>
 

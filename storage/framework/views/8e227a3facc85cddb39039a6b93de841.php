@@ -88,7 +88,7 @@
     
     <td class="text-center">
         <?php if($sector->image): ?>
-            <img src="<?php echo e(asset('storage/'.$sector->image)); ?>" width="120">
+            <img src="<?php echo e(asset('public/'.$sector->image)); ?>" width="120">
         <?php elseif($sector->icon): ?>
             <i class="<?php echo e($sector->icon); ?> fa-2x"></i>
         <?php endif; ?>

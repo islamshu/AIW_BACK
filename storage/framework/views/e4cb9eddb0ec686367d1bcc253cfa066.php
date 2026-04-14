@@ -36,7 +36,7 @@
                             <i class="<?php echo e($service->icon); ?> text-5xl service-icon"
                                 style="color: var(--primary-color)"></i>
                         <?php elseif($service->image): ?>
-                            <img src="<?php echo e(asset('storage/' . $service->image)); ?>"
+                            <img src="<?php echo e(asset('public/' . $service->image)); ?>"
                                 class="w-16 h-16 object-contain service-icon">
                         <?php endif; ?>
                     </div>

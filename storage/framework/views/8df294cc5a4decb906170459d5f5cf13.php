@@ -17,7 +17,7 @@
                 <i class="<?php echo e($service->icon); ?> text-4xl"
                    style="color: var(--primary-color)"></i>
             <?php elseif($service->image): ?>
-                <img src="<?php echo e(asset('storage/'.$service->image)); ?>"
+                <img src="<?php echo e(asset('public/'.$service->image)); ?>"
                      class="w-10 h-10 object-contain">
             <?php endif; ?>
         </div>

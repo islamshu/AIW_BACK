@@ -678,7 +678,7 @@ ${applyUrl}
             updateMeta('og-title', job.title + ' | ' + siteName);
             updateMeta('og-description', description);
             updateMeta('og-url', job.share_url);
-            updateMeta('og-image', "<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>");
+            updateMeta('og-image', "<?php echo e(asset('public/' . get_general_value('website_logo'))); ?>");
 
             updatePageTitle(job.title + ' | ' + siteName);
         }

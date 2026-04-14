@@ -89,7 +89,7 @@
                     {{-- ICON / IMAGE --}}
                     <td class="text-center">
                         @if($service->image)
-                        <img src="{{ asset($service->image) }}"
+                        <img src="{{ asset('public/'.$service->image) }}"
                             width="120">
                         @elseif($service->icon)
                         <i class="{{ $service->icon }} fa-2x"></i>

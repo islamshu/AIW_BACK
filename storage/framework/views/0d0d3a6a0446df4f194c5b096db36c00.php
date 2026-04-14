@@ -47,7 +47,7 @@
                             <td class="fw-semibold"><?php echo e($app->name); ?></td>
                             <td><?php echo e($app->phone); ?></td>
                             <td>
-                                <a href="<?php echo e(asset('storage/'.$app->cv_path)); ?>"
+                                <a href="<?php echo e(asset('public/'.$app->cv_path)); ?>"
                                    target="_blank"
                                    class="btn btn-sm btn-outline-primary">
                                     <i class="fas fa-file-pdf"></i>

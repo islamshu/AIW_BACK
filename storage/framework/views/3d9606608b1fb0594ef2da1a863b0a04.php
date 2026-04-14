@@ -69,7 +69,7 @@
 
                                                     <div class="mt-2">
                                                         <img id="imagePreview"
-                                                             src="<?php echo e(asset('storage/'.get_general_value('website_logo'))); ?>"
+                                                             src="<?php echo e(asset('public/'.get_general_value('website_logo'))); ?>"
                                                              class="img-thumbnail"
                                                              style="max-height:120px">
                                                     </div>
@@ -255,7 +255,7 @@
                                                               rows="6"
                                                               name="general[custom_html_head]"
                                                               placeholder="<!-- أكواد مخصصة في ال head -->
-<meta property='og:image' content='<?php echo e(asset('storage/'.get_general_value('website_logo'))); ?>'>
+<meta property='og:image' content='<?php echo e(asset('public/'.get_general_value('website_logo'))); ?>'>
 <link rel='preconnect' href='https://fonts.googleapis.com'>"
                                                             ><?php echo e(get_general_value('custom_html_head')); ?></textarea>
                                                     <small class="text-muted">

@@ -45,7 +45,7 @@
                             <td class="fw-semibold">{{ $app->name }}</td>
                             <td>{{ $app->phone }}</td>
                             <td>
-                                <a href="{{ asset($app->cv_path) }}"
+                                <a href="{{ asset('public/'.$app->cv_path) }}"
                                    target="_blank"
                                    class="btn btn-sm btn-outline-primary">
                                     <i class="fas fa-file-pdf"></i>

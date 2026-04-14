@@ -17,7 +17,7 @@
                 <i class="{{ $service->icon }} text-4xl"
                    style="color: var(--primary-color)"></i>
             @elseif($service->image)
-                <img src="{{ asset($service->image) }}"
+                <img src="{{ asset('public/'.$service->image) }}"
                      class="w-10 h-10 object-contain">
             @endif
         </div>

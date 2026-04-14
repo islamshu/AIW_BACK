@@ -24,7 +24,7 @@
     
     <meta property="og:image"
           id="og-image"
-          content="<?php echo $__env->yieldContent('og:image', asset('storage/' . get_general_value('website_logo'))); ?>">
+          content="<?php echo $__env->yieldContent('og:image', asset('public/' . get_general_value('website_logo'))); ?>">
     
     <title id="page-title">
         <?php echo $__env->yieldContent('title', get_general_value('website_name_' . app()->getLocale())); ?>
@@ -32,7 +32,7 @@
     
 
     
-    <link rel="icon" href="<?php echo e(asset('storage/' . get_general_value('website_logo'))); ?>">
+    <link rel="icon" href="<?php echo e(asset('public/' . get_general_value('website_logo'))); ?>">
 
     
     <script src="https://cdn.tailwindcss.com"></script>

@@ -13,10 +13,10 @@
 
     <title><?php echo e(get_general_value('website_name_' . app()->getLocale())); ?> - <?php echo $__env->yieldContent('title'); ?></title>
 
-    <link rel="apple-touch-icon" href="<?php echo e(asset('storage/' . get_general_value('website_icon'))); ?>">
-    <link rel="shortcut icon" type="image/x-icon" href="<?php echo e(asset('storage/' . get_general_value('website_icon'))); ?>">
+    <link rel="apple-touch-icon" href="<?php echo e(asset('public/' . get_general_value('website_icon'))); ?>">
+    <link rel="shortcut icon" type="image/x-icon" href="<?php echo e(asset('public/' . get_general_value('website_icon'))); ?>">
     <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
-    <link rel="icon" href="<?php echo e(asset('storage/' . get_general_value('website_icon'))); ?>">
+    <link rel="icon" href="<?php echo e(asset('public/' . get_general_value('website_icon'))); ?>">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
