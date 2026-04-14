@@ -105,7 +105,7 @@
                         <i class="fas fa-file-pdf me-2"></i>
                         السيرة الذاتية
                     </h5>
-                    
+
                 </div>
                 <div class="card-body">
                     @if($application->cv_path)
@@ -115,14 +115,14 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <a href="{{ asset('storage/'.$application->cv_path) }}"
+                            <a href="{{ asset($application->cv_path) }}"
                                target="_blank"
                                class="btn btn-primary">
                                 <i class="fas fa-eye me-1"></i>
                                 عرض السيرة الذاتية
                             </a>
 
-                            <a href="{{ asset('storage/'.$application->cv_path) }}"
+                            <a href="{{ asset($application->cv_path) }}"
                                download="CV_{{ $application->name }}.pdf"
                                class="btn btn-outline-primary">
                                 <i class="fas fa-download me-1"></i>

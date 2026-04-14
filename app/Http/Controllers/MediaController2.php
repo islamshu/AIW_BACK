@@ -1,31 +1,32 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Models\Media;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
-class MediaController extends Controller
+class MediaController2 extends Controller
 {
     public function index(Request $request)
     {
         $media = Media::latest()->get();
-
+    
         return view('dashboard.media.index', [
             'media' => $media,
-            'selectMode' => $request->get('select_mode')
+            'selectMode' => $request->get('select_mode') 
         ]);
     }
-
     public function grid(Request $request)
     {
         $media = Media::latest()->paginate(20);
         $selectMode = $request->has('select_mode');
-
+        
+        // إذا كان الطلب AJAX، نرجع جزء الـ grid فقط
         if ($request->ajax() || $request->wantsJson()) {
             return view('dashboard.media._media_grid', compact('media', 'selectMode'));
         }
-
+        
+        // للطلبات العادية
         return view('dashboard.media.index', compact('media', 'selectMode'));
     }
 
@@ -37,32 +38,14 @@ class MediaController extends Controller
 
         $uploadedMedia = [];
 
-        $pathDir = public_path('uploads/media');
-
-        // إنشاء المجلد إذا غير موجود
-        if (!file_exists($pathDir)) {
-            mkdir($pathDir, 0777, true);
-        }
-
         foreach ($request->file('files', []) as $file) {
-
-            if (!$file || !$file->isValid()) {
-                continue;
-            }
-
-            // اسم ملف فريد
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-
-            // رفع مباشر للمجلد العام
-            $file->move($pathDir, $filename);
-
-            $fullPath = $pathDir . '/' . $filename;
+            $path = $file->store('media', 'public');
 
             $media = Media::create([
                 'file_name' => $file->getClientOriginalName(),
-                'file_path' => 'uploads/media/' . $filename,
-                'mime_type' => $file->getClientMimeType(),
-                'size' => file_exists($fullPath) ? filesize($fullPath) : 0,
+                'file_path' => $path,
+                'mime_type' => $file->getMimeType(),
+                'size' => $file->getSize(),
             ]);
 
             $uploadedMedia[] = $media;
@@ -84,9 +67,9 @@ class MediaController extends Controller
         ]);
 
         $media->update(
-            $request->only(['title', 'alt', 'caption', 'description'])
+            $request->only(['title','alt','caption','description'])
         );
-
+    
         return response()->json([
             'success' => true,
             'media' => [
@@ -97,7 +80,7 @@ class MediaController extends Controller
                 'description' => $media->description,
                 'file_name' => $media->file_name,
                 'created_at' => $media->created_at->format('Y/m/d'),
-                'url' => asset($media->file_path),
+                'url' => $media->url,
                 'human_size' => $media->human_size,
             ]
         ]);
@@ -105,16 +88,12 @@ class MediaController extends Controller
 
     public function destroy(Media $media)
     {
-        $filePath = public_path($media->file_path);
-
-        if (file_exists($filePath)) {
-            unlink($filePath);
-        }
-
+        // حذف الملف من التخزين
+        Storage::disk('public')->delete($media->file_path);
+        
+        // حذف السجل من قاعدة البيانات
         $media->delete();
-
-        return response()->json([
-            'success' => true
-        ]);
+        
+        return response()->json(['success' => true]);
     }
 }

@@ -12,7 +12,7 @@
                     <li class="nav-item">
                         <a class="navbar-brand" target="_blank" href="{{route('dashboard')}}">
                             {{-- <img class="brand-logo" alt="{{ get_general_value('website_name_'. app()->getLocale()) }}"
-                                src="{{ asset('storage/'.get_general_value('website_icon')) }}" width="40" height="40"> --}}
+                                src="{{ asset(get_general_value('website_icon')) }}" width="40" height="40"> --}}
                             <h3 class="brand-text">{{ get_general_value('website_name_'. app()->getLocale()) }}</h3>
                         </a>
                     </li>

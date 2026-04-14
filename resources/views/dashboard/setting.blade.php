@@ -68,7 +68,7 @@
 
                                                     <div class="mt-2">
                                                         <img id="imagePreview"
-                                                             src="{{ asset('storage/'.get_general_value('website_logo')) }}"
+                                                             src="{{ asset(get_general_value('website_logo')) }}"
                                                              class="img-thumbnail"
                                                              style="max-height:120px">
                                                     </div>
@@ -241,7 +241,7 @@
                                                               rows="6"
                                                               name="general[custom_html_head]"
                                                               placeholder="<!-- أكواد مخصصة في ال head -->
-<meta property='og:image' content='{{ asset('storage/'.get_general_value('website_logo')) }}'>
+<meta property='og:image' content='{{ asset(get_general_value('website_logo')) }}'>
 <link rel='preconnect' href='https://fonts.googleapis.com'>"
                                                             >{{ get_general_value('custom_html_head') }}</textarea>
                                                     <small class="text-muted">
