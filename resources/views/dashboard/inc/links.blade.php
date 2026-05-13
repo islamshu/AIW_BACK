@@ -68,10 +68,33 @@ tinymce.init({
     language: 'ar',
     directionality: 'rtl',
     height: 300,
+
     plugins: 'image link lists code autoresize',
-    toolbar:
-        'undo redo | bold italic underline | bullist numlist | image media-library | alignleft aligncenter alignright | code',
+    toolbar: 'undo redo | fontfamily fontsize | bold italic underline | bullist numlist | image media-library | alignleft aligncenter alignright | code',
+
+    font_family_formats:
+        'Cairo=Cairo,sans-serif;' +
+        'Tajawal=Tajawal,sans-serif;' +
+        'Amiri=Amiri,serif;' +
+        'El Messiri=El Messiri,sans-serif;' +
+        'Almarai=Almarai,sans-serif;' +
+        'Reem Kufi=Reem Kufi,sans-serif;' +
+        'Mada=Mada,sans-serif;' +
+        'Changa=Changa,sans-serif;' +
+        'Arial=arial,helvetica,sans-serif;',
+
+    content_style: `
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=El+Messiri:wght@400;700&family=Almarai:wght@400;700&family=Reem+Kufi:wght@400;700&family=Mada:wght@400;700&family=Changa:wght@400;700&display=swap');
+
+        body {
+            font-family: Cairo, sans-serif;
+            direction: rtl;
+            text-align: right;
+        }
+    `,
+
     branding: false,
+
     setup: function (editor) {
         editor.ui.registry.addButton('media-library', {
             text: '📁 مكتبة الوسائط',
