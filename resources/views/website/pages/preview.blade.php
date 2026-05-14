@@ -9,21 +9,11 @@
 @forelse($layouts as $layout)
 
     {{-- ================= LAYOUT ROW ================= --}}
-    <section
-        class="w-full py-14 md:py-20 relative"
-        style="
-            background:
-                linear-gradient(
-                    180deg,
-                    var(--bg-color),
-                    color-mix(in srgb, var(--bg-color) 90%, var(--primary-color))
-                );
-        "
-    >
-        <div class="container mx-auto px-4 relative z-10">
+    <section class="w-full">
+        <div class="container mx-auto px-4">
 
             {{-- Grid 12 --}}
-            <div class="grid grid-cols-12 gap-6 md:gap-10">
+            <div class="grid grid-cols-12 gap-6">
 
                 @foreach($layout['columns'] as $column)
 
@@ -45,27 +35,15 @@
                                     : json_decode($section->data ?? '[]', true);
                             @endphp
 
-                            <div
-                                class="mb-10 last:mb-0 rounded-2xl p-6 md:p-8
-                                       transition-all duration-300"
-                                style="
-                                    background: rgba(255,255,255,0.04);
-                                    border: 1px solid rgba(255,255,255,0.08);
-                                    backdrop-filter: blur(6px);
-                                "
-                            >
-
-                                @includeIf(
-                                    'website.sections.' . $section->type,
-                                    [
-                                        'section' => $section,
-                                        'data'    => $data,
-                                        'page'    => $page,
-                                        'col'     => $colSpan,
-                                    ]
-                                )
-
-                            </div>
+                            @includeIf(
+                                "website.sections.{$section->type}",
+                                [
+                                    'section' => $section,
+                                    'data'    => $data,
+                                    'page'    => $page,
+                                    'col'     => $colSpan,
+                                ]
+                            )
 
                         @empty
                         @endforelse
@@ -76,21 +54,6 @@
 
             </div>
         </div>
-
-        {{-- Divider --}}
-        <div
-            class="absolute inset-x-0 bottom-0 h-px"
-            style="
-                background: linear-gradient(
-                    90deg,
-                    transparent,
-                    var(--primary-color),
-                    transparent
-                );
-                opacity: .25;
-            "
-        ></div>
-
     </section>
     {{-- ================= END LAYOUT ROW ================= --}}
 

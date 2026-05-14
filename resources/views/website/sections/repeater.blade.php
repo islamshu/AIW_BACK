@@ -55,9 +55,10 @@
 
             @foreach($items as $item)
                 @php
-                    $title = $isAr ? ($item['title_ar'] ?? '') : ($item['title_en'] ?? '');
-                    $desc  = $isAr ? ($item['desc_ar'] ?? '')  : ($item['desc_en'] ?? '');
-                    $icon  = $item['icon'] ?? 'fa-regular fa-star';
+                    $title     = $isAr ? ($item['title_ar'] ?? '') : ($item['title_en'] ?? '');
+                    $desc      = $isAr ? ($item['desc_ar'] ?? '')  : ($item['desc_en'] ?? '');
+                    $icon      = $item['icon']       ?? 'fa-regular fa-star';
+                    $iconColor = $item['icon_color'] ?? 'var(--primary-color)';
                 @endphp
 
                 <div
@@ -73,16 +74,9 @@
 
                         <div
                             class="h-14 w-14 flex items-center justify-center rounded-2xl"
-                            style="
-                                background: linear-gradient(
-                                    135deg,
-                                    var(--primary-color),
-                                    var(--secondary-color)
-                                );
-                                opacity: .18;
-                            "
+                            style="background: color-mix(in srgb, {{ $iconColor }} 18%, transparent);"
                         >
-                            <i class="{{ $icon }}" style="color: var(--primary-color)"></i>
+                            <i class="{{ $icon }}" style="color: {{ $iconColor }};"></i>
                         </div>
 
                         @if($title)
@@ -121,25 +115,19 @@
 
                 @foreach($items as $item)
                     @php
-                        $title = $isAr ? ($item['title_ar'] ?? '') : ($item['title_en'] ?? '');
-                        $desc  = $isAr ? ($item['desc_ar'] ?? '')  : ($item['desc_en'] ?? '');
-                        $icon  = $item['icon'] ?? 'fa-regular fa-star';
+                        $title     = $isAr ? ($item['title_ar'] ?? '') : ($item['title_en'] ?? '');
+                        $desc      = $isAr ? ($item['desc_ar'] ?? '')  : ($item['desc_en'] ?? '');
+                        $icon      = $item['icon']       ?? 'fa-regular fa-star';
+                        $iconColor = $item['icon_color'] ?? 'var(--primary-color)';
                     @endphp
 
                     <div class="flex gap-4 items-start">
 
                         <div
                             class="h-12 w-12 flex items-center justify-center rounded-xl flex-shrink-0"
-                            style="
-                                background: linear-gradient(
-                                    135deg,
-                                    var(--primary-color),
-                                    var(--secondary-color)
-                                );
-                                opacity: .18;
-                            "
+                            style="background: color-mix(in srgb, {{ $iconColor }} 18%, transparent);"
                         >
-                            <i class="{{ $icon }}" style="color: var(--primary-color)"></i>
+                            <i class="{{ $icon }}" style="color: {{ $iconColor }};"></i>
                         </div>
 
                         <div>

@@ -48,7 +48,7 @@ if (!function_exists('get_image_path')) {
         }
         $media = Media::find($id);
 
-        return $media->url;
+        return @$media->url;
     }
 }
 if (!function_exists('get_pass_check')) {
