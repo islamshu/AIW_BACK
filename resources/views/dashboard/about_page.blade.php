@@ -83,7 +83,84 @@
                      'bullist numlist outdent indent | link image media table emoticons | ' +
                      'code fullscreen preview',
             menubar: 'file edit view insert format tools table help',
-            content_style: 'body { font-family:Arial,sans-serif; font-size:14px }'
+            font_family_formats:
+                'Axiforma=Axiforma,sans-serif;' +
+                'Atyp Display TRIAL=AtypDisplayTRIAL,sans-serif;' +
+                'Al Jazeera Arabic=Al Jazeera Arabic,sans-serif;' +
+                'Cairo=Cairo,sans-serif;' +
+                'Tajawal=Tajawal,sans-serif;' +
+                'Amiri=Amiri,serif;' +
+                'El Messiri=El Messiri,sans-serif;' +
+                'Almarai=Almarai,sans-serif;' +
+                'Reem Kufi=Reem Kufi,sans-serif;' +
+                'Mada=Mada,sans-serif;' +
+                'Changa=Changa,sans-serif;' +
+                'Arial=arial,helvetica,sans-serif;',
+            content_style: `
+                @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=El+Messiri:wght@400;700&family=Almarai:wght@400;700&family=Reem+Kufi:wght@400;700&family=Mada:wght@400;700&family=Changa:wght@400;700&display=swap');
+
+                @font-face {
+                    font-family: 'AtypDisplayTRIAL';
+                    src: url('{{ asset('backend/fonts/custom/AtypDisplayTRIAL/AtypDisplayTRIAL-Light-BF65727125c722b.otf') }}') format('opentype');
+                    font-weight: 300;
+                    font-style: normal;
+                }
+                @font-face {
+                    font-family: 'AtypDisplayTRIAL';
+                    src: url('{{ asset('backend/fonts/custom/AtypDisplayTRIAL/AtypDisplayTRIAL-Regular-BF65727125d566e.otf') }}') format('opentype');
+                    font-weight: 400;
+                    font-style: normal;
+                }
+                @font-face {
+                    font-family: 'AtypDisplayTRIAL';
+                    src: url('{{ asset('backend/fonts/custom/AtypDisplayTRIAL/AtypDisplayTRIAL-Medium-BF65727125b8683.otf') }}') format('opentype');
+                    font-weight: 500;
+                    font-style: normal;
+                }
+                @font-face {
+                    font-family: 'AtypDisplayTRIAL';
+                    src: url('{{ asset('backend/fonts/custom/AtypDisplayTRIAL/AtypDisplayTRIAL-Semibold-BF65727125c6fc9.otf') }}') format('opentype');
+                    font-weight: 600;
+                    font-style: normal;
+                }
+
+                @font-face {
+                    font-family: 'Al Jazeera Arabic';
+                    src: url('{{ asset('backend/fonts/custom/aljazera/Al-Jazeera-Arabic-Regular.ttf') }}') format('truetype');
+                    font-weight: 400;
+                    font-style: normal;
+                }
+
+                @font-face {
+                    font-family: 'Axiforma';
+                    src: url('{{ asset('backend/fonts/custom/axiforma/AXIFORMA-THIN.TTF') }}') format('truetype');
+                    font-weight: 100;
+                    font-style: normal;
+                }
+                @font-face {
+                    font-family: 'Axiforma';
+                    src: url('{{ asset('backend/fonts/custom/axiforma/AXIFORMA-THINITALIC.TTF') }}') format('truetype');
+                    font-weight: 100;
+                    font-style: italic;
+                }
+                @font-face {
+                    font-family: 'Axiforma';
+                    src: url('{{ asset('backend/fonts/custom/axiforma/AXIFORMA-REGULAR.TTF') }}') format('truetype');
+                    font-weight: 400;
+                    font-style: normal;
+                }
+                @font-face {
+                    font-family: 'Axiforma';
+                    src: url('{{ asset('backend/fonts/custom/axiforma/AXIFORMA-ITALIC.TTF') }}') format('truetype');
+                    font-weight: 400;
+                    font-style: italic;
+                }
+
+                body {
+                    font-family: Cairo, sans-serif;
+                    font-size: 14px;
+                }
+            `
         });
     </script>
 @endsection
