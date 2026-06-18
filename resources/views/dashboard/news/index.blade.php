@@ -154,7 +154,7 @@
                                 {{-- TITLE --}}
                                 <td>
                                     @if ($item->image)
-                                        <img src="{{ asset('public/' . $item->image) }}" alt="news image"
+                                        <img src="{{ asset('storage/' . $item->image) }}" alt="news image"
                                             class="news-thumb">
                                     @else
                                         <span>لا يوجد صورة</span>

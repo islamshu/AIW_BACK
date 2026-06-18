@@ -30,52 +30,46 @@ class MediaController extends Controller
     }
 
     public function upload(Request $request)
-    {
-        $request->validate([
-            'files.*' => 'required|image|max:5120',
-        ]);
+{
+    $request->validate([
+        'files.*' => 'required|image|max:5120',
+    ]);
 
-        $uploadedMedia = [];
+    $uploadedMedia = [];
 
-        // 🔥 المسار الصحيح داخل public_html
-        $pathDir = public_path('uploads/media');
+    $pathDir = public_path('storage/media');
 
-        if (!file_exists($pathDir)) {
-            mkdir($pathDir, 0777, true);
-        }
-
-        foreach ($request->file('files', []) as $file) {
-
-            if (!$file || !$file->isValid()) {
-                continue;
-            }
-
-            // اسم فريد للملف
-            $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
-
-            // 🔥 رفع داخل public_html/uploads/media
-            $file->move($pathDir, $filename);
-
-            $media = Media::create([
-                'file_name' => $file->getClientOriginalName(),
-
-                // 🔥 نخزن المسار بدون public
-                'file_path' => 'uploads/media/' . $filename,
-
-                'mime_type' => $file->getClientMimeType(),
-                'size' => file_exists($pathDir . '/' . $filename)
-                    ? filesize($pathDir . '/' . $filename)
-                    : 0,
-            ]);
-
-            $uploadedMedia[] = $media;
-        }
-
-        return response()->json([
-            'success' => true,
-            'media' => $uploadedMedia
-        ]);
+    if (!file_exists($pathDir)) {
+        mkdir($pathDir, 0777, true);
     }
+
+    foreach ($request->file('files', []) as $file) {
+
+        if (!$file || !$file->isValid()) {
+            continue;
+        }
+
+        $filename = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+        $file->move($pathDir, $filename);
+
+        $media = Media::create([
+            'file_name' => $file->getClientOriginalName(),
+            'file_path' => 'storage/media/' . $filename,
+            'mime_type' => $file->getClientMimeType(),
+            'size' => file_exists($pathDir . '/' . $filename)
+                ? filesize($pathDir . '/' . $filename)
+                : 0,
+        ]);
+
+        $uploadedMedia[] = $media;
+    }
+
+    return response()->json([
+        'success' => true,
+        'media' => $uploadedMedia
+    ]);
+}
 
     public function update(Request $request, Media $media)
     {
@@ -100,7 +94,7 @@ class MediaController extends Controller
                 'description' => $media->description,
                 'file_name' => $media->file_name,
                 'created_at' => $media->created_at->format('Y/m/d'),
-                'url' => asset('public/'.$media->file_path),
+                'url' => asset('storage/'.$media->file_path),
                 'human_size' => $media->human_size,
             ]
         ]);

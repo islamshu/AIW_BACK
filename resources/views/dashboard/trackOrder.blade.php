@@ -49,7 +49,7 @@
     </div>
     <div class="mt-2">
         <img id="preview-track_image_cover"
-            src="{{ asset('public/' . get_general_value('track_image_cover')) }}"
+            src="{{ asset('storage/' . get_general_value('track_image_cover')) }}"
             style="width: 150px; height: auto;"
             class="img-thumbnail" alt="">
     </div>
@@ -67,7 +67,7 @@
     </div>
     <div class="mt-2">
         <img id="preview-track_image"
-            src="{{ asset('public/' . get_general_value('track_image')) }}"
+            src="{{ asset('storage/' . get_general_value('track_image')) }}"
             style="width: 150px; height: auto;"
             class="img-thumbnail" alt="">
     </div>

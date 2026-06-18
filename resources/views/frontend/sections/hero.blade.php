@@ -106,7 +106,7 @@
                                bg-white shadow-2xl flex items-center justify-center pulse"
                     >
                         <img
-                            src="{{ asset('public/'.$hero->image) }}"
+                            src="{{ asset('storage/'.$hero->image) }}"
                             alt="Hero Image"
                             class="w-full h-full object-contain"
                         >

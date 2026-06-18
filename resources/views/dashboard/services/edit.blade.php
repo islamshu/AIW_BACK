@@ -116,7 +116,7 @@
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="image-preview-container text-center">
-                                                            <img src="{{ asset('public/'.$service->icon) }}"
+                                                            <img src="{{ asset('storage/'.$service->icon) }}"
                                                                 style="max-width: 200px; max-height: 150px;"
                                                                 class="img-thumbnail image-preview mt-2" alt="">
                                                         </div>

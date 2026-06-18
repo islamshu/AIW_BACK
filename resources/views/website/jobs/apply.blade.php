@@ -668,7 +668,7 @@ ${applyUrl}
             updateMeta('og-title', job.title + ' | ' + siteName);
             updateMeta('og-description', description);
             updateMeta('og-url', job.share_url);
-            updateMeta('og-image', "{{ asset('public/' . get_general_value('website_logo')) }}");
+            updateMeta('og-image', "{{ asset('storage/' . get_general_value('website_logo')) }}");
 
             updatePageTitle(job.title + ' | ' + siteName);
         }

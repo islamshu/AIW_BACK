@@ -16,7 +16,7 @@
 
                      <td class="drag-handle" style="cursor: move;">&#x2630;</td> <!-- ☰ icon -->
                      <td>{{ $key + 1 }}</td>
-                     <td><img src="{{ asset('public/' . $banner->image) }}" width="80"
+                     <td><img src="{{ asset('storage/' . $banner->image) }}" width="80"
                              alt="{{ $banner->getTranslation('title', app()->getLocale()) }}"></td>
                      <td>{{ $banner->getTranslation('title', app()->getLocale()) }}</td>
                      <td>{{ $banner->order }}</td>

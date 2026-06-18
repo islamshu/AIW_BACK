@@ -13,10 +13,10 @@
 
     <title>{{ get_general_value('website_name_' . app()->getLocale()) }} - @yield('title')</title>
 
-    <link rel="apple-touch-icon" href="{{ asset('public/' . get_general_value('website_icon')) }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('public/' . get_general_value('website_icon')) }}">
+    <link rel="apple-touch-icon" href="{{ asset('storage/' . get_general_value('website_icon')) }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('storage/' . get_general_value('website_icon')) }}">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="{{ asset('public/' . get_general_value('website_icon')) }}">
+    <link rel="icon" href="{{ asset('storage/' . get_general_value('website_icon')) }}">
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 

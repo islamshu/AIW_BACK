@@ -115,7 +115,7 @@
                         {{-- IMAGE PREVIEW --}}
                         <div class="mt-2">
                             <img id="imagePreview"
-                                src="{{ isset($homeService) && $homeService->image ? asset('public/' . $homeService->image) : '' }}"
+                                src="{{ isset($homeService) && $homeService->image ? asset('storage/' . $homeService->image) : '' }}"
                                 class="img-thumbnail"
                                 style="max-height:120px; {{ isset($homeService) && $homeService->image ? '' : 'display:none' }}">
                         </div>

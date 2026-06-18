@@ -50,7 +50,7 @@
             <a href="/" class="flex items-center gap-4 group">
                 @if($logo)
                     <img
-                        src="{{ asset('public/' . $logo) }}"
+                        src="{{ asset('storage/' . $logo) }}"
                         class="h-14 md:h-16 max-w-[220px] object-contain
                                transition-transform duration-300
                                group-hover:scale-105">

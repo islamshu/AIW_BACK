@@ -115,14 +115,14 @@
                         </div>
 
                         <div class="d-grid gap-2">
-                            <a href="{{ asset('public/'.$application->cv_path) }}"
+                            <a href="{{ asset('storage/'.$application->cv_path) }}"
                                target="_blank"
                                class="btn btn-primary">
                                 <i class="fas fa-eye me-1"></i>
                                 عرض السيرة الذاتية
                             </a>
 
-                            <a href="{{ asset('public/'.$application->cv_path) }}"
+                            <a href="{{ asset('storage/'.$application->cv_path) }}"
                                download="CV_{{ $application->name }}.pdf"
                                class="btn btn-outline-primary">
                                 <i class="fas fa-download me-1"></i>

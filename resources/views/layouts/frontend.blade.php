@@ -24,7 +24,7 @@
     
     <meta property="og:image"
           id="og-image"
-          content="@yield('og:image', asset('public/' . get_general_value('website_logo')))">
+          content="@yield('og:image', asset('storage/' . get_general_value('website_logo')))">
     
     <title id="page-title">
         @yield('title', get_general_value('website_name_' . app()->getLocale()))
@@ -32,7 +32,7 @@
     
 
     {{-- Favicons --}}
-    <link rel="icon" href="{{ asset('public/' . get_general_value('website_logo')) }}">
+    <link rel="icon" href="{{ asset('storage/' . get_general_value('website_logo')) }}">
 
     {{-- Tailwind --}}
     <script src="https://cdn.tailwindcss.com"></script>

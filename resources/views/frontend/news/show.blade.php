@@ -7,7 +7,7 @@
     <div class="container mx-auto px-4 max-w-4xl">
 
         {{-- IMAGE --}}
-        <img src="{{ asset('public/' . $news->image) }}"
+        <img src="{{ asset('storage/' . $news->image) }}"
              class="rounded-2xl mb-8 w-full">
 
         {{-- META --}}

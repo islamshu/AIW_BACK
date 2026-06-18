@@ -48,7 +48,7 @@
 
                                             <td class="drag-handle" style="cursor: move;">&#x2630;</td> <!-- ☰ icon -->
                                             <td>{{ $loop->iteration }}</td>
-                                            <td><img src="{{asset('public/'.$service->icon)}}" width="80" height="50" alt=""></td>
+                                            <td><img src="{{asset('storage/'.$service->icon)}}" width="80" height="50" alt=""></td>
                                             <td>{{ $service->getTranslation('title', app()->getLocale()) }}</td>
                                              <td>{{ $service->getTranslation('description', app()->getLocale()) }}</td>
 

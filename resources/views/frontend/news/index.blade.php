@@ -17,7 +17,7 @@
 
                 {{-- IMAGE --}}
                 <div class="h-48 overflow-hidden">
-                    <img src="{{ asset('public/' . $item->image) }}"
+                    <img src="{{ asset('storage/' . $item->image) }}"
                          class="w-full h-full object-cover">
                 </div>
 
